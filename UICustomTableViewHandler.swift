@@ -1,3 +1,24 @@
+/************************************************************************************************************************************/
+/** @file		UICustomTableViewHandler.swift
+ *  @project    x
+ * 	@brief		x
+ * 	@details	x
+ *
+ * 	@author		Justin Reina, Firmware Engineer, Jaostech
+ *  @created    11/5/17
+ *  @last rev   11/26/17
+ *
+ *
+ * 	@notes		x
+ *
+ * 	@section	Opens
+ * 			none current
+ *
+ * 	@section	Legal Disclaimer
+ * 			All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
+ * 			Corporation. Do not distribute. Do not copy.
+ */
+/************************************************************************************************************************************/
 //
 //  UICustomTableViewHandler.swift
 //  0_0 - UITableView
@@ -27,9 +48,47 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
     }
 
     
+/************************************************************************************************************************************/
+/*                                  UITableViewDataSource, UITableViewDelegate Interfaces                                        	*/
+/************************************************************************************************************************************/
+
+
     /********************************************************************************************************************************/
-    /*                                  UITableViewDataSource, UITableViewDelegate Interfaces                                        */
-    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if(verbose){ print("Handler.tableView():           (numberOfRowsInSection) The table will now have \(self.timerTable.getCellCount()), cause I just said so..."); }
@@ -38,6 +97,42 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
     }
     
     
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell : UICustomTableViewCell = self.timerTable.myCustomCells[(indexPath as NSIndexPath).item];
@@ -46,6 +141,42 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
     }
     
     
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
         if(true){ print("CustomTableViewHandler.tableView():         handling a cell tap of \((indexPath as NSIndexPath).item)"); }
@@ -102,12 +233,84 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
         return;
     }
     
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     //src: http://stackoverflow.com/questions/24103069/swift-add-swipe-to-delete-tableviewcell
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
 
         return true;
     }
     
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         if(self.timerTable.myCustomCells.count > 0) {
@@ -121,16 +324,124 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 /************************************************************************************************************************************/
 /*                                                        Helpers                                                                   */
 /************************************************************************************************************************************/
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     @objc func getCharName(_ i : Int) -> String {
         return String(describing: UnicodeScalar(i + Int(("A" as UnicodeScalar).value)));
     }
     
     
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     @objc func getRowLabel(_ charName : String, index: Int) -> String {
         return String(format: "Item '%@' (%d)", charName, index);
     }
     
     
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     @objc func addNewRow() {
         
         let charName : String = self.getCharName(self.timerTable.getCellCount());

@@ -1,3 +1,24 @@
+/************************************************************************************************************************************/
+/** @file		UICustomTableView.swift
+ *  @project    x
+ * 	@brief		x
+ * 	@details	x
+ *
+ * 	@author		Justin Reina, Firmware Engineer, Jaostech
+ *  @created    11/5/17
+ *  @last rev   11/26/17
+ *
+ *
+ * 	@notes		x
+ *
+ * 	@section	Opens
+ * 			none current
+ *
+ * 	@section	Legal Disclaimer
+ * 			All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
+ * 			Corporation. Do not distribute. Do not copy.
+ */
+/************************************************************************************************************************************/
 //
 //  UICustomTableView.swift
 //  0_0 - UITableView
@@ -15,6 +36,42 @@ class UICustomTableView : UITableView {
     @objc var myCustomCells : [UICustomTableViewCell] = [UICustomTableViewCell]();
 
     
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     @objc init(frame: CGRect, style: UITableViewStyle, items :[String]) {
         super.init(frame:frame, style:style);
         
@@ -44,6 +101,42 @@ class UICustomTableView : UITableView {
     }
     
     
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     @objc func addNewCell(_ cellString : String) {
     
         
@@ -58,6 +151,43 @@ class UICustomTableView : UITableView {
         return;
     }
     
+    
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     //self.timerTable.removeCell(indexPath.item);
     @objc func removeCell(_ index : Int) {
         
@@ -76,6 +206,42 @@ class UICustomTableView : UITableView {
     }
     
     
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     @objc func getCell(_ index: Int) -> UICustomTableViewCell {
     
         let cell : UICustomTableViewCell = self.myCustomCells[index];
@@ -83,6 +249,42 @@ class UICustomTableView : UITableView {
         return cell;
     }
     
+    /********************************************************************************************************************************/
+	/**	@fcn		int main(void)
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Purpose
+	 *  	x
+	 *
+	 *  @param		[in]	name	descrip
+	 *
+	 *  @param		[out]	name	descrip
+	 *
+	 *  @return		(type) descrip
+	 *
+	 *  @pre		x
+	 *
+	 *  @post		x
+	 *
+	 *  @section	Operation
+	 *		x
+	 *		
+	 *  @section	Opens
+	 *  	x
+	 *
+	 *  @section	Hazards & Risks
+	 *  	x
+	 *
+	 *	@section	Todo
+	 *		x
+	 *
+	 *  @section	Timing
+	 *  	x
+	 *
+	 *  @note		x
+	 */
+	/********************************************************************************************************************************/
     @objc func getCellCount() -> Int {
         return myCustomCells.count;
     }
