@@ -27,18 +27,18 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
    
     let verbose : Bool = true;
     
-    var timerTable : UICustomTableView!;
+    var table : UICustomTableView!;
     
     
     /********************************************************************************************************************************/
-    /** @fcn        init(items: [String], timerTable : UICustomTableView)
+    /** @fcn        init(items: [String], table : UICustomTableView)
      *  @brief      x
      *  @details    x
      */
     /********************************************************************************************************************************/
-    init(items: [String], timerTable : UICustomTableView) {
+    init(items: [String], table : UICustomTableView) {
 
-        self.timerTable = timerTable;
+        self.table = table;
         
         if(verbose){ print("CustomTableViewHandler.init():    the CustomTableViewHandler was initialized"); }
 
@@ -59,9 +59,9 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	/********************************************************************************************************************************/
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if(verbose){ print("Handler.tableView():           (numberOfRowsInSection) The table will now have \(self.timerTable.getCellCount()), cause I just said so..."); }
+        if(verbose){ print("Handler.tableView():           (numberOfRowsInSection) The table will now have \(self.table.getCellCount()), cause I just said so..."); }
         
-        return self.timerTable.getCellCount();                                  /* return how many rows you want printed....!       */
+        return self.table.getCellCount();                                  /* return how many rows you want printed....!       */
     }
     
     
@@ -73,7 +73,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	/********************************************************************************************************************************/
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let cell : UICustomTableViewCell = self.timerTable.myCustomCells[(indexPath as NSIndexPath).item];
+        let cell : UICustomTableViewCell = self.table.myCustomCells[(indexPath as NSIndexPath).item];
         
         return cell;
     }
@@ -90,12 +90,12 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
         if(true){ print("CustomTableViewHandler.tableView():         handling a cell tap of \((indexPath as NSIndexPath).item)"); }
 
         //CUSTOM
-        timerTable.deselectRow(at: indexPath, animated:true);
+        table.deselectRow(at: indexPath, animated:true);
         
         //eww... the traditional access method...
         //let currCell : UICustomTableViewCell = customTable.dequeueReusableCellWithIdentifier("cell") as! UICustomTableViewCell;
         
-        let cell : UICustomTableViewCell = self.timerTable.getCell((indexPath as NSIndexPath).item);
+        let cell : UICustomTableViewCell = self.table.getCell((indexPath as NSIndexPath).item);
         
         print("    We have cell '\( cell.textLabel?.text as String!)'");
 
@@ -105,31 +105,31 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
         switch((indexPath as NSIndexPath).row) {
         case (0):
             print("top selected. Scrolling to the bottom!");
-            timerTable.scrollToRow(at: IndexPath(row: self.timerTable.getCellCount()-1, section: 0), at: UITableViewScrollPosition.bottom, animated: true);
+            table.scrollToRow(at: IndexPath(row: self.table.getCellCount()-1, section: 0), at: UITableViewScrollPosition.bottom, animated: true);
             break;
         case (1):
-            self.timerTable.addNewCell("Woot Woot!");
+            self.table.addNewCell("Woot Woot!");
             print("added a cell?");
             break;
         case (2):
-            self.timerTable.setEditing(true, animated: true);
+            self.table.setEditing(true, animated: true);
             print("editing is enabled");
             break;
-        case (self.timerTable.getCellCount()-4):
+        case (self.table.getCellCount()-4):
             print("swapped the seperator color to blue");
-            timerTable.separatorColor = UIColor.blue;
+            table.separatorColor = UIColor.blue;
             break;
-        case (self.timerTable.getCellCount()-3):
+        case (self.table.getCellCount()-3):
             print("scrolling to the top with a Rect and fade");
-            timerTable.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:true);           //slow scroll to top
+            table.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:true);           //slow scroll to top
             break;
-        case (self.timerTable.getCellCount()-2):
+        case (self.table.getCellCount()-2):
             print("scrolling to the top with a Rect and no fade");
-            timerTable.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:false);          //immediate scroll to top
+            table.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:false);          //immediate scroll to top
             break;
-        case (self.timerTable.getCellCount()-1):
+        case (self.table.getCellCount()-1):
             print("scrolling to the top with scrollToRowAtIndexPath");
-            timerTable.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true);
+            table.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true);
             break;
         default:
             print("I didn't program a reaction for this case. I was lazy...");
@@ -165,8 +165,8 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	/********************************************************************************************************************************/
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
-        if(self.timerTable.myCustomCells.count > 0) {
-            self.timerTable.removeCell((indexPath as NSIndexPath).item);            /* handle delete (by removing the data from     */
+        if(self.table.myCustomCells.count > 0) {
+            self.table.removeCell((indexPath as NSIndexPath).item);            /* handle delete (by removing the data from     */
         }                                                                           /* your array and updating the tableview)       */
         
         return;
@@ -207,13 +207,13 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	/********************************************************************************************************************************/
     func addNewRow() {
         
-        let charName : String = self.getCharName(self.timerTable.getCellCount());
+        let charName : String = self.getCharName(self.table.getCellCount());
         
-        let newLabel : String = self.getRowLabel(charName, index: self.timerTable.getCellCount());
+        let newLabel : String = self.getRowLabel(charName, index: self.table.getCellCount());
   
-        self.timerTable.addNewCell(newLabel);
+        self.table.addNewCell(newLabel);
         
-        self.timerTable.reloadData();
+        self.table.reloadData();
         
         print("row was added '\(newLabel)'");
         
