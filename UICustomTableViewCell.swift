@@ -19,54 +19,19 @@
  * 			Corporation. Do not distribute. Do not copy.
  */
 /************************************************************************************************************************************/
-//
-//  UICustomTableViewCell.swift
-//  0_0 - UITableView
-//
-
 import UIKit
 
 
 class UICustomTableViewCell : UITableViewCell {
     
-    @objc let verbose : Bool = false;
+    let verbose : Bool = false;
     
-    @objc let cellSelectionFade : Bool = false;
+    let cellSelectionFade : Bool = false;
 
     /********************************************************************************************************************************/
-	/**	@fcn		int main(void)
+	/**	@fcn		override init(style: UITableViewCellStyle, reuseIdentifier: String?)
 	 *  @brief		x
 	 *  @details	x
-	 *
-	 *  @section	Purpose
-	 *  	x
-	 *
-	 *  @param		[in]	name	descrip
-	 *
-	 *  @param		[out]	name	descrip
-	 *
-	 *  @return		(type) descrip
-	 *
-	 *  @pre		x
-	 *
-	 *  @post		x
-	 *
-	 *  @section	Operation
-	 *		x
-	 *		
-	 *  @section	Opens
-	 *  	x
-	 *
-	 *  @section	Hazards & Risks
-	 *  	x
-	 *
-	 *	@section	Todo
-	 *		x
-	 *
-	 *  @section	Timing
-	 *  	x
-	 *
-	 *  @note		x
 	 */
 	/********************************************************************************************************************************/
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -85,39 +50,9 @@ class UICustomTableViewCell : UITableViewCell {
     }
 
     /********************************************************************************************************************************/
-	/**	@fcn		int main(void)
+	/**	@fcn		init?(coder aDecoder: NSCoder)
 	 *  @brief		x
 	 *  @details	x
-	 *
-	 *  @section	Purpose
-	 *  	x
-	 *
-	 *  @param		[in]	name	descrip
-	 *
-	 *  @param		[out]	name	descrip
-	 *
-	 *  @return		(type) descrip
-	 *
-	 *  @pre		x
-	 *
-	 *  @post		x
-	 *
-	 *  @section	Operation
-	 *		x
-	 *		
-	 *  @section	Opens
-	 *  	x
-	 *
-	 *  @section	Hazards & Risks
-	 *  	x
-	 *
-	 *	@section	Todo
-	 *		x
-	 *
-	 *  @section	Timing
-	 *  	x
-	 *
-	 *  @note		x
 	 */
 	/********************************************************************************************************************************/
     required init?(coder aDecoder: NSCoder) {
