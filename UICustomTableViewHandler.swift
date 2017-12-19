@@ -40,7 +40,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 
         self.table = table;
         
-        if(verbose){ print("CustomTableViewHandler.init():    the CustomTableViewHandler was initialized"); }
+        if(verbose){ print("CustomTableViewHandler.init():      the CustomTableViewHandler was initialized"); }
 
         return;
     }
@@ -87,7 +87,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	/********************************************************************************************************************************/
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
-        if(true){ print("CustomTableViewHandler.tableView():         handling a cell tap of \((indexPath as NSIndexPath).item)"); }
+        if(true){ print("CustomTableViewHandler.tableView():     handling a cell tap of \((indexPath as NSIndexPath).item)"); }
 
         //CUSTOM
         table.deselectRow(at: indexPath, animated:true);

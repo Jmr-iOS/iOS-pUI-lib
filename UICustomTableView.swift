@@ -27,9 +27,9 @@ import UIKit
 
 class UICustomTableView : UITableView {
     
-    @objc var verbose : Bool = true;
+    var verbose : Bool = true;
 
-    @objc var myCustomCells : [UICustomTableViewCell] = [UICustomTableViewCell]();
+    var myCustomCells : [UICustomTableViewCell] = [UICustomTableViewCell]();
 
     
     /********************************************************************************************************************************/
@@ -61,7 +61,7 @@ class UICustomTableView : UITableView {
         }
         
         
-        if(verbose){ print("CustomTableView.init():    the CustomTableView was initialized"); }
+        if(verbose){ print("CustomTableView.init():             the CustomTableView was initialized"); }
 
         return;
     }
