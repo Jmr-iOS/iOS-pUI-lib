@@ -41,16 +41,18 @@ class UICustomTableView : UITableView {
 	override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame:frame, style:style);
         
-        for _ in 0...100 {
+        for i in 0...100 {
             let cell : UICustomTableViewCell = UICustomTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "nbd");
+            
+            cell.textLabel?.text = "Table Row \(i)";
             
             myCustomCells.append(cell);
         }
         
         
-        self.register(UICustomTableViewCell.self, forCellReuseIdentifier: "cell");          //I have no idea why we do this
+        self.register(UICustomTableViewCell.self, forCellReuseIdentifier: "cell");          /* I have no idea why we do this        */
         
-        self.translatesAutoresizingMaskIntoConstraints = false;                            //Std
+        self.translatesAutoresizingMaskIntoConstraints = false;                             /* Std                                  */
         
         if(verbose){ print("CustomTableView.init():             the CustomTableView was initialized"); }
 
@@ -123,7 +125,7 @@ class UICustomTableView : UITableView {
         
         self.sizeToFit();
         
-        //turn mode off (just cause, for demo's sake
+        //turn mode off (just cause, for demo's sake)
         self.setEditing(false, animated: true);
 
         print("cell removed");

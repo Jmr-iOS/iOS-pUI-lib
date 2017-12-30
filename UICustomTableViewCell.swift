@@ -43,8 +43,6 @@ class UICustomTableViewCell : UITableViewCell {
             self.selectionStyle = UITableViewCellSelectionStyle.none;
         }
         
-        self.textLabel?.text = "1234";
-        
         if(verbose){ print("CustomTableViewCell.init():         the CustomTableViewCell was initialized"); }
         
         return;
