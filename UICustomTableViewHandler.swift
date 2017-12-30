@@ -27,16 +27,16 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
    
     let verbose : Bool = true;
     
-    var table : UICustomTableView!;
+	var table : UICustomTableView!;
     
     
     /********************************************************************************************************************************/
-    /** @fcn        init(items: [String], table : UICustomTableView)
+    /** @fcn        init(table : UICustomTableView)
      *  @brief      x
      *  @details    x
      */
     /********************************************************************************************************************************/
-    init(items: [String], table : UICustomTableView) {
+	init(table : UICustomTableView) {
 
         self.table = table;
         
@@ -57,7 +57,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if(verbose){ print("Handler.tableView():           (numberOfRowsInSection) The table will now have \(self.table.getCellCount()), cause I just said so..."); }
         
@@ -71,7 +71,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell : UICustomTableViewCell = self.table.myCustomCells[(indexPath as NSIndexPath).item];
         
@@ -85,7 +85,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
         if(true){ print("CustomTableViewHandler.tableView():     handling a cell tap of \((indexPath as NSIndexPath).item)"); }
 
@@ -136,8 +136,6 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
             break;
         }
         
-        print("   ");
-        
         return;
     }
     
@@ -151,7 +149,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	 *		http://stackoverflow.com/questions/24103069/swift-add-swipe-to-delete-tableviewcell
 	 */
 	/********************************************************************************************************************************/
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+	func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
 
         return true;
     }
@@ -163,7 +161,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         if(self.table.myCustomCells.count > 0) {
             self.table.removeCell((indexPath as NSIndexPath).item);            /* handle delete (by removing the data from     */
@@ -183,7 +181,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-    func getCharName(_ i : Int) -> String {
+	func getCharName(_ i : Int) -> String {
         return String(describing: UnicodeScalar(i + Int(("A" as UnicodeScalar).value)));
     }
     
@@ -194,7 +192,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-    func getRowLabel(_ charName : String, index: Int) -> String {
+	func getRowLabel(_ charName : String, index: Int) -> String {
         return String(format: "Item '%@' (%d)", charName, index);
     }
     
@@ -205,7 +203,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-    func addNewRow() {
+	func addNewRow() {
         
         let charName : String = self.getCharName(self.table.getCellCount());
         

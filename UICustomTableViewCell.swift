@@ -24,7 +24,7 @@ import UIKit
 
 class UICustomTableViewCell : UITableViewCell {
     
-    let verbose : Bool = false;
+    let verbose : Bool = true;
     
     let cellSelectionFade : Bool = false;
 
@@ -38,13 +38,14 @@ class UICustomTableViewCell : UITableViewCell {
         super.init(style:style, reuseIdentifier:reuseIdentifier);
 
         if(self.cellSelectionFade == true) {
-            self.selectionStyle = UITableViewCellSelectionStyle.gray;   //Options are 'Gray/Blue/Default/None'
+            self.selectionStyle = UITableViewCellSelectionStyle.gray;           /* Options are 'Gray/Blue/Default/None'             */
         } else {
             self.selectionStyle = UITableViewCellSelectionStyle.none;
         }
         
+        self.textLabel?.text = "1234";
         
-        if(verbose){ print("CustomTableViewCell.init():    the CustomTableViewCell was initialized"); }
+        if(verbose){ print("CustomTableViewCell.init():         the CustomTableViewCell was initialized"); }
         
         return;
     }

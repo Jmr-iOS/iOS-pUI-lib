@@ -27,39 +27,30 @@ import UIKit
 
 class UICustomTableView : UITableView {
     
-    var verbose : Bool = true;
+    let verbose : Bool = true;
 
-    var myCustomCells : [UICustomTableViewCell] = [UICustomTableViewCell]();
+	var myCustomCells : [UICustomTableViewCell] = [UICustomTableViewCell]();
 
     
     /********************************************************************************************************************************/
-	/**	@fcn		init(frame: CGRect, style: UITableViewStyle, items :[String])
+	/**	@fcn		init(frame: CGRect, style: UITableViewStyle)
 	 *  @brief		x
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-    init(frame: CGRect, style: UITableViewStyle, items :[String]) {
+	override init(frame: CGRect, style: UITableViewStyle) {
         super.init(frame:frame, style:style);
+        
+        for _ in 0...100 {
+            let cell : UICustomTableViewCell = UICustomTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "nbd");
+            
+            myCustomCells.append(cell);
+        }
+        
         
         self.register(UICustomTableViewCell.self, forCellReuseIdentifier: "cell");          //I have no idea why we do this
         
         self.translatesAutoresizingMaskIntoConstraints = false;                            //Std
-        
-        for i in 0...items.count {
-            
-            let newCell : UICustomTableViewCell = UICustomTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "why");
-            
-            let cellText:String = "P\(i)";
-            
-            let subjectField:UILabel = UILabel(frame: CGRect(x:55, y: 25, width: 303, height:  25));
-            
-            subjectField.text = cellText;
-            
-            newCell.addSubview(subjectField);
-            
-            myCustomCells.append(newCell);
-        }
-        
         
         if(verbose){ print("CustomTableView.init():             the CustomTableView was initialized"); }
 
@@ -103,7 +94,7 @@ class UICustomTableView : UITableView {
 	 *  @note		x
 	 */
 	/********************************************************************************************************************************/
-    func addNewCell(_ cellString : String) {
+	func addNewCell(_ cellString : String) {
     
         
         let newCell : UICustomTableViewCell = UICustomTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "eww?");
@@ -124,7 +115,7 @@ class UICustomTableView : UITableView {
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-    func removeCell(_ index : Int) {
+	func removeCell(_ index : Int) {
         
         myCustomCells.remove(at: index);
         
@@ -147,7 +138,7 @@ class UICustomTableView : UITableView {
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-    func getCell(_ index: Int) -> UICustomTableViewCell {
+	func getCell(_ index: Int) -> UICustomTableViewCell {
     
         let cell : UICustomTableViewCell = self.myCustomCells[index];
 
@@ -161,11 +152,11 @@ class UICustomTableView : UITableView {
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-    func getCellCount() -> Int {
+	func getCellCount() -> Int {
         return myCustomCells.count;
     }
 
 
-    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+	required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
 
