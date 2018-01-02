@@ -24,7 +24,7 @@ import UIKit
 
 class UICustomTableViewCell : UITableViewCell {
     
-    let verbose : Bool = true;
+    let verbose : Bool = false;
     
     let cellSelectionFade : Bool = false;
 

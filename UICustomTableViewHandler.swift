@@ -59,7 +59,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	/********************************************************************************************************************************/
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if(verbose){ print("Handler.tableView():           (numberOfRowsInSection) The table will now have \(self.table.getCellCount()), cause I just said so..."); }
+        if(verbose){ print("Handler.tableView():                (numberOfRowsInSection) The table will now have \(self.table.getCellCount()), cause I just said so..."); }
         
         return self.table.getCellCount();                                  /* return how many rows you want printed....!       */
     }
@@ -87,7 +87,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	/********************************************************************************************************************************/
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
-        if(true){ print("CustomTableViewHandler.tableView():     handling a cell tap of \((indexPath as NSIndexPath).item)"); }
+        if(true){ print("CustomTableViewHandler.tableView(): handling a cell tap of \((indexPath as NSIndexPath).item)"); }
 
         //CUSTOM
         table.deselectRow(at: indexPath, animated:true);
@@ -97,42 +97,42 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
         
         let cell : UICustomTableViewCell = self.table.getCell((indexPath as NSIndexPath).item);
         
-        print("    We have cell '\( cell.textLabel?.text as String!)'");
+        print("Handler.tableView():                (didSelectRowAt) We have cell '\((cell.textLabel?.text)!)...'");
 
         /****************************************************************************************************************************/
         /* scroll to the top or change the bar color                                                                                */
         /****************************************************************************************************************************/
         switch((indexPath as NSIndexPath).row) {
         case (0):
-            print("top selected. Scrolling to the bottom!");
+            print("Handler.tableView():                (didSelectRowAt) top selected. Scrolling to the bottom!");
             table.scrollToRow(at: IndexPath(row: self.table.getCellCount()-1, section: 0), at: UITableViewScrollPosition.bottom, animated: true);
             break;
         case (1):
             self.table.addNewCell("Woot Woot!");
-            print("added a cell?");
+            print("Handler.tableView():                (didSelectRowAt) added a cell?");
             break;
         case (2):
             self.table.setEditing(true, animated: true);
-            print("editing is enabled");
+            print("Handler.tableView():                (didSelectRowAt) editing is enabled");
             break;
         case (self.table.getCellCount()-4):
-            print("swapped the seperator color to blue");
+            print("Handler.tableView():                (didSelectRowAt) swapped the seperator color to blue");
             table.separatorColor = UIColor.blue;
             break;
         case (self.table.getCellCount()-3):
-            print("scrolling to the top with a Rect and fade");
+            print("Handler.tableView():                (didSelectRowAt) scrolling to the top with a Rect and fade");
             table.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:true);           //slow scroll to top
             break;
         case (self.table.getCellCount()-2):
-            print("scrolling to the top with a Rect and no fade");
+            print("Handler.tableView():                (didSelectRowAt) scrolling to the top with a Rect and no fade");
             table.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:false);          //immediate scroll to top
             break;
         case (self.table.getCellCount()-1):
-            print("scrolling to the top with scrollToRowAtIndexPath");
+            print("Handler.tableView():                (didSelectRowAt) scrolling to the top with scrollToRowAtIndexPath");
             table.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true);
             break;
         default:
-            print("I didn't program a reaction for this case. I was lazy...");
+            print("Handler.tableView():                (didSelectRowAt) I didn't program a reaction for this case. I was lazy...");
             break;
         }
         

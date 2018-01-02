@@ -6,7 +6,7 @@
  *
  * 	@author		Justin Reina, Firmware Engineer, Jaostech
  *  @created    11/5/17
- *  @last rev   11/26/17
+ *  @last rev   1/2/18
  *
  *
  * 	@notes		x
@@ -105,7 +105,7 @@ class UICustomTableView : UITableView {
         
         self.reloadData();
         
-        if(verbose){ print("CustomTableView.addCell():    a new cell was added"); }
+        if(verbose){ print("CustomTableView.addCell():          a new cell was added"); }
 
         return;
     }
@@ -128,7 +128,7 @@ class UICustomTableView : UITableView {
         //turn mode off (just cause, for demo's sake)
         self.setEditing(false, animated: true);
 
-        print("cell removed");
+        print("CustomTableView.removeCell():        cell removed");
         
         return;
     }
@@ -159,6 +159,12 @@ class UICustomTableView : UITableView {
     }
 
 
+    /********************************************************************************************************************************/
+    /** @fcn        required init?(coder aDecoder: NSCoder)
+     *  @brief      x
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
 	required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
 
