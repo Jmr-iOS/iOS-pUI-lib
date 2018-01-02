@@ -27,7 +27,7 @@ import UIKit
 
 class UICustomTableView : UITableView {
     
-    let verbose : Bool = true;
+    let verbose : Bool = false;
 
 	var myCustomCells : [UICustomTableViewCell] = [UICustomTableViewCell]();
 
@@ -50,9 +50,9 @@ class UICustomTableView : UITableView {
         }
         
         
-        self.register(UICustomTableViewCell.self, forCellReuseIdentifier: "cell");          /* I have no idea why we do this        */
+        register(UICustomTableViewCell.self, forCellReuseIdentifier: "cell");               /* I have no idea why we do this        */
         
-        self.translatesAutoresizingMaskIntoConstraints = false;                             /* Std                                  */
+        translatesAutoresizingMaskIntoConstraints = false;                                  /* Std                                  */
         
         if(verbose){ print("CustomTableView.init():             the CustomTableView was initialized"); }
 
@@ -103,7 +103,7 @@ class UICustomTableView : UITableView {
         
         myCustomCells.append(newCell);
         
-        self.reloadData();
+        reloadData();
         
         if(verbose){ print("CustomTableView.addCell():          a new cell was added"); }
 
@@ -121,12 +121,12 @@ class UICustomTableView : UITableView {
         
         myCustomCells.remove(at: index);
         
-        self.reloadData();
+        reloadData();
         
-        self.sizeToFit();
+        sizeToFit();
         
         //turn mode off (just cause, for demo's sake)
-        self.setEditing(false, animated: true);
+        setEditing(false, animated: true);
 
         print("CustomTableView.removeCell():        cell removed");
         
@@ -142,7 +142,7 @@ class UICustomTableView : UITableView {
 	/********************************************************************************************************************************/
 	func getCell(_ index: Int) -> UICustomTableViewCell {
     
-        let cell : UICustomTableViewCell = self.myCustomCells[index];
+        let cell : UICustomTableViewCell = myCustomCells[index];
 
         return cell;
     }

@@ -25,7 +25,7 @@ import UIKit
 
 class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelegate {
    
-    let verbose : Bool = true;
+    let verbose : Bool = false;
     
 	var table : UICustomTableView!;
     
@@ -61,7 +61,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
         
         if(verbose){ print("Handler.tableView():                (numberOfRowsInSection) The table will now have \(self.table.getCellCount()), cause I just said so..."); }
         
-        return self.table.getCellCount();                                  /* return how many rows you want printed....!       */
+        return table.getCellCount();                                            /* return how many rows you want printed....!       */
     }
     
     
@@ -73,7 +73,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	/********************************************************************************************************************************/
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let cell : UICustomTableViewCell = self.table.myCustomCells[(indexPath as NSIndexPath).item];
+        let cell : UICustomTableViewCell = table.myCustomCells[(indexPath as NSIndexPath).item];
         
         return cell;
     }
@@ -95,7 +95,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
         //eww... the traditional access method...
         //let currCell : UICustomTableViewCell = customTable.dequeueReusableCellWithIdentifier("cell") as! UICustomTableViewCell;
         
-        let cell : UICustomTableViewCell = self.table.getCell((indexPath as NSIndexPath).item);
+        let cell : UICustomTableViewCell = table.getCell((indexPath as NSIndexPath).item);
         
         print("Handler.tableView():                (didSelectRowAt) We have cell '\((cell.textLabel?.text)!)...'");
 
@@ -108,26 +108,26 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
             table.scrollToRow(at: IndexPath(row: self.table.getCellCount()-1, section: 0), at: UITableViewScrollPosition.bottom, animated: true);
             break;
         case (1):
-            self.table.addNewCell("Woot Woot!");
+            table.addNewCell("Woot Woot!");
             print("Handler.tableView():                (didSelectRowAt) added a cell?");
             break;
         case (2):
-            self.table.setEditing(true, animated: true);
+            table.setEditing(true, animated: true);
             print("Handler.tableView():                (didSelectRowAt) editing is enabled");
             break;
-        case (self.table.getCellCount()-4):
+        case (table.getCellCount()-4):
             print("Handler.tableView():                (didSelectRowAt) swapped the seperator color to blue");
             table.separatorColor = UIColor.blue;
             break;
-        case (self.table.getCellCount()-3):
+        case (table.getCellCount()-3):
             print("Handler.tableView():                (didSelectRowAt) scrolling to the top with a Rect and fade");
             table.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:true);           //slow scroll to top
             break;
-        case (self.table.getCellCount()-2):
+        case (table.getCellCount()-2):
             print("Handler.tableView():                (didSelectRowAt) scrolling to the top with a Rect and no fade");
             table.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:false);          //immediate scroll to top
             break;
-        case (self.table.getCellCount()-1):
+        case (table.getCellCount()-1):
             print("Handler.tableView():                (didSelectRowAt) scrolling to the top with scrollToRowAtIndexPath");
             table.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true);
             break;
@@ -150,7 +150,6 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	 */
 	/********************************************************************************************************************************/
 	func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-
         return true;
     }
     
@@ -163,8 +162,8 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	/********************************************************************************************************************************/
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
-        if(self.table.myCustomCells.count > 0) {
-            self.table.removeCell((indexPath as NSIndexPath).item);            /* handle delete (by removing the data from     */
+        if(table.myCustomCells.count > 0) {
+            table.removeCell((indexPath as NSIndexPath).item);                      /* handle delete (by removing the data from     */
         }                                                                           /* your array and updating the tableview)       */
         
         return;
@@ -205,15 +204,15 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
 	/********************************************************************************************************************************/
 	func addNewRow() {
         
-        let charName : String = self.getCharName(self.table.getCellCount());
+        let charName : String = getCharName(self.table.getCellCount());
         
-        let newLabel : String = self.getRowLabel(charName, index: self.table.getCellCount());
+        let newLabel : String = getRowLabel(charName, index: table.getCellCount());
   
-        self.table.addNewCell(newLabel);
+        table.addNewCell(newLabel);
         
-        self.table.reloadData();
+        table.reloadData();
         
-        print("row was added '\(newLabel)'");
+        print("Handler.tableView():                new row was added '\(newLabel)'");
         
         return;
     }

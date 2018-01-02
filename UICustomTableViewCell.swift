@@ -37,10 +37,10 @@ class UICustomTableViewCell : UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style:style, reuseIdentifier:reuseIdentifier);
 
-        if(self.cellSelectionFade == true) {
-            self.selectionStyle = UITableViewCellSelectionStyle.gray;           /* Options are 'Gray/Blue/Default/None'             */
+        if(cellSelectionFade == true) {
+            selectionStyle = UITableViewCellSelectionStyle.gray;                /* Options are 'Gray/Blue/Default/None'             */
         } else {
-            self.selectionStyle = UITableViewCellSelectionStyle.none;
+            selectionStyle = UITableViewCellSelectionStyle.none;
         }
         
         if(verbose){ print("CustomTableViewCell.init():         the CustomTableViewCell was initialized"); }
