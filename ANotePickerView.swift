@@ -210,10 +210,10 @@ class ANotePickerView : UIPickerView, UIPickerViewDelegate, UIPickerViewDataSour
     /********************************************************************************************************************************/
     func getAsString() -> String {
     
-        var s = "[" + ViewController.selectedRowValue(handler: self, picker: self, ic: 0);
+        var s = "[" + Utils.selectedRowValue(handler: self, picker: self, ic: 0);
 
         for ic in 1...3 {
-            s = s + ", " + ViewController.selectedRowValue(handler: self, picker: self, ic: ic);
+            s = s + ", " + Utils.selectedRowValue(handler: self, picker: self, ic: ic);
         }
         s = s + "]";
         
@@ -222,24 +222,12 @@ class ANotePickerView : UIPickerView, UIPickerViewDelegate, UIPickerViewDataSour
     
     
     /********************************************************************************************************************************/
-    /** @fcn        Dimension
-     *  @brief      table dimension
-     *  @details    x
-     */
-    /********************************************************************************************************************************/
-    enum Dimension {
-        case cols;
-        case rows;
-    }
-    
-    
-    /********************************************************************************************************************************/
-    /** @fcn        getCount(_ dim : ANotePickerView.Dimension) -> Int
+    /** @fcn        getCount(_ dim : Dimension) -> Int
      *  @brief      get requested dimension
      *  @details    x
      */
     /********************************************************************************************************************************/
-    func getCount(_ dim : ANotePickerView.Dimension) -> Int {
+    func getCount(_ dim : Dimension) -> Int {
         
         switch(dim) {
             case .cols:
