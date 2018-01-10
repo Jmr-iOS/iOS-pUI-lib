@@ -1,8 +1,8 @@
 /************************************************************************************************************************************/
-/** @file       ANotePickerView.swift
+/** @file       CustomPickerViewrView.swift
  *  @project    0_0 - UIPickerView
- *  @brief      class to wrap & control the aNote picker view
- *  @details    x
+ *  @brief      class to wrap & control a custom picker view
+ *  @details    picker imitates the UIDatePicker in XYZ configuration
  *
  *  @notes      data is private to enforce api access
  *
@@ -17,7 +17,7 @@
 import UIKit
 
 
-class ANotePickerView : UIPickerView, UIPickerViewDelegate, UIPickerViewDataSource {
+class CustomPickerView : UIPickerView, UIPickerViewDelegate, UIPickerViewDataSource {
     
     //Data
     private var dateArr  = [String]();
@@ -58,7 +58,7 @@ class ANotePickerView : UIPickerView, UIPickerViewDelegate, UIPickerViewDataSour
         
         //Init scroll position
         selectRow((10_000/2), inComponent: 0, animated: false);
-        selectRow((10_000/2), inComponent: 1, animated: false);
+        selectRow(0*(10_000/2), inComponent: 1, animated: false);
         selectRow((10_000/2), inComponent: 2, animated: false);
         selectRow(1,          inComponent: 3, animated: false);
 
@@ -197,8 +197,35 @@ class ANotePickerView : UIPickerView, UIPickerViewDelegate, UIPickerViewDataSour
         
         return retArr;
     }
-        
-        
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        class func pickValue()
+     *  @brief      show picker for date selection
+     *  @details    init to current date
+     */
+    /********************************************************************************************************************************/
+    class func pickValue() {
+        CustomPickerView.pickValue(Date(timeIntervalSinceNow: 0));
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        class func pickValue(_ picker : ANotePickerView?)
+     *  @brief      show picker for date selection
+     *  @details    x
+     *
+     *  @param      [in] (ANotePickerView?) picker - picker to extract init date from
+     */
+    /********************************************************************************************************************************/
+    class func pickValue(_ picker : CustomPickerView?) {
+        fatalError("not yet supported");
+        //CustomPickerView.pickValue((picker?.getDate())!);
+        //return;
+    }
+    
+    
     /********************************************************************************************************************************/
     /** @fcn        getAsString() -> String
      *  @brief      generate the aNote data structure as a string
@@ -270,6 +297,58 @@ class ANotePickerView : UIPickerView, UIPickerViewDelegate, UIPickerViewDataSour
         return val;
     }
     
+    
+    /********************************************************************************************************************************/
+    /** @fcn        getDate() -> Date
+     *  @brief      parse current selection
+     *  @return     current selection as date
+     *
+     *  @section    Component Access
+     *      day   = Calendar.current.component(.day, from: date)
+     *      month = Calendar.current.component(.month, from: date)
+     *
+     *  @section    Opens
+     *      Handle error case where (hour==12) && (mer==PM)
+     *      Handle scrolling issues, off by '1' quite consistently?
+     *      Understand and resolve why very last row of column zero states row=0, currently ignored
+     */
+    /********************************************************************************************************************************/
+    func getDate() -> Date {
+
+        print(">>----------------------------------------------------------------------------------------------------//");
+        var dc    : DateComponents = DateComponents();                              /* used for date generation                     */
+        
+        //Init
+        dc.calendar = Calendar(identifier: .gregorian);
+        dc.timeZone = TimeZone(abbreviation: "PST");
+
+        //Get Fields (Date, Hr, Min, Merid)
+        let val   = ((selectedRow(inComponent: 0)+1)%365);                          /*  +1 for zero-indexed row                     */
+        var date  = DateComponents(calendar: dc.calendar, year: 0, day: val).date;
+        var hr    = ((selectedRow(inComponent: 1)%hourArr.count)+1);                /*  +1 for zero-indexed row                     */
+        let min   = ((selectedRow(inComponent: 2)%minArr.count)*5);
+        let mer   = selectedRow(inComponent: 3);
+        
+        //Apply Meridian (AM/PM)
+        if(mer > 0) {
+            hr = (hr + 12);
+        }
+        print("val:\(val)");
+        //Grab hour & minute from
+        var newComps = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date!);
+        newComps.year   = 0;                                                        /* set to 0 for simplicity                      */
+        newComps.hour   = hr;
+        newComps.minute = min;
+        newComps.second = 0;
+        
+        date = Calendar.current.date(from: newComps);
+        
+        print("ANotePickerView.getDate():          date returned (\(date!))");
+        print(">>----------------------------------------------------------------------------------------------------//\n\n");
+        return date!;
+    }
+    
+    
     /********************************************************************************************************************************/
     /** @fcn        resetPressed()
      *  @brief      reset fields
@@ -288,6 +367,30 @@ class ANotePickerView : UIPickerView, UIPickerViewDelegate, UIPickerViewDataSour
     
     
     /********************************************************************************************************************************/
+    /** @fcn        class func pickValue(_ date : Date)
+     *  @brief      show picker for date selection
+     *  @details    called by class & raw versions
+     *
+     *  @param      [in] (Date) date - value to initialize display with
+     */
+    /********************************************************************************************************************************/
+    class func pickValue(_ date : Date) {
+        
+        //Fields
+//      let cal : Calendar = Calendar.current;
+//      let hr  : Int = cal.component(.hour, from: date);
+        
+        //Second Picker
+//      let sec : Int = cal.component(.second, from: date);
+        
+        //Meridian
+        print("--> Open Picker Here @todo");
+        
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
     /** @fcn        required init?(coder aDecoder: NSCoder)
      *  @brief      x
      *  @details    x
@@ -298,3 +401,9 @@ class ANotePickerView : UIPickerView, UIPickerViewDelegate, UIPickerViewDataSour
     }
 }
 
+
+
+
+extension Calendar {
+    static let iso8601 = Calendar(identifier: .iso8601);
+}
