@@ -49,6 +49,9 @@ class UICustomTableView : UITableView {
             myCustomCells.append(cell);
         }
         
+        //Configure scrolling & selection
+        self.allowsSelection = false;
+        self.isScrollEnabled = true;
         
         register(UICustomTableViewCell.self, forCellReuseIdentifier: "cell");               /* I have no idea why we do this        */
         
@@ -64,41 +67,13 @@ class UICustomTableView : UITableView {
 	/**	@fcn		addNewCell(_ cellString : String)
 	 *  @brief		x
 	 *  @details	x
-	 *
-	 *  @section	Purpose
-	 *  	x
-	 *
-	 *  @param		[in]	name	descrip
-	 *
-	 *  @param		[out]	name	descrip
-	 *
-	 *  @return		(type) descrip
-	 *
-	 *  @pre		x
-	 *
-	 *  @post		x
-	 *
-	 *  @section	Operation
-	 *		x
-	 *		
-	 *  @section	Opens
-	 *  	x
-	 *
-	 *  @section	Hazards & Risks
-	 *  	x
-	 *
-	 *	@section	Todo
-	 *		x
-	 *
-	 *  @section	Timing
-	 *  	x
-	 *
-	 *  @note		x
+     *
+	 *  @param		[in] (String) cellString - text to display in cell
+     *
 	 */
 	/********************************************************************************************************************************/
 	func addNewCell(_ cellString : String) {
-    
-        
+            
         let newCell : UICustomTableViewCell = UICustomTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "eww?");
         
         myCustomCells.append(newCell);

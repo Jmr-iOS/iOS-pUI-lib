@@ -58,7 +58,7 @@ class CustomPickerView : UIPickerView, UIPickerViewDelegate, UIPickerViewDataSou
         
         //Init scroll position
         selectRow((10_000/2), inComponent: 0, animated: false);
-        selectRow(0*(10_000/2), inComponent: 1, animated: false);
+        selectRow((10_000/2), inComponent: 1, animated: false);
         selectRow((10_000/2), inComponent: 2, animated: false);
         selectRow(1,          inComponent: 3, animated: false);
 
