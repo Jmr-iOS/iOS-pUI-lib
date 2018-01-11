@@ -69,7 +69,7 @@ class ANoteTableView : UICustomTableView {
     
     
     /********************************************************************************************************************************/
-    /** @fcn        func getItems(rows :[Row]) -> [String]
+    /** @fcn        func getItems(rows :[ANoteRow]) -> [String]
      *  @brief      x
      *
      *  @param  [in] ([Row]) row - rows for table
@@ -77,7 +77,7 @@ class ANoteTableView : UICustomTableView {
      *  @return     ([String]) items - items to se in tableview initialization
      */
     /********************************************************************************************************************************/
-    func getItems(rows :[Row]) -> [String]{
+    func getItems(rows :[ANoteRow]) -> [String]{
         
         var  items : [String] = [String]();
         

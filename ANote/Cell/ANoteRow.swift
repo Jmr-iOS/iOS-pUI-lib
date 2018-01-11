@@ -1,5 +1,5 @@
 /************************************************************************************************************************************/
-/** @file       Row.swift
+/** @file       ANoteRow.swift
  *  @brief      x
  *  @details    x
  *
@@ -16,18 +16,18 @@
 import Foundation
 
 
-struct Row {
+struct ANoteRow {
     var main : String?;                                         /* primary text to display                                          */
     var body : String?;                                         /* sub text displayed below main and smaller                        */
     var bott : String?;                                         /* text for time label                                              */
     var time : Date?;                                           /* time selection for cell                                          */
 }
 
-extension Row {
+extension ANoteRow {
     
-    @objc(rowHelperClass) class RowClass: NSObject, NSCoding {
+    @objc(rowHelperClass) class ANoteRowClass: NSObject, NSCoding {
     
-        var row: Row;
+        var row : ANoteRow;
        
         
         /****************************************************************************************************************************/
@@ -36,7 +36,7 @@ extension Row {
          *  @details    x
          */
         /****************************************************************************************************************************/
-        init(row: Row) {
+        init(row: ANoteRow) {
             self.row = row;
             super.init()
         }
@@ -54,7 +54,7 @@ extension Row {
             guard let bott = aDecoder.decodeObject(forKey: RowBackupKeys.bott) as? String else { return nil; }
             guard let time = aDecoder.decodeObject(forKey: RowBackupKeys.time) as? Date   else { return nil; }
             
-            row = Row(main: main, body: body, bott: bott, time: time);          /* init new row from retrieved                      */
+            row = ANoteRow(main: main, body: body, bott: bott, time: time);          /* init new row from retrieved                 */
             
             super.init();
             
@@ -90,10 +90,10 @@ extension Row {
          *  @details    x
          */
         /****************************************************************************************************************************/
-        static func encodeX(row: Row) {
-            let rowClassObject = RowClass(row: row);
+        static func encodeX(row: ANoteRow) {
+            let rowClassObject = ANoteRowClass(row: row);
             
-            let stat : Bool = NSKeyedArchiver.archiveRootObject(rowClassObject, toFile: RowClass.path());
+            let stat : Bool = NSKeyedArchiver.archiveRootObject(rowClassObject, toFile: ANoteRowClass.path());
             
             print("-->I found that the encode save was \(stat)");
             
@@ -102,41 +102,41 @@ extension Row {
     
         
         /****************************************************************************************************************************/
-        /** @fcn        decode() -> Row?
+        /** @fcn        decode() -> ANoteRow?
          *  @brief      x
          *  @details    x
          */
         /****************************************************************************************************************************/
-        static func decode() -> Row? {
-            let rowClassObject = NSKeyedUnarchiver.unarchiveObject(withFile: RowClass.path()) as? RowClass;
+        static func decode() -> ANoteRow? {
+            let rowClassObject = NSKeyedUnarchiver.unarchiveObject(withFile: ANoteRowClass.path()) as? ANoteRowClass;
             
             return rowClassObject?.row;
         }
         
         
         /****************************************************************************************************************************/
-        /** @fcn        static func saveStocksArray(rowArray: [Row]) -> Bool
+        /** @fcn        static func saveStocksArray(rowArray: [ANoteRow]) -> Bool
          *  @brief      x
          *  @details    x
          */
         /****************************************************************************************************************************/
-        static func saveStocksArray(rowArray: [Row]) -> Bool {
-            let rowObjects = rowArray.map{RowClass(row: $0)}
-            let file = documentsDirectoryURL().appendingPathComponent("Rows").path;         /* @todo        to helper               */
+        static func saveStocksArray(rowArray: [ANoteRow]) -> Bool {
+            let rowObjects = rowArray.map{ANoteRowClass(row: $0)}
+            let file = documentsDirectoryURL().appendingPathComponent("ANoteRows").path;         /* @todo        to helper          */
             return NSKeyedArchiver.archiveRootObject(rowObjects, toFile: file);
         }
         
         
         /****************************************************************************************************************************/
-        /** @fcn        static func loadStocksArray() -> [Row]?
+        /** @fcn        static func loadStocksArray() -> [ANoteRow]?
          *  @brief      x
          *  @details    x
          */
         /****************************************************************************************************************************/
-        static func loadStocksArray() -> [Row]? {
-            let file = documentsDirectoryURL().appendingPathComponent("Rows").path;         /* @todo        to helper               */
+        static func loadStocksArray() -> [ANoteRow]? {
+            let file = documentsDirectoryURL().appendingPathComponent("ANoteRows").path;    /* @todo        to helper               */
             let result = NSKeyedUnarchiver.unarchiveObject(withFile: file);                 /* @todo    string def to Globals       */
-            return (result as? [RowClass])?.map{$0.row}
+            return (result as? [ANoteRowClass])?.map{$0.row}
         }
 
         
@@ -167,7 +167,7 @@ extension Row {
             let documentsPath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory,
                                                                     FileManager.SearchPathDomainMask.userDomainMask,
                                                                     true).first;
-            let path = documentsPath?.appendingFormat("/Row");                          /* @todo    string def to Globals           */
+            let path = documentsPath?.appendingFormat("/ANoteRow");                      /* @todo    string def to Globals           */
             
             return path!;
         }
