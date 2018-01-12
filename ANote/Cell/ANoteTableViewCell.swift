@@ -92,7 +92,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         self.mainView.addSubview(self.cellSubView);
 
         //Get Current Cell's Info
-        let currRow : Row = self.vc.rows[indexPath.item];
+        let currRow : ANoteRow = self.vc.rows[indexPath.item];
         
 
         /****************************************************************************************************************************/

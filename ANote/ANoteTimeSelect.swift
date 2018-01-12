@@ -7,7 +7,15 @@
  *  @notes      x
  *
  *  @section    Opens
- *      none current
+ *      extend border to left wall
+ *      row 0 height
+ *      row 1 height
+ *      row 2 height
+ *      row 3 height
+ *      row 4 height
+ *      row 5 height
+ *      row 6 height
+ *      row 7 height
  *
  *  @section    Legal Disclaimer
  *      All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
@@ -17,12 +25,12 @@
 import UIKit
 
 
-class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
+class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
-    let numRows   : CGFloat = 6;
     let width     : CGFloat = UIScreen.main.bounds.width;
-    let height    : CGFloat = 450;                                      /* expand as needed to fit                                  */
-    let rowHeight : CGFloat;
+    let height    : CGFloat = 517;                                      /* full view height                                         */
+    /*                            r0                                                                                                */
+    var rowHeights : [CGFloat] = [45, 55, 55, 55, 55, 55, 55, 55, 0];   /* height of each row in table                              */
     
     var isRaised   : Bool;
     
@@ -39,12 +47,17 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
     /** @fcn        init()
      *  @brief      x
      *  @details    x
+     *
+     *  @section    Opens
+     *      View has correct height
      */
     /********************************************************************************************************************************/
     init(_ vc : ViewController) {
 
         //Init Constants
-        rowHeight = (height/numRows);
+        //@pre (temp)
+        let h = rowHeights.reduce(0, +);
+        rowHeights[rowHeights.count-1] = rowHeights[rowHeights.count-1] + (height-h);
         
         if(verbose){ print("ANoteTimeSelect.init():             adding a standard table"); }
         
@@ -81,11 +94,12 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
         tableView.separatorColor = UIColor.gray;
         tableView.separatorStyle = .singleLine;
         
+        tableView.layoutMargins = UIEdgeInsets.zero;								/* set borders full cell span					*/
+        tableView.separatorInset = UIEdgeInsets.zero;
+        
+        
         //Safety
         tableView.backgroundColor = UIColor.black;
-        
-        //Set the row height
-        tableView.rowHeight = rowHeight;
         
         //Disable scrolling & selection
         tableView.allowsSelection = false;
@@ -95,8 +109,11 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
         
         //Add it!
         self.addSubview(tableView);
-//<END>
+//<TEMP>
         self.backgroundColor = UIColor.darkGray;
+        self.layer.borderWidth = 1;
+        self.layer.borderColor = UIColor.init(red:222/255.0, green:225/255.0, blue:227/255.0, alpha: 1.0).cgColor;
+//</TEMP>
         
         if(verbose){ print("ANoteTimeSelect.show():             initialization complete"); }
         
@@ -172,17 +189,23 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
     /********************************************************************************************************************************/
     func load_row0() -> UITableViewCell {
         
+        //helpers
+        let fnt : UIFont = (UIButton().titleLabel?.font)!;                          /* standard UIButton font                       */
+
+        //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
         
         //Constants
         let labelFrame = CGRect(x: 0,
-                                y: ((cell?.frame.height)!)/2,
+                                y: 1,
                                 width: UIScreen.main.bounds.width,
                                 height: ((cell?.frame.height)!));
         
         //UILabel  ("To-do Info")
         let myFirstLabel = UILabel();                                               /* init                                         */
         myFirstLabel.textAlignment = .center;                                       /* x-alignment of text                          */
+        myFirstLabel.font = UIFont(name: fnt.fontName+"-Medium", size: (fnt.pointSize));
+        myFirstLabel.textColor = UIColor.black;
         myFirstLabel.frame = labelFrame;                                            /* location in view                             */
         myFirstLabel.translatesAutoresizingMaskIntoConstraints = true;              /* allow constraints                            */
         myFirstLabel.text = "To-do Info";                                           /* set the displayed text                       */
@@ -190,10 +213,17 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
 
         //UIButton ("Cancel") - enabled
         let cancelButton = UIButton(type: UIButtonType.roundedRect);
+        cancelButton.titleLabel?.font = UIFont(name: fnt.fontName, size: (fnt.pointSize-1));                                            //add to UIButton Demo
+        cancelButton.setTitleColor(UIColor.orange, for: .normal);                                                                       //add to UIButton Demo
+        //cancelButton.setTitle(, for: )                                                                                                //add to UIButton Demo, showing different state configurations
+
         cancelButton.translatesAutoresizingMaskIntoConstraints = true;
-        cancelButton.setTitle("Cancel", for: UIControlState());
+        cancelButton.setTitle("Cancel", for: .normal);
         cancelButton.sizeToFit();
-        cancelButton.center = CGPoint(x: (cancelButton.frame.width/2+25), y: ((cell?.frame.height)!));
+
+        print("-->W:\(cancelButton.frame.width/2+8)");
+        
+        cancelButton.center = CGPoint(x: (cancelButton.frame.width/2+8), y: 26);
         cancelButton.contentHorizontalAlignment = .left;
         cancelButton.contentVerticalAlignment   = .top;
         cancelButton.addTarget(self, action: #selector(self.cancelPressed(_:)), for:  .touchUpInside);
@@ -201,13 +231,18 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
         
         //UIButton ("Done") -> disabled
         let doneButton = UIButton(type: UIButtonType.roundedRect);
+        
+        doneButton.titleLabel?.font = UIFont(name: fnt.fontName+"-Medium", size: (fnt.pointSize-1));                                    //add to UIButton Demo
+        doneButton.setTitleColor(UIColor.gray, for: .normal);                                                                       //add to UIButton Demo                                                                                               //add to UIButton Demo
+        
         doneButton.translatesAutoresizingMaskIntoConstraints = true;
-        doneButton.setTitle("Done", for: UIControlState());
+        doneButton.setTitle("Done", for: .normal);
         doneButton.sizeToFit();
         doneButton.isEnabled = false;                                           /* set to disabled                                  */
         
-        let x : CGFloat = UIScreen.main.bounds.width - (doneButton.frame.width/2+10);
-        doneButton.center = CGPoint(x: x, y: ((cell?.frame.height)!));
+        
+        let x : CGFloat = UIScreen.main.bounds.width - 28;
+        doneButton.center = CGPoint(x: x, y: 26);
         doneButton.contentHorizontalAlignment = .left;
         doneButton.contentVerticalAlignment   = .top;
         doneButton.addTarget(self, action: #selector(self.donePressed(_:)), for:  .touchUpInside);
@@ -215,6 +250,174 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
 
         
         if(self.verbose){ print("ANoteTimeSelect.load_row0():        row 0 load complete"); }
+        
+        return cell!;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        load_row1() -> UITableViewCell
+     *  @brief
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func load_row1() -> UITableViewCell {
+        
+        //Acquire Cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
+    
+        if(self.verbose){ print("ANoteTimeSelect.load_row1():        row 1 load complete"); }
+        
+        return cell!;
+    }
+    
+    
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        load_row2() -> UITableViewCell
+     *  @brief
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func load_row2() -> UITableViewCell {
+        
+        //Acquire Cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
+        
+        if(self.verbose){ print("ANoteTimeSelect.load_row2():        row 2 load complete"); }
+        
+        return cell!;
+    }
+    
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        load_row3() -> UITableViewCell
+     *  @brief
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func load_row3() -> UITableViewCell {
+        
+        //Acquire Cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
+        
+//<TEMP>
+        cell?.backgroundColor = UIColor.red;
+//</TEMP>
+        
+        if(self.verbose){ print("ANoteTimeSelect.load_row3():        row 3 load complete"); }
+        
+        return cell!;
+    }
+    
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        load_row4() -> UITableViewCell
+     *  @brief
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func load_row4() -> UITableViewCell {
+        
+        //Acquire Cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
+        
+//<TEMP>
+        cell?.backgroundColor = UIColor.cyan;
+//</TEMP>
+        
+        if(self.verbose){ print("ANoteTimeSelect.load_row4():        row 4 load complete"); }
+        
+        return cell!;
+    }
+    
+    
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        load_row5() -> UITableViewCell
+     *  @brief
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func load_row5() -> UITableViewCell {
+        
+        //Acquire Cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
+        
+//<TEMP>
+        cell?.backgroundColor = UIColor.yellow;
+//</TEMP>
+        
+        if(self.verbose){ print("ANoteTimeSelect.load_row5():        row 5 load complete"); }
+        
+        return cell!;
+    }
+    
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        load_row6() -> UITableViewCell
+     *  @brief
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func load_row6() -> UITableViewCell {
+        
+        //Acquire Cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
+        
+//<TEMP>
+        cell?.backgroundColor = UIColor.purple;
+//</TEMP>
+        
+        if(self.verbose){ print("ANoteTimeSelect.load_row6():        row 6 load complete"); }
+        
+        return cell!;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        load_row7() -> UITableViewCell
+     *  @brief
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func load_row7() -> UITableViewCell {
+        
+        //Acquire Cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
+        
+//<TEMP>
+        cell?.backgroundColor = UIColor.cyan;
+//</TEMP>
+        
+        if(self.verbose){ print("ANoteTimeSelect.load_row7():        row 7 load complete"); }
+        
+        return cell!;
+    }
+    
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        load_row8() -> UITableViewCell
+     *  @brief
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func load_row8() -> UITableViewCell {
+        
+        //Acquire Cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
+        
+//<TEMP>
+        cell?.backgroundColor = UIColor.lightGray;
+//</TEMP>
+        
+        if(self.verbose){ print("ANoteTimeSelect.load_row8():        row 8 load complete"); }
         
         return cell!;
     }
@@ -256,6 +459,29 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
     }
     
     
+    /********************************************************************************************************************************/
+    /** @fcn        getNumRows() -> Int
+     *  @brief      get number of rows in table
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func getNumRows() -> Int {
+        print("!!!getNumRows() called");
+        return rowHeights.count;
+    }
+
+    
+    /********************************************************************************************************************************/
+    /** @fcn        getTableHeight() -> CGFloat
+     *  @brief      get height of all rows
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func getTableHeight() -> CGFloat {
+        return rowHeights.reduce(0, +);
+    }
+    
+    
 /************************************************************************************************************************************/
 /*                                    UITableViewDataSource, UITableViewDelegate Interfaces                                         */
 /************************************************************************************************************************************/
@@ -268,9 +494,9 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
     /********************************************************************************************************************************/
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
    
-        if(verbose){ print("ViewController.tableView(NRS):      the table will now have \(numRows), cause I just said so..."); }
+        if(verbose){ print("ViewController.tableView(NRS):      the table will now have \(getNumRows()), cause I just said so..."); }
         
-        return Int(numRows);                                                /* return how many rows you want printed....!           */
+        return getNumRows();                                                /* return how many rows you want printed....!           */
     }
     
     
@@ -286,13 +512,38 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
         
         //Grab
         let cell : UITableViewCell?;
-        
+
         switch(indexPath.item) {
-        case 0:
-            cell = load_row0();
-            break;
-        default:
-            cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
+            case 0:
+                cell = load_row0();
+                break;
+            case 1:
+                cell = load_row1();
+                break;
+            case 2:
+                cell = load_row2();
+                break;
+            case 3:
+                cell = load_row3();
+                break;
+            case 4:
+                cell = load_row4();
+                break;
+            case 5:
+                cell = load_row5();
+                break;
+            case 6:
+                cell = load_row6();
+                break;
+            case 7:
+                cell = load_row7();
+                break;
+            case 8:
+                cell = load_row8();
+                break;
+            default:
+                cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
+                print("!!! Bad cell returned");
         }
         
         
@@ -301,7 +552,8 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
         cell?.textLabel?.font = UIFont(name: (cell?.textLabel!.font.fontName)!, size: 20);      /* font                             */
         cell?.textLabel?.textAlignment = NSTextAlignment.center;                                /* alignment                        */
         cell?.selectionStyle = UITableViewCellSelectionStyle.none;                              /* tap ui response                  */
-        
+        cell?.layoutMargins = UIEdgeInsets.zero;												/* set borders full cell span		*/
+
         if(verbose){ print("ANoteTimeSelect.tableView(cFR):     adding a cell complete"); }
         
         return cell!;
@@ -367,6 +619,18 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate  {
         return UITableViewCellEditingStyle.none;
     }
     
+
+    /********************************************************************************************************************************/
+    /** @fcn        tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+     *  @brief      x
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if(verbose){ print("ANoteTimeSelect.tableView(HFR):     called"); }
+        return rowHeights[indexPath.item];
+    }
+
     
     /********************************************************************************************************************************/
     /* @fcn        required init?(coder aDecoder: NSCoder)                                                                          */
