@@ -7,15 +7,7 @@
  *  @notes      x
  *
  *  @section    Opens
- *      extend border to left wall
- *      row 0 height
- *      row 1 height
- *      row 2 height
- *      row 3 height
- *      row 4 height
- *      row 5 height
- *      row 6 height
- *      row 7 height
+ *      none listed
  *
  *  @section    Legal Disclaimer
  *      All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
@@ -29,8 +21,8 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
     let width     : CGFloat = UIScreen.main.bounds.width;
     let height    : CGFloat = 517;                                      /* full view height                                         */
-    /*                            r0                                                                                                */
-    var rowHeights : [CGFloat] = [45, 55, 55, 55, 55, 55, 55, 55, 0];   /* height of each row in table                              */
+
+    var rowHeights : [CGFloat] = [45, 92, 188, 49, 49, 48, 0];          /* height of each row in table                              */
     
     var isRaised   : Bool;
     
@@ -302,13 +294,9 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
-        
-//<TEMP>
-        cell?.backgroundColor = UIColor.red;
-//</TEMP>
-        
+
         if(self.verbose){ print("ANoteTimeSelect.load_row3():        row 3 load complete"); }
-        
+
         return cell!;
     }
     
@@ -324,11 +312,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
-        
-//<TEMP>
-        cell?.backgroundColor = UIColor.cyan;
-//</TEMP>
-        
+
         if(self.verbose){ print("ANoteTimeSelect.load_row4():        row 4 load complete"); }
         
         return cell!;
@@ -347,11 +331,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
-        
-//<TEMP>
-        cell?.backgroundColor = UIColor.yellow;
-//</TEMP>
-        
+         
         if(self.verbose){ print("ANoteTimeSelect.load_row5():        row 5 load complete"); }
         
         return cell!;
@@ -370,54 +350,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
         
-//<TEMP>
-        cell?.backgroundColor = UIColor.purple;
-//</TEMP>
-        
         if(self.verbose){ print("ANoteTimeSelect.load_row6():        row 6 load complete"); }
-        
-        return cell!;
-    }
-    
-    
-    /********************************************************************************************************************************/
-    /** @fcn        load_row7() -> UITableViewCell
-     *  @brief
-     *  @details    x
-     */
-    /********************************************************************************************************************************/
-    func load_row7() -> UITableViewCell {
-        
-        //Acquire Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
-        
-//<TEMP>
-        cell?.backgroundColor = UIColor.cyan;
-//</TEMP>
-        
-        if(self.verbose){ print("ANoteTimeSelect.load_row7():        row 7 load complete"); }
-        
-        return cell!;
-    }
-    
-    
-    
-    /********************************************************************************************************************************/
-    /** @fcn        load_row8() -> UITableViewCell
-     *  @brief
-     *  @details    x
-     */
-    /********************************************************************************************************************************/
-    func load_row8() -> UITableViewCell {
-        
-        //Acquire Cell
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
-        
-//<TEMP>
-        cell?.backgroundColor = UIColor.lightGray;
-//</TEMP>
-        
-        if(self.verbose){ print("ANoteTimeSelect.load_row8():        row 8 load complete"); }
         
         return cell!;
     }
@@ -535,15 +468,8 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
             case 6:
                 cell = load_row6();
                 break;
-            case 7:
-                cell = load_row7();
-                break;
-            case 8:
-                cell = load_row8();
-                break;
             default:
-                cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
-                print("!!! Bad cell returned");
+                fatalError("Bad cell returned, aborting");
         }
         
         
