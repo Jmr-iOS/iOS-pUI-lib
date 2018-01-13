@@ -64,17 +64,6 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         super.init(frame: frame);
         
         //Init UI
-        //@todo     [X] table
-        //@todo     table.row[0]: Button | UILabel | Button
-        //@todo     table.row[1]: Empty
-        //@todo     table.row[2]: DatePicker
-        //@todo     table.row[3]: Empty
-        //@todo     table.row[4]: Empty
-        //@todo     table.row[5]: Empty
-        //@todo     table.row[6]: Empty
-
-        
-        //Init
         tableView = UITableView(frame:CGRect(x: 0, y: 0, width: frame.width, height: frame.height));
         
         tableView.delegate = self;                                                  /* Set both to handle clicks & provide data     */
@@ -85,10 +74,6 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         tableView.separatorColor = UIColor.gray;
         tableView.separatorStyle = .singleLine;
-        
-        tableView.layoutMargins = UIEdgeInsets.zero;								/* set borders full cell span					*/
-        tableView.separatorInset = UIEdgeInsets.zero;
-        
         
         //Safety
         tableView.backgroundColor = UIColor.black;
@@ -101,11 +86,6 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //Add it!
         self.addSubview(tableView);
-//<TEMP>
-        self.backgroundColor = UIColor.darkGray;
-        self.layer.borderWidth = 1;
-        self.layer.borderColor = UIColor.init(red:222/255.0, green:225/255.0, blue:227/255.0, alpha: 1.0).cgColor;
-//</TEMP>
         
         if(verbose){ print("ANoteTimeSelect.show():             initialization complete"); }
         
@@ -205,16 +185,11 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
 
         //UIButton ("Cancel") - enabled
         let cancelButton = UIButton(type: UIButtonType.roundedRect);
-        cancelButton.titleLabel?.font = UIFont(name: fnt.fontName, size: (fnt.pointSize-1));                                            //add to UIButton Demo
-        cancelButton.setTitleColor(UIColor.orange, for: .normal);                                                                       //add to UIButton Demo
-        //cancelButton.setTitle(, for: )                                                                                                //add to UIButton Demo, showing different state configurations
-
+        cancelButton.titleLabel?.font = UIFont(name: fnt.fontName, size: (fnt.pointSize-1));
+        cancelButton.setTitleColor(UIColor.orange, for: .normal);
         cancelButton.translatesAutoresizingMaskIntoConstraints = true;
         cancelButton.setTitle("Cancel", for: .normal);
         cancelButton.sizeToFit();
-
-        print("-->W:\(cancelButton.frame.width/2+8)");
-        
         cancelButton.center = CGPoint(x: (cancelButton.frame.width/2+8), y: 26);
         cancelButton.contentHorizontalAlignment = .left;
         cancelButton.contentVerticalAlignment   = .top;
@@ -223,15 +198,12 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //UIButton ("Done") -> disabled
         let doneButton = UIButton(type: UIButtonType.roundedRect);
-        
-        doneButton.titleLabel?.font = UIFont(name: fnt.fontName+"-Medium", size: (fnt.pointSize-1));                                    //add to UIButton Demo
-        doneButton.setTitleColor(UIColor.gray, for: .normal);                                                                       //add to UIButton Demo                                                                                               //add to UIButton Demo
-        
+        doneButton.titleLabel?.font = UIFont(name: fnt.fontName+"-Medium", size: (fnt.pointSize-1));
+        doneButton.setTitleColor(UIColor.gray, for: .normal);
         doneButton.translatesAutoresizingMaskIntoConstraints = true;
         doneButton.setTitle("Done", for: .normal);
         doneButton.sizeToFit();
         doneButton.isEnabled = false;                                           /* set to disabled                                  */
-        
         
         let x : CGFloat = UIScreen.main.bounds.width - 28;
         doneButton.center = CGPoint(x: x, y: 26);
@@ -286,15 +258,49 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
     /********************************************************************************************************************************/
     /** @fcn        load_row3() -> UITableViewCell
-     *  @brief
+     *  @brief      Alarm and 'At time of event'
      *  @details    x
+     *
+     *  @section    Opens
+     *      left-align title
+     *      right-align value
      */
     /********************************************************************************************************************************/
     func load_row3() -> UITableViewCell {
         
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
-
+        
+        //Init Title Label
+        let titleLabel = UILabel();
+        titleLabel.textAlignment = .left;
+        titleLabel.textColor = UIColor.darkGray;
+        titleLabel.frame.origin.x = 25;
+        titleLabel.frame.origin.y = 13;
+        titleLabel.translatesAutoresizingMaskIntoConstraints = true;
+        titleLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        titleLabel.text = "Alarm";
+        titleLabel.sizeToFit();
+        
+        //Init Value Label
+        let valueLabel = UILabel();
+        valueLabel.textColor = UIColor.gray;
+        valueLabel.translatesAutoresizingMaskIntoConstraints = true;
+        valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        valueLabel.text = "At time of event";
+        valueLabel.sizeToFit();
+        valueLabel.frame = CGRect(x: (285-valueLabel.frame.width), y: 13.5, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
+        
+        //Init Button
+        let button : UIButton = UIButton(frame:CGRect(x: 297, y: 15, width: 10, height: 16));
+        button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
+        button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
+        
+        //Add to view
+        cell?.addSubview(titleLabel);
+        cell?.addSubview(valueLabel);
+        cell?.addSubview(button);
+        
         if(self.verbose){ print("ANoteTimeSelect.load_row3():        row 3 load complete"); }
 
         return cell!;
@@ -304,7 +310,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
     /********************************************************************************************************************************/
     /** @fcn        load_row4() -> UITableViewCell
-     *  @brief
+     *  @brief      Repeat and Never
      *  @details    x
      */
     /********************************************************************************************************************************/
@@ -312,7 +318,37 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
-
+        
+        //Init Title Label
+        let titleLabel = UILabel();
+        titleLabel.textAlignment = .left;
+        titleLabel.textColor = UIColor.darkGray;
+        titleLabel.frame.origin.x = 25;
+        titleLabel.frame.origin.y = 13;
+        titleLabel.translatesAutoresizingMaskIntoConstraints = true;
+        titleLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        titleLabel.text = "Repeat";
+        titleLabel.sizeToFit();
+        
+        //Init Value Label
+        let valueLabel = UILabel();
+        valueLabel.textColor = UIColor.gray;
+        valueLabel.translatesAutoresizingMaskIntoConstraints = true;
+        valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        valueLabel.text = "Never";
+        valueLabel.sizeToFit();
+        valueLabel.frame = CGRect(x: (285-valueLabel.frame.width), y: 13.75, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
+        
+        //Init Button
+        let button : UIButton = UIButton(frame:CGRect(x: 297, y: 15, width: 10, height: 16));
+        button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
+        button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
+        
+        //Add to view
+        cell?.addSubview(titleLabel);
+        cell?.addSubview(valueLabel);
+        cell?.addSubview(button);
+        
         if(self.verbose){ print("ANoteTimeSelect.load_row4():        row 4 load complete"); }
         
         return cell!;
@@ -323,7 +359,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
     /********************************************************************************************************************************/
     /** @fcn        load_row5() -> UITableViewCell
-     *  @brief
+     *  @brief      Status and None
      *  @details    x
      */
     /********************************************************************************************************************************/
@@ -331,7 +367,38 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
-         
+        
+        //Init Title Label
+        let titleLabel = UILabel();
+        titleLabel.textAlignment = .left;
+        titleLabel.textColor = UIColor.darkGray;
+        titleLabel.frame.origin.x = 25;
+        titleLabel.frame.origin.y = 13;
+        titleLabel.translatesAutoresizingMaskIntoConstraints = true;
+        titleLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        titleLabel.text = "Status";
+        titleLabel.sizeToFit();
+
+        //Init Value Label
+        let valueLabel = UILabel();
+        valueLabel.textColor = UIColor.gray;
+        valueLabel.translatesAutoresizingMaskIntoConstraints = true;
+        valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        valueLabel.text = "None";
+        valueLabel.sizeToFit();
+        valueLabel.frame = CGRect(x: (285-valueLabel.frame.width), y: 14, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
+        
+        
+        //Init Button
+        let button : UIButton = UIButton(frame:CGRect(x: 297, y: 15, width: 10, height: 16));
+        button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
+        button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
+
+        //Add to view
+        cell?.addSubview(titleLabel);
+        cell?.addSubview(valueLabel);
+        cell?.addSubview(button);
+        
         if(self.verbose){ print("ANoteTimeSelect.load_row5():        row 5 load complete"); }
         
         return cell!;
@@ -341,7 +408,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
     /********************************************************************************************************************************/
     /** @fcn        load_row6() -> UITableViewCell
-     *  @brief
+     *  @brief      add 'Remove To-do Info' button in red
      *  @details    x
      */
     /********************************************************************************************************************************/
@@ -350,7 +417,18 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
         
-        if(self.verbose){ print("ANoteTimeSelect.load_row6():        row 6 load complete"); }
+        //Init Button
+        let button : UIButton = UIButton(frame:(cell?.frame)!);
+        button.setTitle("Remove To-do Info", for: .normal);
+        button.titleLabel?.font = UIFont(descriptor: (button.titleLabel?.font.fontDescriptor)!,
+                                         size:       ((button.titleLabel?.font.pointSize)!-2));
+        button.setTitleColor(UIColor.red, for: .normal);
+        button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
+        
+        //Add
+        cell?.addSubview(button);
+        
+        if(self.verbose){ print("ANoteTimeSelect.load_row6():        row 6 load complete, remove button inserted"); }
         
         return cell!;
     }
@@ -393,13 +471,25 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
     
     /********************************************************************************************************************************/
+    /** @fcn        func removePressed(_: (UIButton?))
+     *  @brief      handle the search button selection
+     *  @details    x
+     *  @note       @objc exposed to enable assignment for button response, not sure why
+     */
+    /********************************************************************************************************************************/
+    @objc func removePressed(_ sender : (UIButton!)) {
+        if(self.verbose){ print("ANoteTimeSelect.removePressed():    '\(sender.titleLabel!.text!)' was pressed"); }
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
     /** @fcn        getNumRows() -> Int
      *  @brief      get number of rows in table
      *  @details    x
      */
     /********************************************************************************************************************************/
     func getNumRows() -> Int {
-        print("!!!getNumRows() called");
         return rowHeights.count;
     }
 
@@ -478,7 +568,6 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         cell?.textLabel?.font = UIFont(name: (cell?.textLabel!.font.fontName)!, size: 20);      /* font                             */
         cell?.textLabel?.textAlignment = NSTextAlignment.center;                                /* alignment                        */
         cell?.selectionStyle = UITableViewCellSelectionStyle.none;                              /* tap ui response                  */
-        cell?.layoutMargins = UIEdgeInsets.zero;												/* set borders full cell span		*/
 
         if(verbose){ print("ANoteTimeSelect.tableView(cFR):     adding a cell complete"); }
         
