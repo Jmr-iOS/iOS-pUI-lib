@@ -260,10 +260,6 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /** @fcn        load_row3() -> UITableViewCell
      *  @brief      Alarm and 'At time of event'
      *  @details    x
-     *
-     *  @section    Opens
-     *      left-align title
-     *      right-align value
      */
     /********************************************************************************************************************************/
     func load_row3() -> UITableViewCell {
@@ -289,7 +285,8 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
         valueLabel.text = "At time of event";
         valueLabel.sizeToFit();
-        valueLabel.frame = CGRect(x: (285-valueLabel.frame.width), y: 13.5, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
+        let x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
+        valueLabel.frame = CGRect(x: x, y: 13.5, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
         
         //Init Button
         let button : UIButton = UIButton(frame:CGRect(x: 297, y: 15, width: 10, height: 16));
@@ -337,7 +334,8 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
         valueLabel.text = "Never";
         valueLabel.sizeToFit();
-        valueLabel.frame = CGRect(x: (285-valueLabel.frame.width), y: 13.75, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
+        let x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
+        valueLabel.frame = CGRect(x: x, y: 13.5, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
         
         //Init Button
         let button : UIButton = UIButton(frame:CGRect(x: 297, y: 15, width: 10, height: 16));
@@ -386,8 +384,8 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
         valueLabel.text = "None";
         valueLabel.sizeToFit();
-        valueLabel.frame = CGRect(x: (285-valueLabel.frame.width), y: 14, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
-        
+        let x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
+        valueLabel.frame = CGRect(x: x, y: 13.5, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
         
         //Init Button
         let button : UIButton = UIButton(frame:CGRect(x: 297, y: 15, width: 10, height: 16));
