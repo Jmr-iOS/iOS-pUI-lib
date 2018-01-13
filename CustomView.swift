@@ -39,7 +39,7 @@ class CustomView : UIView {
     init() {
         super.init(frame: UIScreen.main.bounds);
         
-        //for debug validation
+        //for validation
         self.backgroundColor = UIColor.blue;
         print("My Custom Init");
         
