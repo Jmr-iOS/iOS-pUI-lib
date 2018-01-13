@@ -30,6 +30,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
     //UI
     var tableView : UITableView!;
+    var picker    : UIDatePicker!;
     
     //Constants
     let verbose : Bool = true;
@@ -174,19 +175,18 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
                                 height: ((cell?.frame.height)!));
         
         //UILabel  ("To-do Info")
-        let myFirstLabel = UILabel();                                               /* init                                         */
-        myFirstLabel.textAlignment = .center;                                       /* x-alignment of text                          */
-        myFirstLabel.font = UIFont(name: fnt.fontName+"-Medium", size: (fnt.pointSize));
-        myFirstLabel.textColor = UIColor.black;
-        myFirstLabel.frame = labelFrame;                                            /* location in view                             */
-        myFirstLabel.translatesAutoresizingMaskIntoConstraints = true;              /* allow constraints                            */
-        myFirstLabel.text = "To-do Info";                                           /* set the displayed text                       */
-        cell?.addSubview(myFirstLabel);                                             /* add to view                                  */
+        let label = UILabel();                                                      /* init                                         */
+        label.textAlignment = .center;                                              /* x-alignment of text                          */
+        label.font = UIFont(name: fnt.fontName+"-Medium", size: (fnt.pointSize));
+        label.textColor = UIColor.black;
+        label.frame = labelFrame;                                                   /* location in view                             */
+        label.translatesAutoresizingMaskIntoConstraints = true;                     /* allow constraints                            */
+        label.text = "To-do Info";                                                  /* set the displayed text                       */
 
         //UIButton ("Cancel") - enabled
         let cancelButton = UIButton(type: UIButtonType.roundedRect);
         cancelButton.titleLabel?.font = UIFont(name: fnt.fontName, size: (fnt.pointSize-1));
-        cancelButton.setTitleColor(UIColor.orange, for: .normal);
+        cancelButton.setTitleColor(UIColor(red:1.00, green:0.66, blue:0.00, alpha:1.0), for: .normal);      /* ffa800               */
         cancelButton.translatesAutoresizingMaskIntoConstraints = true;
         cancelButton.setTitle("Cancel", for: .normal);
         cancelButton.sizeToFit();
@@ -194,12 +194,11 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         cancelButton.contentHorizontalAlignment = .left;
         cancelButton.contentVerticalAlignment   = .top;
         cancelButton.addTarget(self, action: #selector(self.cancelPressed(_:)), for:  .touchUpInside);
-        cell?.addSubview(cancelButton);
         
         //UIButton ("Done") -> disabled
         let doneButton = UIButton(type: UIButtonType.roundedRect);
         doneButton.titleLabel?.font = UIFont(name: fnt.fontName+"-Medium", size: (fnt.pointSize-1));
-        doneButton.setTitleColor(UIColor.gray, for: .normal);
+        doneButton.setTitleColor(UIColor.lightGray, for: .normal);
         doneButton.translatesAutoresizingMaskIntoConstraints = true;
         doneButton.setTitle("Done", for: .normal);
         doneButton.sizeToFit();
@@ -210,8 +209,17 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         doneButton.contentHorizontalAlignment = .left;
         doneButton.contentVerticalAlignment   = .top;
         doneButton.addTarget(self, action: #selector(self.donePressed(_:)), for:  .touchUpInside);
-        cell?.addSubview(doneButton);
+        
+        //Add upper board
+        let upperBorder = UIView();
+        upperBorder.backgroundColor = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1.0);
+        upperBorder.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1);
 
+        //Add to view
+        cell?.addSubview(label);
+        cell?.addSubview(cancelButton);
+        cell?.addSubview(doneButton);
+        cell?.addSubview(upperBorder);
         
         if(self.verbose){ print("ANoteTimeSelect.load_row0():        row 0 load complete"); }
         
@@ -227,9 +235,79 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /********************************************************************************************************************************/
     func load_row1() -> UITableViewCell {
         
+        //Constants
+        let wBtn  : CGFloat = 80;                                       /* width of button                                          */
+        let xMid  : CGFloat = (UIScreen.main.bounds.width/2)-(wBtn/2);  /* middle of screen                                         */
+        let xBtn  : CGFloat = 88;                                       /* delta between row[1] buttons                             */
+        let xOffs : CGFloat = 8;                                        /* offset of buttons in row                                 */
+
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
     
+        //Label
+        let titleLabel = UILabel();
+        titleLabel.textAlignment = .left;
+        titleLabel.textColor = UIColor.darkGray;
+        titleLabel.frame.origin.x = 25;
+        titleLabel.frame.origin.y = 13;
+        titleLabel.translatesAutoresizingMaskIntoConstraints = true;
+        titleLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        titleLabel.text = "Due Date";
+        titleLabel.sizeToFit();
+        
+        //Switch
+        let alarmSwitch = UISwitch();
+        alarmSwitch.frame.origin = CGPoint(x: UIScreen.main.bounds.width - 65, y: 8);
+        alarmSwitch.onTintColor = UIColor(red:1.00, green:0.67, blue:0.00, alpha:1.0);
+        alarmSwitch.addTarget(self, action: #selector(self.alarmPressed(_:)), for: UIControlEvents.valueChanged);
+        
+        //Three Buttons (Today, Tomorrow, Someday)  (-1 font, darkGray title) (with selection)
+        let todayButton = UIButton(type: UIButtonType.roundedRect);
+        todayButton.translatesAutoresizingMaskIntoConstraints = true;
+        todayButton.setTitle("Today",      for: UIControlState());
+        todayButton.titleLabel?.font = UIFont(descriptor: (todayButton.titleLabel?.font.fontDescriptor)!, size: (todayButton.titleLabel?.font.pointSize)!-1);
+        todayButton.setTitleColor(UIColor.darkGray, for: .normal);
+        todayButton.sizeToFit();
+        todayButton.frame = CGRect(x: (xMid-xBtn+xOffs), y: 50, width: wBtn, height: 32);
+        todayButton.setTitleColor(UIColor.black, for: .normal);
+        todayButton.backgroundColor = UIColor(red:0.90, green:0.90, blue:0.90, alpha:1.0);
+        todayButton.clipsToBounds = true;
+        todayButton.layer.cornerRadius = 5;
+        //!todayButton.addTarget(self, action: #selector(ViewController.secondPressed(_:)), for:  .touchUpInside);
+        
+        let tommButton = UIButton(type: UIButtonType.roundedRect);
+        tommButton.translatesAutoresizingMaskIntoConstraints = true;
+        tommButton.setTitle("Tomorrow",      for: UIControlState());
+        tommButton.titleLabel?.font = UIFont(descriptor: (todayButton.titleLabel?.font.fontDescriptor)!, size: (todayButton.titleLabel?.font.pointSize)!-1);
+        tommButton.setTitleColor(UIColor.darkGray, for: .normal);
+        tommButton.sizeToFit();
+        tommButton.frame = CGRect(x: (xMid+xOffs), y: 50, width: wBtn, height: 32);
+        tommButton.setTitleColor(UIColor.black, for: .normal);
+        tommButton.backgroundColor = UIColor(red:0.90, green:0.90, blue:0.90, alpha:1.0);
+        tommButton.clipsToBounds = true;
+        tommButton.layer.cornerRadius = 5;
+        //!tommButton.addTarget(self, action: #selector(ViewController.secondPressed(_:)), for:  .touchUpInside);
+        
+        let someButton = UIButton(type: UIButtonType.roundedRect);
+        someButton.translatesAutoresizingMaskIntoConstraints = true;
+        someButton.setTitle("Someday",      for: UIControlState());
+        someButton.titleLabel?.font = UIFont(descriptor: (todayButton.titleLabel?.font.fontDescriptor)!, size: (todayButton.titleLabel?.font.pointSize)!-1);
+        someButton.setTitleColor(UIColor.darkGray, for: .normal);
+        someButton.sizeToFit();
+        someButton.frame = CGRect(x: (xMid+xBtn+xOffs), y: 50, width: wBtn, height: 32);
+        someButton.setTitleColor(UIColor.black, for: .normal);
+        someButton.backgroundColor = UIColor(red:0.90, green:0.90, blue:0.90, alpha:1.0);
+        someButton.clipsToBounds = true;
+        someButton.layer.cornerRadius = 5;
+        //!someButton.addTarget(self, action: #selector(ViewController.secondPressed(_:)), for:  .touchUpInside);
+        
+        //Add to view
+        cell?.addSubview(titleLabel);
+        cell?.addSubview(alarmSwitch);
+        cell?.addSubview(todayButton);
+        cell?.addSubview(tommButton);
+        cell?.addSubview(someButton);
+        
         if(self.verbose){ print("ANoteTimeSelect.load_row1():        row 1 load complete"); }
         
         return cell!;
@@ -249,11 +327,61 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
         
+        //Label
+        let titleLabel = UILabel();
+        titleLabel.textAlignment = .left;
+        titleLabel.textColor = UIColor.darkGray;
+        titleLabel.frame.origin.x = 25;
+        titleLabel.frame.origin.y = 13;
+        titleLabel.translatesAutoresizingMaskIntoConstraints = true;
+        titleLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        titleLabel.text = "All Day";
+        titleLabel.sizeToFit();
+        
+        //Switch
+        let allDaySwitch = UISwitch();
+        allDaySwitch.frame.origin = CGPoint(x: UIScreen.main.bounds.width - 65, y: 8);
+        allDaySwitch.onTintColor = UIColor(red:1.00, green:0.67, blue:0.00, alpha:1.0);
+        //!allDaySwitch.addTarget(self, action: #selector(self.allDayPressed(_:)), for: UIControlEvents.valueChanged);
+        
+        //Time Selector
+        addPicker_aNote(cell!);
+        
+        //Add to view
+        cell?.addSubview(titleLabel);
+        cell?.addSubview(allDaySwitch);
+        
         if(self.verbose){ print("ANoteTimeSelect.load_row2():        row 2 load complete"); }
         
         return cell!;
     }
     
+    
+    /********************************************************************************************************************************/
+    /** @fcn        addPicker_aNote(_ view:UIView)
+     *  @brief      x
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func addPicker_aNote(_ view:UIView) {
+        
+        let dateFrame = CGRect(x: (UIScreen.main.bounds.width/2-160), y: 35, width: 330, height: 150);
+        let comp = DateComponents(year: 2020, month: 4, day: 23, hour: 11, minute: 25);                     //@todo     today
+        
+        //Init
+        picker = UIDatePicker(frame: dateFrame);
+        picker.datePickerMode = UIDatePickerMode.dateAndTime;
+        picker.date = Calendar.current.date(from: comp)!;
+        
+        //Add
+        view.addSubview(picker);
+        
+        //Print the date
+        let dateFormatter = getStandardFormatter();
+        if(self.verbose){ print("ANoteTimeSelect.load_row2():        picker added for date: \(dateFormatter.string(from: picker.date))"); }
+        
+        return;
+    }
     
     
     /********************************************************************************************************************************/
@@ -482,6 +610,19 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
     
     /********************************************************************************************************************************/
+    /** @fcn        func alarmPressed(_: (UIButton?))
+     *  @brief      handle the switch selection
+     *  @details    x
+     *  @note       @objc exposed to enable assignment for button response, not sure why
+     */
+    /********************************************************************************************************************************/
+    @objc func alarmPressed(_ sender : (UIButton!)) {
+        if(self.verbose){ print("ANoteTimeSelect.alarmPressed():     switch was pressed"); }
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
     /** @fcn        getNumRows() -> Int
      *  @brief      get number of rows in table
      *  @details    x
@@ -644,6 +785,27 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         return rowHeights[indexPath.item];
     }
 
+    
+    /********************************************************************************************************************************/
+    /** @fcn        getStandardFormatter() -> DateFormatter
+     *  @brief      get the standard date formatter for use
+     *  @details    code snippet repeated often, encapsulated for cleanliness
+     */
+    /********************************************************************************************************************************/
+    func getStandardFormatter() -> DateFormatter {
+        
+        let dateFormatter = DateFormatter();
+        
+        dateFormatter.locale = Locale(identifier: "en_US");
+        dateFormatter.timeZone = TimeZone(identifier: "PST");
+        dateFormatter.dateStyle = .medium;
+        dateFormatter.timeStyle = .none;
+        dateFormatter.amSymbol = "AM";
+        dateFormatter.pmSymbol = "PM";
+        
+        return dateFormatter;
+    }
+    
     
     /********************************************************************************************************************************/
     /* @fcn        required init?(coder aDecoder: NSCoder)                                                                          */
