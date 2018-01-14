@@ -37,8 +37,8 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     var bellIcon : UIImageView!;
 
     //Locals
-    var mainView : UIView!;
-    var cellSubView : CellSubview!;
+    var mainView    : UIView!;
+    var cellSubView : ANoteCellSubview!;
     
     //Config
     let cell_fontName : String = cellFont;
@@ -87,7 +87,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
 
         self.tableIndex = indexPath.item;
         
-        self.cellSubView = CellSubview(mainView: self.mainView, parentCell: self);
+        self.cellSubView = ANoteCellSubview(mainView: self.mainView, parentCell: self);
         
         self.mainView.addSubview(self.cellSubView);
 
