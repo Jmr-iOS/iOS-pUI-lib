@@ -152,8 +152,6 @@ class ANoteCellSubview : UIView {
         addSubview(self.bodyButton);
         addSubview(self.bottButton);
         
-        print("ish");
-        
         return;
 
     }

@@ -104,7 +104,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
         /****************************************************************************************************************************/
         switch((indexPath as NSIndexPath).row) {
         case (0):
-            print("Handler.tableView():                (didSelectRowAt) top selected. Scrolling to the bottom!");
+            print("Handler.tableView():                (didSelectRowAt) top selected. Scrolling to the bottom");
             table.scrollToRow(at: IndexPath(row: self.table.getCellCount()-1, section: 0), at: UITableViewScrollPosition.bottom, animated: true);
             break;
         case (1):

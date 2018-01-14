@@ -7,7 +7,10 @@
  *  @notes      x
  *
  *  @section    Opens
- *      none listed
+ *      responds to value changes to date
+ *      change done button once value changes
+ *      pass value on 'Done' selection          (and demo uses)
+ *      pass notice on Cancel selection         (and demo uses)
  *
  *  @section    Legal Disclaimer
  *      All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
@@ -19,8 +22,10 @@ import UIKit
 
 class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
-    let width     : CGFloat = UIScreen.main.bounds.width;
-    let height    : CGFloat = 517;                                      /* full view height                                         */
+    var date       : Date;                                              /* date of selection                                        */
+    
+    let width      : CGFloat = UIScreen.main.bounds.width;
+    let height     : CGFloat = 517;                                     /* full view height                                         */
 
     var rowHeights : [CGFloat] = [45, 92, 188, 49, 49, 48, 0];          /* height of each row in table                              */
     
@@ -35,9 +40,9 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     //Constants
     let verbose : Bool = true;
     
-    
+
     /********************************************************************************************************************************/
-    /** @fcn        init()
+    /** @fcn        init(_ vc : ViewController, date : Date)
      *  @brief      x
      *  @details    x
      *
@@ -45,12 +50,15 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
      *      View has correct height
      */
     /********************************************************************************************************************************/
-    init(_ vc : ViewController) {
+    init(_ vc : ViewController, date : Date) {
 
         //Init Constants
         //@pre (temp)
         let h = rowHeights.reduce(0, +);
         rowHeights[rowHeights.count-1] = rowHeights[rowHeights.count-1] + (height-h);
+    
+        //Init State
+        self.date = date;
         
         if(verbose){ print("ANoteTimeSelect.init():             adding a standard table"); }
         
@@ -129,16 +137,16 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
             vc.view.addSubview(self);
 
             UIView.animate(withDuration: 0.5, delay: 0.5, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
-                if(self.verbose){ print("ANoteTimeSelect.loadPopup():        sliding popup in!"); }
+                if(self.verbose){ print("ANoteTimeSelect.loadPopup():        sliding popup in"); }
                 self.frame = CGRect(x: 0, y: UIScreen.main.bounds.height-height, width: vc.view.frame.width, height: height);
                 self.isRaised = false;
                 viewOpen = false;
             }, completion: { (finished: Bool) -> Void in
-                if(self.verbose){ print("ANoteTimeSelect.loadPopup():        sliding popup in completion!"); }
+                if(self.verbose){ print("ANoteTimeSelect.loadPopup():        sliding popup in completion"); }
                 self.isRaised = true;
             });
         } else {
-            print("ANoteTimeSelect.loadPopup():        off!");
+            print("ANoteTimeSelect.loadPopup():        off");
             UIView.animate(withDuration: 0.5, delay: 0.5, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
                 if(self.verbose){ print("ANoteTimeSelect.loadPopup():        sliding popup out"); }
                 self.frame = CGRect(x: 0, y: UIScreen.main.bounds.height, width: vc.view.frame.width, height: height);
@@ -366,12 +374,11 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     func addPicker_aNote(_ view:UIView) {
         
         let dateFrame = CGRect(x: (UIScreen.main.bounds.width/2-160), y: 35, width: 330, height: 150);
-        let comp = DateComponents(year: 2020, month: 4, day: 23, hour: 11, minute: 25);                     //@todo     today
         
         //Init
         picker = UIDatePicker(frame: dateFrame);
         picker.datePickerMode = UIDatePickerMode.dateAndTime;
-        picker.date = Calendar.current.date(from: comp)!;
+        picker.date = date;
         
         //Add
         view.addSubview(picker);
@@ -422,20 +429,19 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         x = (UIScreen.main.bounds.width - 23);
         let button : UIButton = UIButton(frame:CGRect(x: x, y: 15, width: 10, height: 16));
         button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
-        button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
-        
+        button.addTarget(self, action: #selector(self.rowArrowPressed(_:)), for:  .touchUpInside);
+
         //Add to view
         cell?.addSubview(titleLabel);
         cell?.addSubview(valueLabel);
         cell?.addSubview(button);
-        
+
         if(self.verbose){ print("ANoteTimeSelect.load_row3():        row 3 load complete"); }
 
         return cell!;
     }
-    
-    
-    
+
+
     /********************************************************************************************************************************/
     /** @fcn        load_row4() -> UITableViewCell
      *  @brief      Repeat and Never
@@ -474,7 +480,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         x = (UIScreen.main.bounds.width - 23);
         let button : UIButton = UIButton(frame:CGRect(x: x, y: 15, width: 10, height: 16));
         button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
-        button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
+        button.addTarget(self, action: #selector(self.rowArrowPressed(_:)), for:  .touchUpInside);
         
         //Add to view
         cell?.addSubview(titleLabel);
@@ -527,7 +533,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         x = (UIScreen.main.bounds.width - 23);
         let button : UIButton = UIButton(frame:CGRect(x: x, y: 15, width: 10, height: 16));
         button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
-        button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
+        button.addTarget(self, action: #selector(self.rowArrowPressed(_:)), for:  .touchUpInside);
 
         //Add to view
         cell?.addSubview(titleLabel);
@@ -558,7 +564,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         button.titleLabel?.font = UIFont(descriptor: (button.titleLabel?.font.fontDescriptor)!,
                                          size:       ((button.titleLabel?.font.pointSize)!-2));
         button.setTitleColor(UIColor.red, for: .normal);
-        button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
+        button.addTarget(self, action: #selector(self.rowArrowPressed(_:)), for:  .touchUpInside);
         
         //Add
         cell?.addSubview(button);
@@ -606,14 +612,15 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
     
     /********************************************************************************************************************************/
-    /** @fcn        func removePressed(_: (UIButton?))
+    /** @fcn        rowArrowPressed(_: (UIButton?))
      *  @brief      handle the search button selection
      *  @details    x
      *  @note       @objc exposed to enable assignment for button response, not sure why
      */
     /********************************************************************************************************************************/
-    @objc func removePressed(_ sender : (UIButton!)) {
-        if(self.verbose){ print("ANoteTimeSelect.removePressed():    '\(sender.titleLabel!.text!)' was pressed"); }
+    @objc func rowArrowPressed(_ sender : (UIButton!)) {
+        if(self.verbose){ print("ANoteTimeSelect.rowArrowPressed():  row arrow button was pressed"); }
+        
         return;
     }
     
@@ -737,7 +744,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         let _/*currCell*/ : UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
         
-        if(verbose){ print("ANoteTimeSelect.tableView(DSR):      hello standard cell at index \(indexPath)- '\("currCell.textLabel!.text!")'"); }
+        if(verbose){ print("ANoteTimeSelect.tableView(DSR):      hello standard cell at index \(indexPath)- '\("currCell.textLabel!.text")'"); }
         
         return;
     }

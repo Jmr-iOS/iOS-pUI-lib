@@ -245,12 +245,12 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         
         //Slide in View
         UIView.animate(withDuration: launch_dur_s, delay: launch_del_s, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
-                print("ANoteTableViewCell.launchSubView(): sliding view in!");
+                print("ANoteTableViewCell.launchSubView(): sliding view in");
                 self.cellSubView.alpha = 1.0;
                 self.cellSubView.frame = getCSFrame(onscreen: true);
         }, completion: { (finished: Bool) -> Void in
                 self.launchCompletion();
-                print("ANoteTableViewCell.launchSubView(): sliding view in completion!");
+                print("ANoteTableViewCell.launchSubView(): sliding view in completion");
             self.cellSubView.frame = getCSFrame(onscreen: true);
         });
 
@@ -269,9 +269,9 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         //fade in components
         UIView.animate(withDuration: 0.125, delay: 0.05, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
             self.cellSubView.setContentsAlpha(1);
-            print("fadeInViewTwoComponents():       fade in begin");
+            if(self.verbose) { print("ANoteTableViewCell.launchCompl():   fade in begin"); }
         }, completion: { (finished: Bool) -> Void in
-            print("fadeInViewTwoComponents():       fade in complete!");
+            if(self.verbose) { print("ANoteTableViewCell.launchCompl():   fade in complete"); }
         });
         
     }
@@ -398,15 +398,18 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
      */
     /********************************************************************************************************************************/
     func raiseTimePicker() {
-        
-        //Generate View to Slide Up (similar to aNote) -> Cancel<->"Name"<->Done, Table Below (row 1: date)
-        let x : ANoteTimeSelect = ANoteTimeSelect(vc);
 
+        let today = Date();                                         /* get today's date                                             */
+
+        //Generate aNote TimePicker View to Slide Up
+        let x : ANoteTimeSelect = ANoteTimeSelect(vc, date: today);         /* @todo    do we need to store?                        */
+
+        //Give correct print()
         if(viewOpen) {
             x.show(vc);
-            if(true/*verbose*/) { print("ANoteTableViewCell.raiseTimePkr():  time selection picker was shown"); }
+            if(verbose) { print("ANoteTableViewCell.raiseTimePkr():  time selection picker was shown"); }
         } else {
-            if(true/*verbose*/) { print("ANoteTableViewCell.raiseTimePkr():  view not open, aborting load"); }
+            if(verbose) { print("ANoteTableViewCell.raiseTimePkr():  view not open, aborting load"); }
         }
         return;
     }
