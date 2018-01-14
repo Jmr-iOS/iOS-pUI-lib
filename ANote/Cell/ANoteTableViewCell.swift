@@ -241,19 +241,19 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     /********************************************************************************************************************************/
     func launchSubView() {
 
-        self.cellSubView.frame = g.getCSFrame(onscreen: false);
+        cellSubView.frame = getCSFrame(onscreen: false);
         
         //Slide in View
         UIView.animate(withDuration: launch_dur_s, delay: launch_del_s, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
                 print("ANoteTableViewCell.launchSubView(): sliding view in!");
                 self.cellSubView.alpha = 1.0;
-                self.cellSubView.frame = g.getCSFrame(onscreen: true);
+                self.cellSubView.frame = getCSFrame(onscreen: true);
         }, completion: { (finished: Bool) -> Void in
                 print("ANoteTableViewCell.launchSubView(): sliding view in completion!");
-            self.cellSubView.frame = g.getCSFrame(onscreen: true);
+            self.cellSubView.frame = getCSFrame(onscreen: true);
         });
 
-        self.mainView.reloadInputViews();
+        mainView.reloadInputViews();
         
         return;
     }
