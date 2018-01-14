@@ -392,6 +392,8 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /********************************************************************************************************************************/
     func load_row3() -> UITableViewCell {
         
+        var x : CGFloat;                                        /* used for calcs                                                   */
+        
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
         
@@ -413,11 +415,12 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
         valueLabel.text = "At time of event";
         valueLabel.sizeToFit();
-        let x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
+        x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
         valueLabel.frame = CGRect(x: x, y: 13.5, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
         
         //Init Button
-        let button : UIButton = UIButton(frame:CGRect(x: 297, y: 15, width: 10, height: 16));
+        x = (UIScreen.main.bounds.width - 23);
+        let button : UIButton = UIButton(frame:CGRect(x: x, y: 15, width: 10, height: 16));
         button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
         button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
         
@@ -441,6 +444,8 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /********************************************************************************************************************************/
     func load_row4() -> UITableViewCell {
         
+        var x : CGFloat;                                        /* used for calcs                                                   */
+        
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
         
@@ -462,11 +467,12 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
         valueLabel.text = "Never";
         valueLabel.sizeToFit();
-        let x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
+        x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
         valueLabel.frame = CGRect(x: x, y: 13.5, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
         
         //Init Button
-        let button : UIButton = UIButton(frame:CGRect(x: 297, y: 15, width: 10, height: 16));
+        x = (UIScreen.main.bounds.width - 23);
+        let button : UIButton = UIButton(frame:CGRect(x: x, y: 15, width: 10, height: 16));
         button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
         button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
         
@@ -491,6 +497,8 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /********************************************************************************************************************************/
     func load_row5() -> UITableViewCell {
         
+        var x : CGFloat;                                        /* used for calcs                                                   */
+        
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
         
@@ -512,11 +520,12 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
         valueLabel.text = "None";
         valueLabel.sizeToFit();
-        let x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
+        x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
         valueLabel.frame = CGRect(x: x, y: 13.5, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
         
         //Init Button
-        let button : UIButton = UIButton(frame:CGRect(x: 297, y: 15, width: 10, height: 16));
+        x = (UIScreen.main.bounds.width - 23);
+        let button : UIButton = UIButton(frame:CGRect(x: x, y: 15, width: 10, height: 16));
         button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
         button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
 
