@@ -39,18 +39,21 @@ class ANoteTableView : UICustomTableView {
         /****************************************************************************************************************************/
         super.init(frame: frame, style: style);
         
-        self.register(ANoteTableViewCell.self, forCellReuseIdentifier: "cell");
-        self.translatesAutoresizingMaskIntoConstraints = false;
+        register(ANoteTableViewCell.self, forCellReuseIdentifier: "cell");
+        translatesAutoresizingMaskIntoConstraints = false;
                 
         /****************************************************************************************************************************/
         /*                                              aNote cell-styles                                                           */
         /****************************************************************************************************************************/
-        self.separatorColor = UIColor(red:0.90, green:0.90, blue:0.90, alpha:1.0);      /* #e6e6e6                                  */
-        self.separatorStyle = .singleLine;
-        self.separatorInset = UIEdgeInsetsMake(0, 43, 0, 0);
+        separatorColor = UIColor(red:0.90, green:0.90, blue:0.90, alpha:1.0);      /* #e6e6e6                                  */
+        separatorStyle = .singleLine;
+        separatorInset = UIEdgeInsetsMake(0, 43, 0, 0);
 
         //Set the row height
-        self.rowHeight = (row_height);
+        rowHeight = (row_height);
+        
+        //Allow for selection
+        allowsSelection = true;
         
         //Exit
         if(verbose){print("ANoteTableView.init():              initialized"); }
