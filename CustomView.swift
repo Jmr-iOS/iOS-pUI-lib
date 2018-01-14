@@ -41,7 +41,8 @@ class CustomView : UIView {
         
         //for validation
         self.backgroundColor = UIColor.blue;
-        print("My Custom Init");
+        
+        if(verbose) { print("CustomView.init():                  complete"); }
         
         return;
     }

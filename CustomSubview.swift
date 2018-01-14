@@ -45,7 +45,8 @@ class CustomSubview : UIView {
 
         //for debug validation
         self.backgroundColor = UIColor.gray;
-        print("My Custom Init");
+        
+        if(verbose) { print("CustomSubview.init():               complete"); }
  
         return;
     }
