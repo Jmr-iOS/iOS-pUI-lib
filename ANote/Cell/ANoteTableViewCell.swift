@@ -249,6 +249,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
                 self.cellSubView.alpha = 1.0;
                 self.cellSubView.frame = getCSFrame(onscreen: true);
         }, completion: { (finished: Bool) -> Void in
+                self.launchCompletion();
                 print("ANoteTableViewCell.launchSubView(): sliding view in completion!");
             self.cellSubView.frame = getCSFrame(onscreen: true);
         });
@@ -256,6 +257,23 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         mainView.reloadInputViews();
         
         return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /* @fcn       launchCompletion()                                                                                                */
+    /* @details   call on completion to launch                                                                                      */
+    /********************************************************************************************************************************/
+    func launchCompletion() {
+        
+        //fade in components
+        UIView.animate(withDuration: 0.125, delay: 0.05, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
+            self.cellSubView.setContentsAlpha(1);
+            print("fadeInViewTwoComponents():       fade in begin");
+        }, completion: { (finished: Bool) -> Void in
+            print("fadeInViewTwoComponents():       fade in complete!");
+        });
+        
     }
 
     

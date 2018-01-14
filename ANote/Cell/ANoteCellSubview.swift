@@ -43,6 +43,8 @@ class ANoteCellSubview : UIView {
      *
      *  @param      [in] (UIView) mainView - main view of app
      *  @param      [in] (ANoteTableViewCell) - parent cell for subview
+     *
+     *  @post       all UI contents hidden
      */
 	/********************************************************************************************************************************/
     init(mainView : UIView, parentCell : ANoteTableViewCell) {
@@ -59,95 +61,102 @@ class ANoteCellSubview : UIView {
         //**************************************************************************************************************************//
         //                                              INIT UI                                                                     //
         //**************************************************************************************************************************//
-        self.backgroundColor = UIColor.white;
-        self.frame = getCSFrame(onscreen: false);
+        backgroundColor = UIColor.white;
+        frame = getCSFrame(onscreen: false);
 
 		//Add name label
-        self.nameLabel = UILabel();
+        nameLabel = UILabel();
         
-        self.nameLabel.text = "Item #\(self.parentCell.getNumber()) Subview";
-        self.nameLabel.font = UIFont(name: "MarkerFelt-Thin", size: 15);
-        self.nameLabel.textColor = UIColor.black;        
-        self.nameLabel.numberOfLines = 1;
+        nameLabel.text = "Item #\(self.parentCell.getNumber()) Subview";
+        nameLabel.font = UIFont(name: "MarkerFelt-Thin", size: 15);
+        nameLabel.textColor = UIColor.black;
+        nameLabel.numberOfLines = 1;
 
-        self.nameLabel.numberOfLines = 0;
-        self.nameLabel.sizeToFit();
-        self.nameLabel.textAlignment = .center;
-        self.nameLabel.center = CGPoint(x: UIScreen.main.bounds.width/2, y: 65);
-        self.nameLabel.translatesAutoresizingMaskIntoConstraints = true;
-        
-        self.mainView.reloadInputViews();
-        self.addSubview(self.nameLabel);
-
+        nameLabel.numberOfLines = 0;
+        nameLabel.sizeToFit();
+        nameLabel.textAlignment = .center;
+        nameLabel.center = CGPoint(x: UIScreen.main.bounds.width/2, y: 65);
+        nameLabel.translatesAutoresizingMaskIntoConstraints = true;
 
         //**************************************************************************************************************************//
         //                                            INIT BUTTON                                                                   //
         //**************************************************************************************************************************//
-        self.retButton = UIButton(type: UIButtonType.roundedRect);
+        retButton = UIButton(type: UIButtonType.roundedRect);
  
-        self.retButton.translatesAutoresizingMaskIntoConstraints = true;
-        self.retButton.setTitle("Return",      for: UIControlState());
-        self.retButton.backgroundColor = UIColor.green;
-        self.retButton.sizeToFit();
-        self.retButton.center = CGPoint(x: frame.width/2, y: 100);
-        self.retButton.addTarget(self, action: #selector(self.returnPress(_:)), for:  .touchUpInside);
+        retButton.translatesAutoresizingMaskIntoConstraints = true;
+        retButton.setTitle("Return",      for: UIControlState());
+        retButton.backgroundColor = UIColor.green;
+        retButton.sizeToFit();
+        retButton.center = CGPoint(x: frame.width/2, y: 100);
+        retButton.addTarget(self, action: #selector(returnPress(_:)), for:  .touchUpInside);
         
-        //Add button
-        self.addSubview(self.retButton);
-
+        
         //**************************************************************************************************************************//
         //                                            MAIN BUTTON                                                                   //
         //**************************************************************************************************************************//
-        self.mainButton = UIButton(type: UIButtonType.roundedRect);
+        mainButton = UIButton(type: UIButtonType.roundedRect);
         
-        self.mainButton.translatesAutoresizingMaskIntoConstraints = true;
-        self.mainButton.setTitle("Main",      for: UIControlState());
-        self.mainButton.backgroundColor = UIColor.green;
-        self.mainButton.sizeToFit();
-        self.mainButton.center = CGPoint(x: 40, y: 130);
-        self.mainButton.addTarget(self, action: #selector(self.mainPress(_:)), for:  .touchUpInside);
+        mainButton.translatesAutoresizingMaskIntoConstraints = true;
+        mainButton.setTitle("Main",      for: UIControlState());
+        mainButton.backgroundColor = UIColor.green;
+        mainButton.sizeToFit();
+        mainButton.center = CGPoint(x: 40, y: 130);
+        mainButton.addTarget(self, action: #selector(mainPress(_:)), for:  .touchUpInside);
         
-        //Add button
-        self.addSubview(self.mainButton);
         
         //**************************************************************************************************************************//
         //                                            BODY BUTTON                                                                   //
         //**************************************************************************************************************************//
-        self.bodyButton = UIButton(type: UIButtonType.roundedRect);
+        bodyButton = UIButton(type: UIButtonType.roundedRect);
         
-        self.bodyButton.translatesAutoresizingMaskIntoConstraints = true;
-        self.bodyButton.setTitle("Body",      for: UIControlState());
-        self.bodyButton.backgroundColor = UIColor.green;
-        self.bodyButton.sizeToFit();
-        self.bodyButton.center = CGPoint(x: 40, y: 170);
-        self.bodyButton.addTarget(self, action: #selector(self.bodyPress(_:)), for:  .touchUpInside);
-        
-        //Add button
-        self.addSubview(self.bodyButton);
+        bodyButton.translatesAutoresizingMaskIntoConstraints = true;
+        bodyButton.setTitle("Body",      for: UIControlState());
+        bodyButton.backgroundColor = UIColor.green;
+        bodyButton.sizeToFit();
+        bodyButton.center = CGPoint(x: 40, y: 170);
+        bodyButton.addTarget(self, action: #selector(bodyPress(_:)), for:  .touchUpInside);
+    
         
         //**************************************************************************************************************************//
         //                                            BOTT BUTTON                                                                   //
         //**************************************************************************************************************************//
-        self.bottButton = UIButton(type: UIButtonType.roundedRect);
+        bottButton = UIButton(type: UIButtonType.roundedRect);
         
-        self.bottButton.translatesAutoresizingMaskIntoConstraints = true;
-        self.bottButton.setTitle("Bott",      for: UIControlState());
-        self.bottButton.backgroundColor = UIColor.green;
-        self.bottButton.sizeToFit();
-        self.bottButton.center = CGPoint(x: 40, y: 210);
-        self.bottButton.addTarget(self, action: #selector(self.bottPress(_:)), for:  .touchUpInside);
+        bottButton.translatesAutoresizingMaskIntoConstraints = true;
+        bottButton.setTitle("Bott",      for: UIControlState());
+        bottButton.backgroundColor = UIColor.green;
+        bottButton.sizeToFit();
+        bottButton.center = CGPoint(x: 40, y: 210);
+        bottButton.addTarget(self, action: #selector(bottPress(_:)), for:  .touchUpInside);
         
-        //Add button
-        self.addSubview(self.bottButton);
+        
+        //Init all hidden
+        setContentsAlpha(0);
         
         //@temp for debug validation
-        self.backgroundColor = UIColor.red;
+        backgroundColor = UIColor(red:0.44, green:0.07, blue:0.07, alpha:1.0);
         
-        if(verbose) { print("CellSubview.init():                 my custom cell #\(self.parentCell.getNumber()) subview init"); }
+        self.viewDidLoadish();
+        
+        if(verbose) { print("CellSubview.init():                 my custom cell #\(parentCell.getNumber()) subview init"); }
  
         return;
     }
+
+    func viewDidLoadish() {
     
+        mainView.reloadInputViews();
+        addSubview(self.nameLabel);
+        addSubview(self.retButton);
+        addSubview(self.mainButton);
+        addSubview(self.bodyButton);
+        addSubview(self.bottButton);
+        
+        print("ish");
+        
+        return;
+
+    }
     
     /********************************************************************************************************************************/
 	/**	@fcn		returnPress(_ sender: UIButton!)
@@ -227,7 +236,24 @@ class ANoteCellSubview : UIView {
         return;
     }
     
-
+    
+    /********************************************************************************************************************************/
+    /* @fcn       setContentsAlpha(_ alpha : CGFloat)                                                                                 */
+    /* @details   set alpha of all UI contents                                                                                      */
+    /********************************************************************************************************************************/
+    func setContentsAlpha(_ alpha : CGFloat) {
+        
+        //Apply alpha to all
+        retButton.alpha  = alpha;
+        mainButton.alpha = alpha;
+        bodyButton.alpha = alpha;
+        bottButton.alpha = alpha;
+        nameLabel.alpha  = alpha;
+    
+        return;
+    }
+    
+    
     /********************************************************************************************************************************/
     /* @fcn       dismissSubView()                                                                                                  */
     /* @details   dismiss the subview                                                                                               */
@@ -243,6 +269,7 @@ class ANoteCellSubview : UIView {
             self.frame = getCSFrame(onscreen: false);
         }, completion: { (finished: Bool) -> Void in
             print("CellSubview.dismissSubView():       sliding view out completion");
+            self.setContentsAlpha(0);
             self.frame = getCSFrame(onscreen: false);
         });
         
