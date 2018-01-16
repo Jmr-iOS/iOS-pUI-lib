@@ -24,6 +24,10 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     //State
     var tableIndex   : Int!;
     let numLines     : Int = 2;
+    
+    //Cell Values
+    var date         : Date?;                                   /* date selection for cell (no date if nil)                         */
+    
 
     //Main UI
     var checkBox     : UICheckbox!;
@@ -32,9 +36,10 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     var bottField    : UILabel!;
     
     //Misc UI
-    var timeView : UIView!;
-    var type     : CellType!;
-    var bellIcon : UIImageView!;
+    var timeView  : UIView!;
+    var timeLabel : UILabel!;
+    var type      : CellType!;
+    var bellIcon  : UIImageView!;
 
     //Locals
     var mainView    : UIView!;
@@ -42,6 +47,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     
     //Config
     let cell_fontName : String = cellFont;
+    let myVerbose : Bool = true;                            /* unknown class collisions mitigation                                  */
 
 
     /********************************************************************************************************************************/
@@ -59,14 +65,18 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
      */
     /********************************************************************************************************************************/
     init(vc : ViewController, mainView : UIView, style: UITableViewCellStyle, reuseIdentifier: String?) {
-        
+
+        //Store Vars
+        self.mainView = mainView;
         self.vc = vc;
+        
+        //Init Vars
+        date = nil;                                                 /* init to nil                                                  */
         
         super.init(style:style, reuseIdentifier:reuseIdentifier);
     
-        self.mainView = mainView;
         
-        if(verbose){ print("aNoteTableViewCell.init():          cell was initialized"); }
+        if(myVerbose){ print("aNoteTableViewCell.init():          cell was initialized"); }
     
         return;
     }
@@ -83,7 +93,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
             return;                                                 /* don't re-initialize, called by Handler on scroll             */
         }
         
-        if(verbose){print("aNoteTableViewCell.initialize():    adding: '\(self.vc.rows[indexPath.item].main!)'");}
+        if(myVerbose){print("aNoteTableViewCell.initialize():    adding: '\(self.vc.rows[indexPath.item].main!)'");}
 
         self.tableIndex = indexPath.item;
         
@@ -117,7 +127,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         
         let subjFieldWidth : CGFloat = UIScreen.main.bounds.width - cell_xOffs - rChunk_width - tv_width;
         
-        if(verbose) { print("ANoteTableViewCell.initialize():    grabbing \(indexPath.item)"); }
+        if(myVerbose) { print("ANoteTableViewCell.initialize():    grabbing \(indexPath.item)"); }
         
         let font : UIFont = UIFont(name: cell_fontName, size: mt_size)!;
         
@@ -188,14 +198,13 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
                                         width:  tv_width,
                                         height: tv_height));
         
-        timeView.backgroundColor = nearColor_val;
         timeView.layer.cornerRadius = tv_corner;
         
-        let timeLabel : UILabel = UILabel(frame: CGRect(x: tl_xOffs, y: tl_yOffs, width: tl_width, height:  tl_height));
         
         //Setup
+        timeLabel = UILabel(frame: CGRect(x: tl_xOffs, y: tl_yOffs, width: tl_width, height:  tl_height));
         timeLabel.font  =   UIFont(name: cell_fontName, size: tl_size);
-        timeLabel.text  =   "4:30 PM";
+        setTimeLabel(nil);
         timeLabel.textColor     = UIColor.white;
         timeLabel.textAlignment = NSTextAlignment.left;
 
@@ -212,6 +221,44 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
 
     
     /********************************************************************************************************************************/
+    /** @fcn        setTimeLabel(_ date : Date?)
+     *  @brief      x
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func setTimeLabel(_ date : Date?) {
+        
+        //@pre  Safety
+        if(date == nil) {
+            return;
+        }
+        
+        //Get time components
+        var hr  = Calendar.current.component(.hour, from: date!);
+        let min = Calendar.current.component(.minute, from: date!);
+        var mer = "AM";
+        
+        //Handle meridian
+        if(hr>11) { mer = "PM"; }
+        if(hr>12) { hr = (hr-12); }
+        
+        //Gen strings
+        let hrStr  = "\(hr)";                                           /* num chars std                                            */
+        let minStr = String(format: "%02d", min);                       /* num chars 2                                              */
+
+        //Apply text
+        timeLabel.text  =   "\(hrStr):\(minStr) \(mer)";
+
+        //Apply color
+        timeView.backgroundColor = nearColor_val;
+
+        if(myVerbose) { print("ANoteTableViewCell.setTimeLabel():  time label value changed"); }
+
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
     /* @fcn       timeView_tapResponse()                                                                                            */
     /* @details   respond to selection of the time view                                                                             */
     /*                                                                                                                              */
@@ -223,8 +270,8 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     /********************************************************************************************************************************/
     @objc func timeView_tapResponse() {
         
-        print("ANoteTableViewCell.tvResp():        tap response selected");
-        
+        if(myVerbose) { print("ANoteTableViewCell.tvResp():        tap response selected"); }
+
         raiseTimePicker();
         
         //@todo
@@ -245,12 +292,12 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         
         //Slide in View
         UIView.animate(withDuration: launch_dur_s, delay: launch_del_s, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
-                print("ANoteTableViewCell.launchSubView(): sliding view in");
+            if(self.myVerbose) { print("ANoteTableViewCell.launchSubView(): sliding view in"); }
                 self.cellSubView.alpha = 1.0;
                 self.cellSubView.frame = getCSFrame(onscreen: true);
         }, completion: { (finished: Bool) -> Void in
                 self.launchCompletion();
-                print("ANoteTableViewCell.launchSubView(): sliding view in completion");
+            if(self.myVerbose) { print("ANoteTableViewCell.launchSubView(): sliding view in completion"); }
             self.cellSubView.frame = getCSFrame(onscreen: true);
         });
 
@@ -269,9 +316,9 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         //fade in components
         UIView.animate(withDuration: 0.125, delay: 0.05, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
             self.cellSubView.setContentsAlpha(1);
-            if(self.verbose) { print("ANoteTableViewCell.launchCompl():   fade in begin"); }
+            if(self.myVerbose) { print("ANoteTableViewCell.launchCompl():   fade in begin"); }
         }, completion: { (finished: Bool) -> Void in
-            if(self.verbose) { print("ANoteTableViewCell.launchCompl():   fade in complete"); }
+            if(self.myVerbose) { print("ANoteTableViewCell.launchCompl():   fade in complete"); }
         });
         
     }
@@ -301,7 +348,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     func updateSelection(selected : Bool) {
 
         if(selected) {
-            if(verbose) { print("ANoteTableViewCell.updateSel():     selected"); }
+            if(myVerbose) { print("ANoteTableViewCell.updateSel():     selected"); }
             
             let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: self.subjectField.text!);
             
@@ -314,7 +361,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
             self.subjectField.textColor = UIColor.gray;
             
         } else {
-            if(verbose) { print("ANoteTableViewCell.updateSel():     not selected"); }
+            if(myVerbose) { print("ANoteTableViewCell.updateSel():     not selected"); }
             
             let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: self.subjectField.text!);
             
@@ -386,7 +433,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
      */
     /********************************************************************************************************************************/
     func checkBoxResp(_ checked : Bool) {
-        if(verbose) { print("ANoteTableViewCell.checkResp():     selection response complete for '\(checked)'"); }
+        if(myVerbose) { print("ANoteTableViewCell.checkResp():     selection response complete for '\(checked)'"); }
         return;
     }
 
@@ -399,18 +446,35 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     /********************************************************************************************************************************/
     func raiseTimePicker() {
 
-        let today = Date();                                         /* get today's date                                             */
-
         //Generate aNote TimePicker View to Slide Up
-        let x : ANoteTimeSelect = ANoteTimeSelect(vc, date: today);         /* @todo    do we need to store?                        */
+        let x : ANoteTimeSelect = ANoteTimeSelect(vc, self, date: date);
 
         //Give correct print()
         if(viewOpen) {
             x.show(vc);
-            if(verbose) { print("ANoteTableViewCell.raiseTimePkr():  time selection picker was shown"); }
+            if(myVerbose) { print("ANoteTableViewCell.raiseTimePkr():  time selection picker was shown"); }
         } else {
-            if(verbose) { print("ANoteTableViewCell.raiseTimePkr():  view not open, aborting load"); }
+            if(myVerbose) { print("ANoteTableViewCell.raiseTimePkr():  view not open, aborting load"); }
         }
+        return;
+    }
+    
+
+    /********************************************************************************************************************************/
+    /** @fcn        updateDate(_ date : Date)
+     *  @brief      update stored date value & cell displayed time
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func updateDate(_ date : Date) {
+        //Store value
+        self.date = date;
+        
+        //Update UI
+        setTimeLabel(date);
+        
+        if(myVerbose) { print("ANoteTableViewCell.updateDate():    date was updated to \("somedate")"); }
+        
         return;
     }
 }

@@ -22,7 +22,7 @@ import UIKit
 
 class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
-    var date       : Date;                                              /* date of selection                                        */
+    let startDate : Date;                                               /* date on init                                             */
     
     let width      : CGFloat = UIScreen.main.bounds.width;
     let height     : CGFloat = 517;                                     /* full view height                                         */
@@ -31,18 +31,23 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
     var isRaised   : Bool;
     
+    //Parent
     var vc : ViewController;
+    var parentCell : ANoteTableViewCell;
     
     //UI
     var tableView : UITableView!;
     var picker    : UIDatePicker!;
-    
+    var cancelButton : UIButton!;
+    var doneButton  : UIButton!;
+
     //Constants
     let verbose : Bool = true;
-    
+    let buttonTextColor = UIColor(red:1.00, green:0.66, blue:0.00, alpha:1.0);      /* ffa800                                       */
 
+    
     /********************************************************************************************************************************/
-    /** @fcn        init(_ vc : ViewController, date : Date)
+    /** @fcn        init(_ vc : ViewController,_ parentCell : ANoteTableViewCell, date : Date?)
      *  @brief      x
      *  @details    x
      *
@@ -50,15 +55,23 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
      *      View has correct height
      */
     /********************************************************************************************************************************/
-    init(_ vc : ViewController, date : Date) {
+    init(_ vc : ViewController,_ parentCell : ANoteTableViewCell, date : Date?) {
 
         //Init Constants
         //@pre (temp)
         let h = rowHeights.reduce(0, +);
         rowHeights[rowHeights.count-1] = rowHeights[rowHeights.count-1] + (height-h);
-    
+
+        if(date != nil) {
+            startDate = date!;                              /* store value                                                          */
+        } else {
+            startDate = Date();                             /* equals current date                                                  */
+        }
+        
         //Init State
-        self.date = date;
+        self.vc = vc;
+        self.parentCell = parentCell;
+        
         
         if(verbose){ print("ANoteTimeSelect.init():             adding a standard table"); }
         
@@ -66,7 +79,6 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         let frame = CGRect(x: 0, y: UIScreen.main.bounds.height, width: width, height: height);
         
         //Init Vars
-        self.vc = vc;
         isRaised   = false;
 
         //Super
@@ -192,9 +204,9 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         label.text = "To-do Info";                                                  /* set the displayed text                       */
 
         //UIButton ("Cancel") - enabled
-        let cancelButton = UIButton(type: UIButtonType.roundedRect);
+        cancelButton = UIButton(type: UIButtonType.roundedRect);
         cancelButton.titleLabel?.font = UIFont(name: fnt.fontName, size: (fnt.pointSize-1));
-        cancelButton.setTitleColor(UIColor(red:1.00, green:0.66, blue:0.00, alpha:1.0), for: .normal);      /* ffa800               */
+        cancelButton.setTitleColor(buttonTextColor, for: .normal);
         cancelButton.translatesAutoresizingMaskIntoConstraints = true;
         cancelButton.setTitle("Cancel", for: .normal);
         cancelButton.sizeToFit();
@@ -204,7 +216,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         cancelButton.addTarget(self, action: #selector(self.cancelPressed(_:)), for:  .touchUpInside);
         
         //UIButton ("Done") -> disabled
-        let doneButton = UIButton(type: UIButtonType.roundedRect);
+        doneButton = UIButton(type: UIButtonType.roundedRect);
         doneButton.titleLabel?.font = UIFont(name: fnt.fontName+"-Medium", size: (fnt.pointSize-1));
         doneButton.setTitleColor(UIColor.lightGray, for: .normal);
         doneButton.translatesAutoresizingMaskIntoConstraints = true;
@@ -362,32 +374,6 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         if(self.verbose){ print("ANoteTimeSelect.load_row2():        row 2 load complete"); }
         
         return cell!;
-    }
-    
-    
-    /********************************************************************************************************************************/
-    /** @fcn        addPicker_aNote(_ view:UIView)
-     *  @brief      x
-     *  @details    x
-     */
-    /********************************************************************************************************************************/
-    func addPicker_aNote(_ view:UIView) {
-        
-        let dateFrame = CGRect(x: (UIScreen.main.bounds.width/2-160), y: 35, width: 330, height: 150);
-        
-        //Init
-        picker = UIDatePicker(frame: dateFrame);
-        picker.datePickerMode = UIDatePickerMode.dateAndTime;
-        picker.date = date;
-        
-        //Add
-        view.addSubview(picker);
-        
-        //Print the date
-        let dateFormatter = getStandardFormatter();
-        if(self.verbose){ print("ANoteTimeSelect.load_row2():        picker added for date: \(dateFormatter.string(from: picker.date))"); }
-        
-        return;
     }
     
     
@@ -573,6 +559,60 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         return cell!;
     }
+
+    
+//**********************************************************************************************************************************//
+//                                              BUTTON RESPONSES                                                                    //
+//**********************************************************************************************************************************//
+    
+    /********************************************************************************************************************************/
+    /** @fcn        addPicker_aNote(_ view:UIView)
+     *  @brief      add the date picker in the view
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func addPicker_aNote(_ view:UIView) {
+        
+        let dateFrame = CGRect(x: (UIScreen.main.bounds.width/2-160), y: 35, width: 330, height: 150);
+        
+        //Init
+        picker = UIDatePicker(frame: dateFrame);
+        picker.datePickerMode = UIDatePickerMode.dateAndTime;
+        picker.date = startDate;                                        /* set to passed value on load                              */
+        
+        //Add Handle
+        picker.addTarget(self, action: #selector(dateValueChange), for: UIControlEvents.valueChanged);
+        
+        //Add
+        view.addSubview(picker);
+        
+        //Print the date
+        let dateFormatter = getStandardFormatter();
+
+        if(self.verbose){ print("ANoteTimeSelect.load_row2():        picker added for date: \(dateFormatter.string(from: picker.date))"); }
+        
+        return;
+    }
+    
+
+    /********************************************************************************************************************************/
+    /** @fcn        updateFromPicker(sender: UIDatePicker)
+     *  @brief      respond to date selection
+     *  @details    enable done on first value change
+     */
+    /********************************************************************************************************************************/
+    @objc func dateValueChange(sender: UIDatePicker) {
+
+        //Enable button
+        let fnt : UIFont = (UIButton().titleLabel?.font)!;                          /* standard UIButton font                       */
+        doneButton.titleLabel?.font = UIFont(name: fnt.fontName, size: (fnt.pointSize-1));
+        doneButton.setTitleColor(buttonTextColor, for: .normal);
+        doneButton.isEnabled = true;
+ 
+        if(verbose) { print("ANoteTimeSelect.dateValueChange(): date change response complete"); }
+        
+        return;
+    }
     
     
     /********************************************************************************************************************************/
@@ -602,10 +642,13 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /********************************************************************************************************************************/
     @objc func donePressed(_ sender: UIButton!) {
 
+        //Store date
+        parentCell.updateDate(picker.date);
+        
         //Dismiss view
         loadPopup(vc, dir: false, height: height);
 
-        if(self.verbose){ print("ANoteTimeSelect.donePressed():      '\(sender.titleLabel!.text!)' was pressed"); }
+        if(verbose){ print("ANoteTimeSelect.donePressed():      '\(sender.titleLabel!.text!)' was pressed"); }
         
         return;
     }
@@ -820,6 +863,17 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         dateFormatter.pmSymbol = "PM";
         
         return dateFormatter;
+    }
+
+    
+    /********************************************************************************************************************************/
+    /** @fcn        getDate() -> Date
+     *  @brief      get date for view selection
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func getDate() -> Date {
+        return picker.date;                                             /* it is just the active date value                         */
     }
     
     
