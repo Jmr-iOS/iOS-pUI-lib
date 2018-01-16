@@ -473,7 +473,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         //Update UI
         setTimeLabel(date);
         
-        if(myVerbose) { print("ANoteTableViewCell.updateDate():    date was updated to \("somedate")"); }
+        if(myVerbose) { print("ANoteTableViewCell.updateDate():    date was updated to \(date)"); }
         
         return;
     }

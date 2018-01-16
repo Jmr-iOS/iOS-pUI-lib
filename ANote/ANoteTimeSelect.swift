@@ -578,6 +578,10 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         //Init
         picker = UIDatePicker(frame: dateFrame);
         picker.datePickerMode = UIDatePickerMode.dateAndTime;
+        picker.timeZone =  TimeZone.init(abbreviation: "PST");
+
+        print(picker.date);
+        
         picker.date = startDate;                                        /* set to passed value on load                              */
         
         //Add Handle
@@ -638,6 +642,11 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /** @fcn        donePressed(_ sender: UIButton!)
      *  @brief      x
      *  @details    x
+     *
+     *  @section    Observed Responses
+     *  2/2 @ 2:02 AM - 2/2 @ 10:02
+     *  2/3 @ 3:03 AM - 2/3 @ 11:03
+     *  2/3 @ 3:03 PM - 2/3 @ 23:03     (+12)   <- Time zone UTC!
      */
     /********************************************************************************************************************************/
     @objc func donePressed(_ sender: UIButton!) {
