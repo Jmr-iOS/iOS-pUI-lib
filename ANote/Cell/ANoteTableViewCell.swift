@@ -73,9 +73,9 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         //Init Vars
         date = nil;                                                 /* init to nil                                                  */
         
+        //Super
         super.init(style:style, reuseIdentifier:reuseIdentifier);
     
-        
         if(myVerbose){ print("aNoteTableViewCell.init():          cell was initialized"); }
     
         return;
@@ -85,6 +85,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     /********************************************************************************************************************************/
     /* @fcn       initialize(indexPath : NSIndexPath, aNoteTable : aNoteTableView)                                                  */
     /* @details   initialize the cell, after creation                                                                               */
+    /* @assum     already initialized when timeView not nil                                                                         */
     /********************************************************************************************************************************/
     func initialize(_ indexPath : IndexPath, aNoteTable : ANoteTableView) {
 
@@ -228,8 +229,12 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     /********************************************************************************************************************************/
     func setTimeLabel(_ date : Date?) {
         
-        //@pre  Safety
-        if(date == nil) {
+        let isSet : Bool = (date != nil);                                 /* don't operate on timeView when date not set              */
+        
+        //@pre
+        if(!isSet) {
+            timeLabel.text = "";
+            timeView.backgroundColor = UIColor.lightGray;               /* light gray for unset                                     */
             return;
         }
         
