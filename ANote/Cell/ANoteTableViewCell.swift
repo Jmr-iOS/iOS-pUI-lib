@@ -466,19 +466,25 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     
 
     /********************************************************************************************************************************/
-    /** @fcn        updateDate(_ date : Date)
+    /** @fcn        updateDate(_ date : Date?)
      *  @brief      update stored date value & cell displayed time
      *  @details    x
      */
     /********************************************************************************************************************************/
-    func updateDate(_ date : Date) {
+    func updateDate(_ date : Date?) {
         //Store value
-        self.date = date;
+        self.date = date;                                               /* if nil date is empty                                     */
         
         //Update UI
         setTimeLabel(date);
         
-        if(myVerbose) { print("ANoteTableViewCell.updateDate():    date was updated to \(date)"); }
+        //Grab date
+        var respStr = "nil";
+        if(date != nil) {
+            respStr = "\(date!)";									  /* only print if passed									 */
+        }
+
+        if(myVerbose) { print("ANoteTableViewCell.updateDate():    date was updated to \(respStr)"); }
         
         return;
     }

@@ -116,13 +116,13 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
 
     /********************************************************************************************************************************/
     /** @fcn        show()
-     *  @brief      x
+     *  @brief      show the popup onscreen
      *  @details    x
      */
     /********************************************************************************************************************************/
     func show(_ vc : ViewController) {
         
-        //@todo     slide up
+        //slide up
         loadPopup(vc, dir: true, height: height);
         
         if(verbose){ print("ANoteTimeSelect.show():             shown"); }
@@ -132,6 +132,23 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
 
 
     /********************************************************************************************************************************/
+    /** @fcn        dismiss()
+     *  @brief      dismiss the popup onscreen
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func dismiss(_ vc : ViewController) {
+        
+        //@todo     slide down
+        loadPopup(vc, dir: false, height: height);
+        
+        if(verbose){ print("ANoteTimeSelect.dismiss():          dismissed"); }
+        
+        return;
+    }
+
+    
+    /********************************************************************************************************************************/
     /** @fcn        loadPopup(_ dir : Bool)
      *  @brief      x
      *  @details    x
@@ -140,14 +157,16 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     func loadPopup(_ vc : ViewController, dir : Bool, height : CGFloat) {
         
         if(dir == true) {
-            
+
             //@pre  Safety
             if(!viewOpen) {
                 fatalError("View not open for display over, aborting");
             }
             
+            //Add to view
             vc.view.addSubview(self);
 
+            //Launch with animation
             UIView.animate(withDuration: 0.5, delay: 0.5, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
                 if(self.verbose){ print("ANoteTimeSelect.loadPopup():        sliding popup in"); }
                 self.frame = CGRect(x: 0, y: UIScreen.main.bounds.height-height, width: vc.view.frame.width, height: height);
@@ -158,7 +177,10 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
                 self.isRaised = true;
             });
         } else {
-            print("ANoteTimeSelect.loadPopup():        off");
+            
+            if(verbose) { print("ANoteTimeSelect.loadPopup():        popup dismissed"); }
+            
+            //Remove from view
             UIView.animate(withDuration: 0.5, delay: 0.5, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
                 if(self.verbose){ print("ANoteTimeSelect.loadPopup():        sliding popup out"); }
                 self.frame = CGRect(x: 0, y: UIScreen.main.bounds.height, width: vc.view.frame.width, height: height);
@@ -218,11 +240,10 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         //UIButton ("Done") -> disabled
         doneButton = UIButton(type: UIButtonType.roundedRect);
         doneButton.titleLabel?.font = UIFont(name: fnt.fontName+"-Medium", size: (fnt.pointSize-1));
-        doneButton.setTitleColor(UIColor.lightGray, for: .normal);
         doneButton.translatesAutoresizingMaskIntoConstraints = true;
         doneButton.setTitle("Done", for: .normal);
         doneButton.sizeToFit();
-        doneButton.isEnabled = false;                                           /* set to disabled                                  */
+        updateDoneButton(false);                                                /* set to disabled                                  */
         
         let x : CGFloat = UIScreen.main.bounds.width - 28;
         doneButton.center = CGPoint(x: x, y: 26);
@@ -550,7 +571,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         button.titleLabel?.font = UIFont(descriptor: (button.titleLabel?.font.fontDescriptor)!,
                                          size:       ((button.titleLabel?.font.pointSize)!-2));
         button.setTitleColor(UIColor.red, for: .normal);
-        button.addTarget(self, action: #selector(self.rowArrowPressed(_:)), for:  .touchUpInside);
+        button.addTarget(self, action: #selector(self.removePressed(_:)), for:  .touchUpInside);
         
         //Add
         cell?.addSubview(button);
@@ -608,12 +629,26 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     @objc func dateValueChange(sender: UIDatePicker) {
 
         //Enable button
-        let fnt : UIFont = (UIButton().titleLabel?.font)!;                          /* standard UIButton font                       */
-        doneButton.titleLabel?.font = UIFont(name: fnt.fontName, size: (fnt.pointSize-1));
-        doneButton.setTitleColor(buttonTextColor, for: .normal);
-        doneButton.isEnabled = true;
- 
+        updateDoneButton(true);
+        
         if(verbose) { print("ANoteTimeSelect.dateValueChange(): date change response complete"); }
+        
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        updateDoneButton(_ enable : Bool)
+     *  @brief      update button state based on enabled
+     *  @details    colored if enabled else gray
+     */
+    /********************************************************************************************************************************/
+    func updateDoneButton(_ enable : Bool) {
+
+        let doneColor = (enable) ? buttonTextColor : (UIColor.lightGray);       /* on:color, off:gray                               */
+        
+        doneButton.setTitleColor(doneColor, for: .normal);
+        doneButton.isEnabled = enable;
         
         return;
     }
@@ -629,8 +664,8 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     @objc func cancelPressed(_ sender: UIButton!) {
         
         //Dismiss view
-        loadPopup(vc, dir: false, height: height);
-
+        dismiss(vc);
+        
         if(self.verbose){ print("ANoteTimeSelect.cancelPressed():    '\(sender.titleLabel!.text!)' was pressed"); }
         
         return;
@@ -655,7 +690,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         parentCell.updateDate(picker.date);
         
         //Dismiss view
-        loadPopup(vc, dir: false, height: height);
+        dismiss(vc);
 
         if(verbose){ print("ANoteTimeSelect.donePressed():      '\(sender.titleLabel!.text!)' was pressed"); }
         
@@ -673,6 +708,23 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     @objc func rowArrowPressed(_ sender : (UIButton!)) {
         if(self.verbose){ print("ANoteTimeSelect.rowArrowPressed():  row arrow button was pressed"); }
         
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        func removePressed(_: (UIButton?))
+     *  @brief      handle the switch selection
+     *  @details    x
+     *  @note       @objc exposed to enable assignment for button response, not sure why
+     */
+    /********************************************************************************************************************************/
+    @objc func removePressed(_ sender : (UIButton!)) {
+        
+        //Remove the date from cell
+        parentCell.updateDate(nil);                                 /* remove date from cell                                        */
+        
+        if(self.verbose){ print("ANoteTimeSelect.removePressed():    switch was pressed"); }
         return;
     }
     
