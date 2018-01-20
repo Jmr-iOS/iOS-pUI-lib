@@ -25,6 +25,83 @@ struct ANoteRow {
 
 extension ANoteRow {
     
+    //@todo     header
+    //@note     make easy to acces everywhere
+    func getTimeString() -> String {
+        
+        if(time == nil) {
+            return "";                                          /* return empty if no time value                                    */
+        }
+        
+        //Get time components
+        var hr  = Calendar.current.component(.hour,   from: time!);
+        let min = Calendar.current.component(.minute, from: time!);
+        var mer = "AM";
+        
+        //Handle meridian
+        if(hr>11) { mer = "PM"; }
+        if(hr>12) { hr = (hr-12); }
+        
+        //Gen strings
+        let hrStr  = "\(hr)";                                           /* num chars std                                            */
+        let minStr = String(format: "%02d", min);                       /* num chars 2                                              */
+        
+        //Gen text
+        return "\(hrStr):\(minStr) \(mer)";
+    }
+    
+    
+    /****************************************************************************************************************************/
+    /** @fcn        getDateString() -> String
+     *  @brief      get date for print
+     *  @details    x
+     *
+     *  @section    Examples
+     *      "Today 5:00 PM"
+     *      "Tomorrow 5:00 PM"
+     *      "Fri, Jan 19 7:00 PM"
+     */
+    /****************************************************************************************************************************/
+    func getDateString() -> String {
+        
+        var returnStr : String = "ABC";
+//<TEMP>
+        let cal = Calendar.current;
+        let isToday : Bool = cal.isDateInToday(time!);
+        let isTomm  : Bool = cal.isDateInTomorrow(time!);
+        
+       /*
+ //Get time components
+ var hr  = Calendar.current.component(.hour, from: date!);
+ let min = Calendar.current.component(.minute, from: date!);
+ var mer = "AM";
+ 
+ //Handle meridian
+ if(hr>11) { mer = "PM"; }
+ if(hr>12) { hr = (hr-12); }
+ 
+ //Gen strings
+ let hrStr  = "\(hr)";                                           /* num chars std                                            */
+ let minStr = String(format: "%02d", min);                       /* num chars 2                                              */
+ 
+ //Apply text
+ timeLabel.text  =   "\(hrStr):\(minStr) \(mer)";
+ */
+        
+        if(isToday) {
+            returnStr  = "Today \(getTimeString())";
+        } else if(isTomm) {
+            returnStr = "Tomorrow \(getTimeString())";
+        } else {
+            returnStr = "Maybe \(getTimeString())";
+        }
+        
+//</TEMP>
+        
+        return returnStr;
+    }
+    
+    
     @objc(rowHelperClass) class ANoteRowClass: NSObject, NSCoding {
     
         var row : ANoteRow;
@@ -82,23 +159,6 @@ extension ANoteRow {
             
             return;
         }
-        
-        
-        /****************************************************************************************************************************/
-        /** @fcn        static encode(row: Row)
-         *  @brief      x
-         *  @details    x
-         */
-        /****************************************************************************************************************************/
-        static func encodeX(row: ANoteRow) {
-            let rowClassObject = ANoteRowClass(row: row);
-            
-            let stat : Bool = NSKeyedArchiver.archiveRootObject(rowClassObject, toFile: ANoteRowClass.path());
-            
-            print("-->I found that the encode save was \(stat)");
-            
-            return;
-        }
     
         
         /****************************************************************************************************************************/
@@ -144,7 +204,6 @@ extension ANoteRow {
 //                                                       HELPER ROUTINES                                                            //
 // @brief       common routines                                                                                                     //
 //**********************************************************************************************************************************//
-
         
         /****************************************************************************************************************************/
         /** @fcn        static func documentsDirectoryURL() -> URL

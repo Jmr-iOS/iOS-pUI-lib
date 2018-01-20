@@ -219,6 +219,62 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         
         return;
     }
+    
+
+//<NEW>
+    //@todo     header
+    //@note     make easy to acces everywhere
+    func getTimeString_temp() -> String {
+        
+        if(time == nil) {
+            return "";                                          /* return empty if no time value                                    */
+        }
+        
+        //Get time components
+        var hr  = Calendar.current.component(.hour,   from: date!);
+        let min = Calendar.current.component(.minute, from: date!);
+        var mer = "AM";
+        
+        //Handle meridian
+        if(hr>11) { mer = "PM"; }
+        if(hr>12) { hr = (hr-12); }
+        
+        //Gen strings
+        let hrStr  = "\(hr)";                                           /* num chars std                                            */
+        let minStr = String(format: "%02d", min);                       /* num chars 2                                              */
+        
+        //Gen text
+        return "\(hrStr):\(minStr) \(mer)";
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        setDateLabel(_ date : Date?)
+     *  @brief      x
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func setDateLabel(_ date : Date?) {
+        
+        var returnStr : String = "ABC";
+
+        let cal = Calendar.current;
+        let isToday : Bool = cal.isDateInToday(date!);
+        let isTomm  : Bool = cal.isDateInTomorrow(date!);
+        
+         if(isToday) {
+            returnStr  = "Today \(getTimeString_temp())";
+         } else if(isTomm) {
+            returnStr = "Tomorrow \(getTimeString_temp())";
+         } else {
+            returnStr = "Maybe \(getTimeString_temp())";
+         }
+
+        bottField.text = returnStr;                                         /* @todo    deprecate bott string from row              */
+
+        return;
+    }
+//</NEW>
 
     
     /********************************************************************************************************************************/
@@ -476,6 +532,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         self.date = date;                                               /* if nil date is empty                                     */
         
         //Update UI
+        setDateLabel(date);
         setTimeLabel(date);
         
         //Grab date

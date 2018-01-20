@@ -707,7 +707,6 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /********************************************************************************************************************************/
     @objc func rowArrowPressed(_ sender : (UIButton!)) {
         if(self.verbose){ print("ANoteTimeSelect.rowArrowPressed():  row arrow button was pressed"); }
-        
         return;
     }
     
@@ -723,6 +722,9 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //Remove the date from cell
         parentCell.updateDate(nil);                                 /* remove date from cell                                        */
+        
+        //Dismiss view
+        dismiss(vc);
         
         if(self.verbose){ print("ANoteTimeSelect.removePressed():    switch was pressed"); }
         return;
