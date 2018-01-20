@@ -263,7 +263,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         //@pre
         if(!isSet) {
             timeLabel.text = "";
-            timeView.backgroundColor = UIColor.lightGray;               /* light gray for unset                                     */
+            timeView.backgroundColor = nil;                             /* hidden                                                   */
             return;
         } else {
             isWithinHour = (date!.timeIntervalSince(DateUtils.getToday()) < (60*60));
@@ -537,10 +537,6 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         //Store value
         self.date = date;                                               /* if nil date is empty                                     */
         vc.rows[tableIndex].time = date;                                /* works? eww this is long                                  */
-        
-        let tempRow = ANoteRow(main: nil, body: nil, time: date);
-        let str =  tempRow.getDateString();
-        print("-->a:\(str)");
         
         //Update UI
         setDateLabel(date);

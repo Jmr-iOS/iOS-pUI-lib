@@ -600,8 +600,6 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         picker = UIDatePicker(frame: dateFrame);
         picker.datePickerMode = UIDatePickerMode.dateAndTime;
         picker.timeZone =  TimeZone.init(abbreviation: "PST");
-
-        print(picker.date);
         
         picker.date = startDate;                                        /* set to passed value on load                              */
         
@@ -687,10 +685,6 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     @objc func donePressed(_ sender: UIButton!) {
 
         //Store date
-        let tempRow = ANoteRow(main: nil, body: nil, time: picker.date);
-        let str =  tempRow.getDateString();
-        print("-->0:\(str)");
-        
         parentCell.updateDate(picker.date);
         
         //Dismiss view
