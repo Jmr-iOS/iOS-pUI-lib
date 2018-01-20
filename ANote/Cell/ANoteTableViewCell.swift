@@ -253,8 +253,14 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
      */
     /********************************************************************************************************************************/
     func setTimeLabel(_ date : Date?) {
+
+        let isSet : Bool;                                               /* don't operate on timeView when date not set              */
+        let isWithinHour : Bool;
         
-        let isSet : Bool = (date != nil);                               /* don't operate on timeView when date not set              */
+        //Init
+        isSet = (date != nil);
+        isWithinHour = (date!.timeIntervalSince(DateUtils.getToday()) < (60*60));
+        
         
         //@pre
         if(!isSet) {
@@ -280,7 +286,11 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         timeLabel.text  =   "\(hrStr):\(minStr) \(mer)";
 
         //Apply color
-        timeView.backgroundColor = nearColor_val;
+        if(isWithinHour) {
+            timeView.backgroundColor = nearColor_val;
+        } else {
+            timeView.backgroundColor = farColor_val;
+        }
 
         if(myVerbose) { print("ANoteTableViewCell.setTimeLabel():  time label value changed"); }
 

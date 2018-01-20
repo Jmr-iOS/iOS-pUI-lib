@@ -126,6 +126,7 @@ class DateUtils : NSObject {
     //  FIELD WRAPPERS                                                                                                              //
     //******************************************************************************************************************************//
     class func getToday() -> Date { return Date(); }
+    class func getNow() -> Date   { return Date(); }
     class func getEra(_ date : Date) -> Int { return Calendar.current.component(.hour, from: date); }
     class func getYear(_ date : Date) -> Int { return Calendar.current.component(.year, from: date); }
     class func getMonth(_ date : Date) -> Int { return Calendar.current.component(.month, from: date); }
