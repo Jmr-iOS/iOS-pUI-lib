@@ -259,14 +259,14 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         
         //Init
         isSet = (date != nil);
-        isWithinHour = (date!.timeIntervalSince(DateUtils.getToday()) < (60*60));
-        
-        
+
         //@pre
         if(!isSet) {
             timeLabel.text = "";
             timeView.backgroundColor = UIColor.lightGray;               /* light gray for unset                                     */
             return;
+        } else {
+            isWithinHour = (date!.timeIntervalSince(DateUtils.getToday()) < (60*60));
         }
         
         //Get time components
