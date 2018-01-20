@@ -96,13 +96,31 @@ class DateUtils : NSObject {
     
     /********************************************************************************************************************************/
     /** @fcn        getTimeString(date : Date) -> String
-     *  @brief      get the conventional time string
-     *  @details    x
+     *  @brief      get the conventional time string ("1:23")
+     *  @details    1..12 clock
      */
     /********************************************************************************************************************************/
     class func getTimeString(date : Date,_ useMer : Bool?=false) -> String {
-        return "\(useMer!)";
+      
+        var hr  = DateUtils.getHours(date);
+        let min = DateUtils.getMinutes(date);
+        var mer = "AM";
+        
+        //Update to convention
+        if(hr > 12) {
+            hr  = (hr-12);
+            mer = "PM"
+        }
+        
+        //Handle meridian
+        var timeString = "\(hr):\(min)";
+        if(useMer!) {
+            timeString = "\(timeString) \(mer)";
+        }
+        
+        return timeString;
     }
+    
     
     /********************************************************************************************************************************/
     /** @fcn        getToday() -> Date
@@ -112,6 +130,30 @@ class DateUtils : NSObject {
     /********************************************************************************************************************************/
     class func getToday() -> Date {
         return Date();
+    }
+    
+
+    /********************************************************************************************************************************/
+    /** @fcn        getHours(_ date : Date) -> Int
+     *  @brief      get hours of date
+     *  @details    0...24
+     */
+    /********************************************************************************************************************************/
+    class func getHours(_ date : Date) -> Int {
+        let hour = Calendar.current.component(.hour, from: date);
+        return hour;
+    }
+
+    
+    /********************************************************************************************************************************/
+    /** @fcn        getMinutes(_ date : Date) -> Int
+     *  @brief      get minutes of date
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    class func getMinutes(_ date : Date) -> Int {
+        let minute = Calendar.current.component(.minute, from: date);
+        return minute;
     }
     
     
