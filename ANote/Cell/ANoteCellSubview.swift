@@ -228,9 +228,6 @@ class ANoteCellSubview : UIView {
         
         if(verbose) { print("CellSubview.returnPress():  bottom was pressed, dismissing view"); }
         
-        parentCell.bottField.text = self.parentCell.bottField.text! + "3";
-        parentCell.vc.rows[parentCell.tableIndex].bott = parentCell.bottField.text;
-        
         return;
     }
     

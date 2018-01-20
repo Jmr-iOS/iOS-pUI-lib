@@ -76,12 +76,12 @@ class DateUtils : NSObject {
     }
 
     /********************************************************************************************************************************/
-    /** @fcn        getDateString(date : Date) -> String
+    /** @fcn        getDateString(_ date : Date) -> String
      *  @brief      get the conventional date string
      *  @details    "Sat, Jan 20 2018"
      */
     /********************************************************************************************************************************/
-    class func getDateString(date : Date) -> String {
+    class func getDateString(_ date : Date) -> String {
     
         let dateFormat = DateFormatter();
         dateFormat.timeZone = TimeZone(abbreviation: "UTC");
@@ -95,12 +95,12 @@ class DateUtils : NSObject {
     
     
     /********************************************************************************************************************************/
-    /** @fcn        getTimeString(date : Date) -> String
+    /** @fcn        getTimeString(_ date : Date) -> String
      *  @brief      get the conventional time string ("1:23")
      *  @details    1..12 clock
      */
     /********************************************************************************************************************************/
-    class func getTimeString(date : Date,_ useMer : Bool?=false) -> String {
+    class func getTimeString(_ date : Date,_ useMer : Bool?=false) -> String {
       
         var hr  = DateUtils.getHours(date);
         let min = DateUtils.getMinutes(date);
@@ -113,7 +113,7 @@ class DateUtils : NSObject {
         }
         
         //Handle meridian
-        var timeString = "\(hr):\(min)";
+        var timeString = "\(hr):\(String(format: "%02d", min))";
         if(useMer!) {
             timeString = "\(timeString) \(mer)";
         }

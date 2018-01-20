@@ -16,6 +16,7 @@
 /************************************************************************************************************************************/
 import UIKit
 
+
 class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     
     //Parent
@@ -93,8 +94,6 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         if(timeView != nil) {
             return;                                                 /* don't re-initialize, called by Handler on scroll             */
         }
-        
-        if(myVerbose){print("aNoteTableViewCell.initialize():    adding: '\(self.vc.rows[indexPath.item].main!)'");}
 
         self.tableIndex = indexPath.item;
         
@@ -103,8 +102,9 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         self.mainView.addSubview(self.cellSubView);
 
         //Get Current Cell's Info
-        let currRow : ANoteRow = self.vc.rows[indexPath.item];
+        let currRow = getRowValue();
         
+        if(myVerbose){print("aNoteTableViewCell.initialize():    adding: '\(currRow.main!)'");}
 
         /****************************************************************************************************************************/
         /*                                                      Checkbox                                                            */
@@ -174,7 +174,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         
         bottField = UILabel(frame: CGRect(x:bott_xOffs, y: bott_yOffs, width: bottFieldWidth, height:  bott_height));
 
-        bottField.text = currRow.bott;
+        bottField.text = currRow.getDateString();
         
         bottField.font = UIFont(name: cell_fontName, size: bott_size);
         bottField.textAlignment = NSTextAlignment.left;
@@ -205,7 +205,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         //Setup
         timeLabel = UILabel(frame: CGRect(x: tl_xOffs, y: tl_yOffs, width: tl_width, height:  tl_height));
         timeLabel.font  =   UIFont(name: cell_fontName, size: tl_size);
-        setTimeLabel(nil);
+        setTimeLabel(getRowValue().time);
         timeLabel.textColor     = UIColor.white;
         timeLabel.textAlignment = NSTextAlignment.left;
 
@@ -219,35 +219,8 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         
         return;
     }
-    
 
-//<NEW>
-    //@todo     header
-    //@note     make easy to acces everywhere
-    func getTimeString_temp() -> String {
-        
-        if(time == nil) {
-            return "";                                          /* return empty if no time value                                    */
-        }
-        
-        //Get time components
-        var hr  = Calendar.current.component(.hour,   from: date!);
-        let min = Calendar.current.component(.minute, from: date!);
-        var mer = "AM";
-        
-        //Handle meridian
-        if(hr>11) { mer = "PM"; }
-        if(hr>12) { hr = (hr-12); }
-        
-        //Gen strings
-        let hrStr  = "\(hr)";                                           /* num chars std                                            */
-        let minStr = String(format: "%02d", min);                       /* num chars 2                                              */
-        
-        //Gen text
-        return "\(hrStr):\(minStr) \(mer)";
-    }
-    
-    
+
     /********************************************************************************************************************************/
     /** @fcn        setDateLabel(_ date : Date?)
      *  @brief      x
@@ -256,25 +229,17 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     /********************************************************************************************************************************/
     func setDateLabel(_ date : Date?) {
         
-        var returnStr : String = "ABC";
-
-        let cal = Calendar.current;
-        let isToday : Bool = cal.isDateInToday(date!);
-        let isTomm  : Bool = cal.isDateInTomorrow(date!);
+        //Handle unset cell
+        if(date == nil) {
+            bottField.text = "";                                        /* string is empty when date unset                          */
+            return;
+        }
+ 
+        //Update date string
+        bottField.text = getRowValue().getDateString();
         
-         if(isToday) {
-            returnStr  = "Today \(getTimeString_temp())";
-         } else if(isTomm) {
-            returnStr = "Tomorrow \(getTimeString_temp())";
-         } else {
-            returnStr = "Maybe \(getTimeString_temp())";
-         }
-
-        bottField.text = returnStr;                                         /* @todo    deprecate bott string from row              */
-
         return;
     }
-//</NEW>
 
     
     /********************************************************************************************************************************/
@@ -386,8 +351,21 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
 
     
     /********************************************************************************************************************************/
+    /** @fcn        getIndex() -> Int
+     *  @brief      get table index
+     *  @details    x
+     *
+     *  @return     (Int) index of active cell (e.g. '1' for Item #2)
+     */
+    /********************************************************************************************************************************/
+    func getIndex() -> Int {
+        return (tableIndex);
+    }
+    
+
+    /********************************************************************************************************************************/
     /** @fcn        getNumber() -> Int
-     *  @brief      x
+     *  @brief      get cell number
      *  @details    x
      *
      *  @return     (Int) number of active cell (e.g. '2' for Item #2)
@@ -397,6 +375,19 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         return (tableIndex+1);
     }
 
+    
+    /********************************************************************************************************************************/
+    /** @fcn        getRowValue() -> ANoteRow
+     *  @brief      get cell contents
+     *  @details    x
+     *
+     *  @return     (ANoteRow) row contents for cell
+     */
+    /********************************************************************************************************************************/
+    func getRowValue() -> ANoteRow {
+        return vc.rows[tableIndex];
+    }
+    
     
     /********************************************************************************************************************************/
     /** @fcn        updateSelection(selected : Bool)

@@ -19,15 +19,26 @@ import Foundation
 struct ANoteRow {
     var main : String?;                                         /* primary text to display                                          */
     var body : String?;                                         /* sub text displayed below main and smaller                        */
-    var bott : String?;                                         /* text for time label                                              */
     var time : Date?;                                           /* time selection for cell                                          */
 }
 
 extension ANoteRow {
     
-    //@todo     header
-    //@note     make easy to acces everywhere
-    func getTimeString() -> String {
+    /********************************************************************************************************************************/
+    /** @fcn        getTimeString(_ useMer : Bool?=false) -> String
+     *  @brief      get time for print
+     *  @details    x
+     *
+     *  @section    Examples
+     *      "Today 5:00 PM"
+     *      "Tomorrow 5:00 PM"
+     *      "Fri, Jan 19 7:00 PM"
+     *
+     *  @section    Reference
+     *      DateUtils.getDateString()
+     */
+    /********************************************************************************************************************************/
+    func getTimeString(_ useMer : Bool?=false) -> String {
         
         if(time == nil) {
             return "";                                          /* return empty if no time value                                    */
@@ -51,7 +62,7 @@ extension ANoteRow {
     }
     
     
-    /****************************************************************************************************************************/
+    /********************************************************************************************************************************/
     /** @fcn        getDateString() -> String
      *  @brief      get date for print
      *  @details    x
@@ -60,47 +71,46 @@ extension ANoteRow {
      *      "Today 5:00 PM"
      *      "Tomorrow 5:00 PM"
      *      "Fri, Jan 19 7:00 PM"
+     *
+     *  @section    Reference
+     *      DateUtils.getDateString()
      */
-    /****************************************************************************************************************************/
+    /********************************************************************************************************************************/
     func getDateString() -> String {
+             
+        var dateStr  : String;
+        var dayPart  : String;
+        var timePart : String;
         
-        var returnStr : String = "ABC";
-//<TEMP>
+        if(time == nil) {
+            return "";
+        }
+        
         let cal = Calendar.current;
         let isToday : Bool = cal.isDateInToday(time!);
         let isTomm  : Bool = cal.isDateInTomorrow(time!);
         
-       /*
- //Get time components
- var hr  = Calendar.current.component(.hour, from: date!);
- let min = Calendar.current.component(.minute, from: date!);
- var mer = "AM";
- 
- //Handle meridian
- if(hr>11) { mer = "PM"; }
- if(hr>12) { hr = (hr-12); }
- 
- //Gen strings
- let hrStr  = "\(hr)";                                           /* num chars std                                            */
- let minStr = String(format: "%02d", min);                       /* num chars 2                                              */
- 
- //Apply text
- timeLabel.text  =   "\(hrStr):\(minStr) \(mer)";
- */
-        
         if(isToday) {
-            returnStr  = "Today \(getTimeString())";
+            dayPart  = "Today";
         } else if(isTomm) {
-            returnStr = "Tomorrow \(getTimeString())";
+            dayPart = "Tomorrow";
         } else {
-            returnStr = "Maybe \(getTimeString())";
+            //dateFormat.dateFormat = "EEE, MMM d hh:mm a";
+            //-->A(0): Sun, Feb 1 12:00 AM
+            let dateFormat = DateFormatter();
+            dateFormat.timeZone = TimeZone(abbreviation: "UTC");
+            dateFormat.dateFormat = "EEE, MMM d ";                           /* @format  'Sun, Jan 23'                              */
+            
+            dayPart = dateFormat.string(from: time!);
         }
         
-//</TEMP>
+        timePart = DateUtils.getTimeString(time!, true);
         
-        return returnStr;
+        dateStr = "\(dayPart) \(timePart)";
+        
+        return dateStr;
     }
-    
+
     
     @objc(rowHelperClass) class ANoteRowClass: NSObject, NSCoding {
     
@@ -128,10 +138,9 @@ extension ANoteRow {
         required init?(coder aDecoder: NSCoder) {
             guard let main = aDecoder.decodeObject(forKey: RowBackupKeys.main) as? String else { return nil; }
             guard let body = aDecoder.decodeObject(forKey: RowBackupKeys.body) as? String else { return nil; }
-            guard let bott = aDecoder.decodeObject(forKey: RowBackupKeys.bott) as? String else { return nil; }
             guard let time = aDecoder.decodeObject(forKey: RowBackupKeys.time) as? Date   else { return nil; }
             
-            row = ANoteRow(main: main, body: body, bott: bott, time: time);          /* init new row from retrieved                 */
+            row = ANoteRow(main: main, body: body, time: time);          				/* init new row from retrieved             	*/
             
             super.init();
             
@@ -154,7 +163,6 @@ extension ANoteRow {
         func encode(with aCoder: NSCoder) {
             aCoder.encode(row.main, forKey: RowBackupKeys.main);
             aCoder.encode(row.body, forKey: RowBackupKeys.body);
-            aCoder.encode(row.bott, forKey: RowBackupKeys.bott);
             aCoder.encode(row.time, forKey: RowBackupKeys.time);
             
             return;
@@ -240,7 +248,6 @@ extension ANoteRow {
 struct RowBackupKeys {
     static let main : String = "main";
     static let body : String = "body";
-    static let bott : String = "bott";
     static let time : String = "time";
 }
 
