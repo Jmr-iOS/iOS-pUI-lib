@@ -95,12 +95,9 @@ extension ANoteRow {
         } else if(isTomm) {
             dayPart = "Tomorrow";
         } else {
-            //dateFormat.dateFormat = "EEE, MMM d hh:mm a";
-            //-->A(0): Sun, Feb 1 12:00 AM
             let dateFormat = DateFormatter();
             dateFormat.timeZone = TimeZone(abbreviation: "UTC");
-            dateFormat.dateFormat = "EEE, MMM d ";                           /* @format  'Sun, Jan 23'                              */
-            
+            dateFormat.dateFormat = "EEE, MMM d";                            /* @format  'Sun, Jan 23'                              */
             dayPart = dateFormat.string(from: time!);
         }
         

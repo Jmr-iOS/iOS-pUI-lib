@@ -533,8 +533,14 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
      */
     /********************************************************************************************************************************/
     func updateDate(_ date : Date?) {
+        
         //Store value
         self.date = date;                                               /* if nil date is empty                                     */
+        vc.rows[tableIndex].time = date;                                /* works? eww this is long                                  */
+        
+        let tempRow = ANoteRow(main: nil, body: nil, time: date);
+        let str =  tempRow.getDateString();
+        print("-->a:\(str)");
         
         //Update UI
         setDateLabel(date);
@@ -543,10 +549,10 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         //Grab date
         var respStr = "nil";
         if(date != nil) {
-            respStr = "\(date!)";									  /* only print if passed									 */
+            respStr = "\(DateUtils.getDateString(date!))";		        /* only print if passed									    */
         }
 
-        if(myVerbose) { print("ANoteTableViewCell.updateDate():    date was updated to \(respStr)"); }
+        if(myVerbose) { print("ANoteTableViewCell.updateDate():    date was updated to '\(respStr)'"); }
         
         return;
     }

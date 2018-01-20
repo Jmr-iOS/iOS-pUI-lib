@@ -631,7 +631,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         //Enable button
         updateDoneButton(true);
         
-        if(verbose) { print("ANoteTimeSelect.dateValueChange(): date change response complete"); }
+        if(verbose) { print("ANoteTimeSelect.dateValueChange():  date change response complete"); }
         
         return;
     }
@@ -687,6 +687,10 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     @objc func donePressed(_ sender: UIButton!) {
 
         //Store date
+        let tempRow = ANoteRow(main: nil, body: nil, time: picker.date);
+        let str =  tempRow.getDateString();
+        print("-->0:\(str)");
+        
         parentCell.updateDate(picker.date);
         
         //Dismiss view
