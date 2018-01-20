@@ -122,40 +122,27 @@ class DateUtils : NSObject {
     }
     
     
-    /********************************************************************************************************************************/
-    /** @fcn        getToday() -> Date
-     *  @brief      get today's date
-     *  @details    x
-     */
-    /********************************************************************************************************************************/
-    class func getToday() -> Date {
-        return Date();
-    }
-    
+    //******************************************************************************************************************************//
+    //  FIELD WRAPPERS                                                                                                              //
+    //******************************************************************************************************************************//
+    class func getToday() -> Date { return Date(); }
+    class func getEra(_ date : Date) -> Int { return Calendar.current.component(.hour, from: date); }
+    class func getYear(_ date : Date) -> Int { return Calendar.current.component(.year, from: date); }
+    class func getMonth(_ date : Date) -> Int { return Calendar.current.component(.month, from: date); }
+    class func getDay(_ date : Date) -> Int { return Calendar.current.component(.day, from: date); }
+    class func getHours(_ date : Date) -> Int { return Calendar.current.component(.hour, from: date); }
+    class func getMinutes(_ date : Date) -> Int { return Calendar.current.component(.minute, from: date); }
+    class func getSeconds(_ date : Date) -> Int { return Calendar.current.component(.second, from: date); }
+    class func getWeekday(_ date : Date) -> Int { return Calendar.current.component(.weekday, from: date); }
+    class func getWeekdayOrdinal(_ date : Date) -> Int { return  Calendar.current.component(.weekdayOrdinal, from: date); }
+    class func getQuarter(_ date : Date) -> Int { return Calendar.current.component(.hour, from: date); }
+    class func getWeekOfMonth(_ date : Date) -> Int { return Calendar.current.component(.weekOfMonth, from: date); }
+    class func getWeekOfYear(_ date : Date) -> Int { return Calendar.current.component(.weekOfYear, from: date); }
+    class func getYearForWeekOfYear(_ date : Date) -> Int { return Calendar.current.component(.yearForWeekOfYear, from: date); }
+    class func getNanoseconds(_ date : Date) -> Int { return Calendar.current.component(.nanosecond, from: date); }
+    class func getCalendar(_ date : Date) -> Int { return Calendar.current.component(.calendar, from: date); }
+    class func getTimeZone(_ date : Date) -> Int { return Calendar.current.component(.timeZone, from: date); }
 
-    /********************************************************************************************************************************/
-    /** @fcn        getHours(_ date : Date) -> Int
-     *  @brief      get hours of date
-     *  @details    0...24
-     */
-    /********************************************************************************************************************************/
-    class func getHours(_ date : Date) -> Int {
-        let hour = Calendar.current.component(.hour, from: date);
-        return hour;
-    }
-
-    
-    /********************************************************************************************************************************/
-    /** @fcn        getMinutes(_ date : Date) -> Int
-     *  @brief      get minutes of date
-     *  @details    x
-     */
-    /********************************************************************************************************************************/
-    class func getMinutes(_ date : Date) -> Int {
-        let minute = Calendar.current.component(.minute, from: date);
-        return minute;
-    }
-    
     
     /********************************************************************************************************************************/
     /** @fcn        printExamples()
