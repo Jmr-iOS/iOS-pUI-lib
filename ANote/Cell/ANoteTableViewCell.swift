@@ -232,9 +232,13 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         //Handle unset cell
         if(date == nil) {
             bottField.text = "";                                        /* string is empty when date unset                          */
+            bellIcon.image = nil;                                       /* turn off bell icon                                       */
             return;
         }
- 
+
+        //Update bell icon (in case empty reload)
+        bellIcon.image = UIImage(named:"bell");
+        
         //Update date string
         bottField.text = getRowValue().getDateString();
         
@@ -250,7 +254,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     /********************************************************************************************************************************/
     func setTimeLabel(_ date : Date?) {
         
-        let isSet : Bool = (date != nil);                                 /* don't operate on timeView when date not set              */
+        let isSet : Bool = (date != nil);                               /* don't operate on timeView when date not set              */
         
         //@pre
         if(!isSet) {
