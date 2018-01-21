@@ -36,6 +36,9 @@ class ANoteCellSubview : UIView {
     //Config
     private let verbose : Bool;                                     /* for this class                                               */
     
+    var temp_i : Int = 0;
+    var rslts = [String]();
+    let imgV : UIImageView;
     
     /********************************************************************************************************************************/
 	/**	@fcn		init(mainView : UIView, parentCell : ANoteTableViewCell)
@@ -50,6 +53,7 @@ class ANoteCellSubview : UIView {
     init(mainView : UIView, parentCell : ANoteTableViewCell) {
         
         verbose = false;
+        imgV = UIImageView();
         
         super.init(frame: UIScreen.main.bounds);
         
@@ -57,12 +61,34 @@ class ANoteCellSubview : UIView {
         self.mainView = mainView;
         self.parentCell = parentCell;
 
-        
-        //**************************************************************************************************************************//
-        //                                              INIT UI                                                                     //
-        //**************************************************************************************************************************//
+        //Init view
         backgroundColor = UIColor.white;
         frame = getCSFrame(onscreen: false);
+        
+        
+        //**************************************************************************************************************************//
+        //                                              BACKGROUND                                                                  //
+        //**************************************************************************************************************************//
+        let x = Bundle.main.bundleURL;
+        guard let fileEnumerator = FileManager.default.enumerator(at: x, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions()) else { return };
+        while let file = fileEnumerator.nextObject() {
+            let s : String = (file as! NSURL).lastPathComponent!;
+            rslts.append(s);
+        }
+        
+
+        imgV.frame = UIScreen.main.bounds;                                  /* fullscreen                                           */
+        imgV.contentMode = .scaleToFill;                                    /* set unscaled                                         */
+        imgV.image = UIImage(named: rslts[temp_i]);
+        print(rslts[temp_i]);
+        temp_i = temp_i + 1;
+        
+        self.addSubview(imgV);
+        
+        //**************************************************************************************************************************//
+        //                                             NAME LABEL                                                                   //
+        //**************************************************************************************************************************//
+
 
 		//Add name label
         nameLabel = UILabel();
@@ -133,18 +159,7 @@ class ANoteCellSubview : UIView {
         //Init all hidden
         setContentsAlpha(0);
         
-        //@temp for debug validation
-        backgroundColor = UIColor(red:0.44, green:0.07, blue:0.07, alpha:1.0);
-        
-        self.viewDidLoadish();
-        
-        if(verbose) { print("CellSubview.init():                 my custom cell #\(parentCell.getNumber()) subview init"); }
- 
-        return;
-    }
-
-    func viewDidLoadish() {
-    
+        //Load UI
         mainView.reloadInputViews();
         addSubview(self.nameLabel);
         addSubview(self.retButton);
@@ -152,8 +167,25 @@ class ANoteCellSubview : UIView {
         addSubview(self.bodyButton);
         addSubview(self.bottButton);
         
+        if(verbose) { print("CellSubview.init():                 my cell #\(parentCell.getNumber()) subview init"); }
+ 
         return;
+    }
 
+    
+    /********************************************************************************************************************************/
+    /** @fcn        updateBkgnd()
+     *  @brief      x
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func updateBkgnd() {
+        
+        imgV.image = UIImage(named: rslts[temp_i]);
+        
+        temp_i = (temp_i + 1);
+        
+        return;
     }
     
     /********************************************************************************************************************************/
