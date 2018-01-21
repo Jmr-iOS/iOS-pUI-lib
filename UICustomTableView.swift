@@ -30,7 +30,7 @@ class UICustomTableView : UITableView {
     let verbose : Bool = false;
 
 	var myCustomCells : [UICustomTableViewCell] = [UICustomTableViewCell]();
-
+    
     
     /********************************************************************************************************************************/
 	/**	@fcn		init(frame: CGRect, style: UITableViewStyle)
