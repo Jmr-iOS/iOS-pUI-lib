@@ -43,7 +43,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
 
     //Constants
     let verbose : Bool = true;
-    let buttonTextColor = UIColor(red:1.00, green:0.66, blue:0.00, alpha:1.0);      /* ffa800                                       */
+    let buttonTextColor = UIColor(red:1.00, green:0.66, blue:0.00, alpha:1.0);      /* #ffa800                                      */
 
     
     /********************************************************************************************************************************/

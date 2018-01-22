@@ -38,7 +38,7 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
         let isSecondRow = (indexPath.item == 2);
         
         if(isSecondRow) {
-            height = 75;                                                /* make smaller for visible example                         */
+       		height = 75;                                                /* make smaller for visible example                         */
         }
         
         return height;

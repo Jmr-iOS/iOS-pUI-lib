@@ -31,11 +31,15 @@ class ANoteCellSubview : UIView {
     var nameLabel : UILabel!;
     
     //Config
-    private let verbose : Bool;                                     /* for this class                                               */
+    private let verbose : Bool = false;                             /* for this class                                               */
     
+    private static var bkgnd_ctr : Int =  0;                        /* background index to use for specified call                   */
+    var bkgnd_ind : Int;                                            /* index of background for cell                                 */
+    let bkgndView : UIImageView;                                    /* view holding background image                                */
+ 
     var temp_i : Int = 0;
     var rslts = [String]();
-    let imgV : UIImageView;
+    
     
     /********************************************************************************************************************************/
 	/**	@fcn		init(mainView : UIView, parentCell : ANoteTableViewCell)
@@ -49,8 +53,8 @@ class ANoteCellSubview : UIView {
 	/********************************************************************************************************************************/
     init(mainView : UIView, parentCell : ANoteTableViewCell) {
         
-        verbose = false;
-        imgV = UIImageView();
+        bkgndView = UIImageView();
+        bkgnd_ind = ANoteCellSubview.bkgnd_ctr;                                 /* grab index for use                               */
         
         super.init(frame: UIScreen.main.bounds);
         
@@ -66,34 +70,22 @@ class ANoteCellSubview : UIView {
         //**************************************************************************************************************************//
         //                                              BACKGROUND                                                                  //
         //**************************************************************************************************************************//
-        let x = Bundle.main.bundleURL;
-        guard let fileEnumerator = FileManager.default.enumerator(at: x, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions()) else { return };
-        while let file = fileEnumerator.nextObject() {
-            let s : String = (file as! NSURL).lastPathComponent!;
-            rslts.append(s);
-        }
-        
+        let images : [String] = getCellBackgrounds();                       /* get all backgrounds                                  */
+        bkgndView.frame = UIScreen.main.bounds;                             /* fullscreen                                           */
+        bkgndView.contentMode = .scaleToFill;                               /* set unscaled                                         */
+        bkgndView.image = UIImage(named: images[bkgnd_ind]);                /* acquire next background                              */
 
-        imgV.frame = UIScreen.main.bounds;                                  /* fullscreen                                           */
-        imgV.contentMode = .scaleToFill;                                    /* set unscaled                                         */
-        imgV.image = UIImage(named: rslts[temp_i]);
-        temp_i = temp_i + 1;                                                /* increment index for next cell                        */
-        
-        self.addSubview(imgV);
-        
+        //update ctr
+        ANoteCellSubview.bkgnd_ctr = (ANoteCellSubview.bkgnd_ctr + 1);      /* update for next after use                            */
+
         //**************************************************************************************************************************//
         //                                             NAME LABEL                                                                   //
         //**************************************************************************************************************************//
-
-
-		//Add name label
         nameLabel = UILabel();
         
         nameLabel.text = "Item #\(self.parentCell.getNumber()) Subview";
         nameLabel.font = UIFont(name: "MarkerFelt-Thin", size: 15);
         nameLabel.textColor = UIColor.black;
-        nameLabel.numberOfLines = 1;
-
         nameLabel.numberOfLines = 0;
         nameLabel.sizeToFit();
         nameLabel.textAlignment = .center;
@@ -111,12 +103,12 @@ class ANoteCellSubview : UIView {
         retButton.center = CGPoint(x: frame.width/2, y: 600);
         retButton.addTarget(self, action: #selector(returnPress(_:)), for:  .touchUpInside);
         
-        
         //Init all hidden
         setContentsAlpha(0);
         
         //Load UI
         mainView.reloadInputViews();
+        addSubview(bkgndView);
         addSubview(self.nameLabel);
         addSubview(self.retButton);
         
@@ -127,19 +119,39 @@ class ANoteCellSubview : UIView {
 
     
     /********************************************************************************************************************************/
-    /** @fcn        updateBkgnd()
-     *  @brief      x
-     *  @details    x
+    /** @fcn        getCellBackgrounds() -> [String]
+     *  @brief      get listing of all available images for background use
+     *
+     *  @return     ([String]?) all local images found on phone
+     *
+     *  @section    Supported Types
+     *      png, jpg, jpeg
      */
     /********************************************************************************************************************************/
-    func updateBkgnd() {
+    func getCellBackgrounds() -> [String] {
         
-        imgV.image = UIImage(named: rslts[temp_i]);
+        var rslts = [String]();
         
-        temp_i = (temp_i + 1);
+        let x = Bundle.main.bundleURL;
+        let fileEnumerator = FileManager.default.enumerator(at: x, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions());
         
-        return;
+        while let file = fileEnumerator?.nextObject() {
+            let s : String = (file as! NSURL).lastPathComponent!;
+            
+            var type = (file as! NSURL).pathExtension;
+            type = type?.lowercased();                                  /* handle both cases                                        */
+            
+            let valid : Bool = ((type?.contains("png"))! || (type?.contains("jpg"))! || (type?.contains("jpeg"))!);
+            
+            //Append
+            if(valid) {
+                rslts.append(s);
+            }
+        }
+        
+        return rslts;
     }
+
     
     /********************************************************************************************************************************/
 	/**	@fcn		returnPress(_ sender: UIButton!)
@@ -172,7 +184,7 @@ class ANoteCellSubview : UIView {
         //Apply alpha to all
         retButton.alpha  = alpha;
         nameLabel.alpha  = alpha;
-    
+
         return;
     }
     

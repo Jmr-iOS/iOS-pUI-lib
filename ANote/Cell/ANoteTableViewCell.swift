@@ -335,7 +335,6 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
             if(self.myVerbose) { print("ANoteTableViewCell.launchSubView(): sliding view in"); }
                 self.cellSubView.alpha = 1.0;
                 self.cellSubView.frame = getCSFrame(onscreen: true);
-                self.cellSubView.updateBkgnd();
         }, completion: { (finished: Bool) -> Void in
                 self.launchCompletion();
             if(self.myVerbose) { print("ANoteTableViewCell.launchSubView(): sliding view in completion"); }
