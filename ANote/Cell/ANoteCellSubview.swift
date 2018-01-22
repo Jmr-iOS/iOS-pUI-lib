@@ -4,7 +4,14 @@
  * 	@details	x
  *
  * 	@section	Opens
- * 		none current
+ * 		add top bar             (UIView)
+ *      add title bar           (UIView)
+ *      add date placeholder    (UIView)
+ *      add main text           (UITextView)
+ *      add bottom menubar      (UIView)
+ *      ...
+ *      keyboard dismisses
+ *      main view here is scrollable
  *
  *  @section    Data Architecture
  *      each row represents a data entry whose data is captured in completion by the row's cell subview, presented here. all data
@@ -25,10 +32,15 @@ class ANoteCellSubview : UIView {
     var parentCell   : ANoteTableViewCell!;
     
     //UI
-    var retButton  : UIButton!;                                     /* return button of the subview                                 */
+    var topBar    : UIView;
+    var titleBar  : UIView;
+    var dateBar   : UIView;
+    var datePlace : UIView;
+    var mainText  : UITextView;
+    var menuBar   : UIView;
     
-    //Data
-    var nameLabel : UILabel!;
+    //PrevUI
+    var retButton  : UIButton!;                                     /* return button of the subview                                 */
     
     //Config
     private let verbose : Bool = false;                             /* for this class                                               */
@@ -53,8 +65,17 @@ class ANoteCellSubview : UIView {
 	/********************************************************************************************************************************/
     init(mainView : UIView, parentCell : ANoteTableViewCell) {
         
+        //Prep Background
         bkgndView = UIImageView();
         bkgnd_ind = ANoteCellSubview.bkgnd_ctr;                                 /* grab index for use                               */
+        
+        //Init UI
+        topBar = UIView();
+        titleBar = UIView();
+        dateBar = UIView();
+        datePlace = UIView();
+        mainText = UITextView();
+        menuBar = UIView();
         
         super.init(frame: UIScreen.main.bounds);
         
@@ -78,29 +99,62 @@ class ANoteCellSubview : UIView {
         //update ctr
         ANoteCellSubview.bkgnd_ctr = (ANoteCellSubview.bkgnd_ctr + 1);      /* update for next after use                            */
 
-        //**************************************************************************************************************************//
-        //                                             NAME LABEL                                                                   //
-        //**************************************************************************************************************************//
-        nameLabel = UILabel();
+        //Track view offset
+        var y : CGFloat = UIApplication.shared.statusBarFrame.height;       /* height to begin view placement                       */
         
-        nameLabel.text = "Item #\(self.parentCell.getNumber()) Subview";
-        nameLabel.font = UIFont(name: "MarkerFelt-Thin", size: 15);
-        nameLabel.textColor = UIColor.black;
-        nameLabel.numberOfLines = 0;
-        nameLabel.sizeToFit();
-        nameLabel.textAlignment = .center;
-        nameLabel.center = CGPoint(x: UIScreen.main.bounds.width/2, y: 65);
-        nameLabel.translatesAutoresizingMaskIntoConstraints = true;
+        //**************************************************************************************************************************//
+        //                                              TOP BAR                                                                     //
+        //**************************************************************************************************************************//
+        topBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 37);
+        topBar.backgroundColor = UIColor.lightGray;
+        y = (y + topBar.bounds.height);
+        
+        //**************************************************************************************************************************//
+        //                                              TITLE BAR                                                                   //
+        //**************************************************************************************************************************//
+        titleBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 40);
+        titleBar.backgroundColor = UIColor.red;
+        y = (y + titleBar.bounds.height);
 
         //**************************************************************************************************************************//
-        //                                            INIT BUTTON                                                                   //
+        //                                               DATE BAR                                                                   //
+        //**************************************************************************************************************************//
+        dateBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 33);
+        dateBar.backgroundColor = UIColor.darkGray;
+        y = (y + dateBar.bounds.height);
+
+        //**************************************************************************************************************************//
+        //                                             DATE VIEW                                                                    //
+        // @todo    only inserted when date is present                                                                              //
+        //**************************************************************************************************************************//
+        datePlace.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 81);
+        datePlace.backgroundColor = UIColor.blue;
+        y = (y + datePlace.bounds.height);
+        
+        //**************************************************************************************************************************//
+        //                                             MAIN TEXT                                                                    //
+        //**************************************************************************************************************************//
+        mainText.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 312);
+        mainText.backgroundColor = UIColor.orange;
+        mainText.text = "main";
+        y = (y + mainText.bounds.height);
+        
+        //**************************************************************************************************************************//
+        //                                             MENU BAR                                                                     //
+        //**************************************************************************************************************************//
+        menuBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - y));
+        menuBar.backgroundColor = UIColor.purple;
+
+
+        //**************************************************************************************************************************//
+        //                                          RETURN BUTTON                                                                   //
         //**************************************************************************************************************************//
         retButton = UIButton(type: UIButtonType.roundedRect);
- 
+        
         retButton.translatesAutoresizingMaskIntoConstraints = true;
         retButton.setTitle("Return",      for: UIControlState());
         retButton.sizeToFit();
-        retButton.center = CGPoint(x: frame.width/2, y: 600);
+        retButton.center = CGPoint(x: frame.width/2, y: 500);
         retButton.addTarget(self, action: #selector(returnPress(_:)), for:  .touchUpInside);
         
         //Init all hidden
@@ -109,15 +163,21 @@ class ANoteCellSubview : UIView {
         //Load UI
         mainView.reloadInputViews();
         addSubview(bkgndView);
-        addSubview(self.nameLabel);
-        addSubview(self.retButton);
+        addSubview(retButton);
+        addSubview(topBar);
+        addSubview(titleBar);
+        addSubview(dateBar);
+        addSubview(datePlace);
+        addSubview(mainText);
+        addSubview(menuBar);
         
+        addSubview(retButton);
+
         if(verbose) { print("CellSubview.init():                 my cell #\(parentCell.getNumber()) subview init"); }
  
         return;
     }
-
-    
+//</PREV>
     /********************************************************************************************************************************/
     /** @fcn        getCellBackgrounds() -> [String]
      *  @brief      get listing of all available images for background use
@@ -183,8 +243,13 @@ class ANoteCellSubview : UIView {
         
         //Apply alpha to all
         retButton.alpha  = alpha;
-        nameLabel.alpha  = alpha;
-
+        topBar.alpha     = alpha;
+        titleBar.alpha   = alpha;
+        datePlace.alpha  = alpha;
+        dateBar.alpha    = alpha;
+        mainText.alpha   = alpha;
+        menuBar.alpha    = alpha;
+        
         return;
     }
     
