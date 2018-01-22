@@ -77,8 +77,7 @@ class ANoteCellSubview : UIView {
         imgV.frame = UIScreen.main.bounds;                                  /* fullscreen                                           */
         imgV.contentMode = .scaleToFill;                                    /* set unscaled                                         */
         imgV.image = UIImage(named: rslts[temp_i]);
-        print(rslts[temp_i]);
-        temp_i = temp_i + 1;
+        temp_i = temp_i + 1;                                                /* increment index for next cell                        */
         
         self.addSubview(imgV);
         

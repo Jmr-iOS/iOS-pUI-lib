@@ -416,27 +416,54 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
 
         if(selected) {
             if(myVerbose) { print("ANoteTableViewCell.updateSel():     selected"); }
-            
-            let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: self.subjectField.text!);
+
+            //Subject field
+            var attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: self.subjectField.text!);
             
             attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle,
                                          value: NSUnderlineStyle.styleSingle.rawValue,
                                          range: NSMakeRange(0, self.subjectField.text!.count));
 
             self.subjectField.attributedText = attributeString;
-            
             self.subjectField.textColor = UIColor.gray;
+
+            
+            //Date field
+            attributeString =  NSMutableAttributedString(string: self.bottField.text!);
+            
+            attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle,
+                                         value: NSUnderlineStyle.styleSingle.rawValue,
+                                         range: NSMakeRange(0, self.bottField.text!.count));
+
+            self.bottField.attributedText = attributeString;
+            self.bottField.textColor = UIColor.gray;
+            
             
         } else {
             if(myVerbose) { print("ANoteTableViewCell.updateSel():     not selected"); }
+
+            //Subject field
+            var attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: self.subjectField.text!);
             
-            let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: self.subjectField.text!);
-            
-            attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle, value: 0, range: NSMakeRange(0, attributeString.length));
-            
+            attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle,
+                                         value: 0,
+                                         range: NSMakeRange(0, attributeString.length));
+
+
             self.subjectField.attributedText = attributeString;
-            
             self.subjectField.textColor = UIColor.black;
+
+            
+            //Subject field
+            attributeString =  NSMutableAttributedString(string: self.bottField.text!);
+            
+            attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle,
+                                         value: 0,
+                                         range: NSMakeRange(0, attributeString.length));
+
+            //Date field
+            self.bottField.attributedText = attributeString;
+            self.bottField.textColor = UIColor.black;
         }
         
         return;
