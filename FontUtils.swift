@@ -114,6 +114,36 @@ class FontUtils : NSObject {
     
     
     /********************************************************************************************************************************/
+    /** @fcn        updateSize(_ font : UIFont, _ size : CGFloat) -> UIFont
+     *  @brief      set font size
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    class func updateFontSize(_ font : UIFont, _ size : CGFloat) -> UIFont {
+        
+        //Return updated
+        return font.withSize(size);
+    }
+    
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        incrementFontSize(_ font : UIFont, _ size : CGFloat) -> UIFont
+     *  @brief      increment font size
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    class func incrementFontSize(_ font : UIFont, _ size : CGFloat) -> UIFont {
+        
+        //Calc size
+        let size : CGFloat = (font.pointSize + size);
+        
+        //Return updated
+        return font.withSize(size);
+    }
+    
+        
+    /********************************************************************************************************************************/
     /** @fcn        applyTrait()
      *  @brief      apply conventional iOS traits, for reference
      *  @details    x
