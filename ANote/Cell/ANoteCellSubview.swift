@@ -112,6 +112,13 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         topBar.backgroundColor = UIColor.lightGray;
         y = (y + topBar.bounds.height);
         
+        //@todo  Draw Folder
+        
+        //@todo  Text
+        
+        //@todo  Draw Folder
+        
+        //Bookmark Icon
         
         //**************************************************************************************************************************//
         //                                              TITLE BAR                                                                   //

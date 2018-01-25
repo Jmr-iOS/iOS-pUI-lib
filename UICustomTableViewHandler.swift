@@ -6,7 +6,7 @@
  *
  * 	@author		Justin Reina, Firmware Engineer, Jaostech
  *  @created    11/5/17
- *  @last rev   1/21/18
+ *  @last rev   1/25/18
  *
  * 	@note you need to create a custom handler to ensure the cell's are CREATED and ACCESSED differently in this example code
  *        differently than the standard table example. It's not that a seperate class is REQUIRED, it's just dramatically cleaner and
@@ -27,23 +27,10 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
    
     let verbose : Bool = false;
     
-	var table : UICustomTableView!;
-    
-    
-    //Set Row Height
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        var height : CGFloat = 100;
-        
-        let isSecondRow = (indexPath.item == 2);
-        
-        if(isSecondRow) {
-       		height = 75;                                                /* make smaller for visible example                         */
-        }
-        
-        return height;
-    }
-    
+    //Vars
+	var table     : UICustomTableView!;                         /* table for handler to control                                     */
+    var rowHeight : CGFloat;                                    /* uniform height for all rows                                      */
+
     
     /********************************************************************************************************************************/
     /** @fcn        init(table : UICustomTableView)
@@ -51,9 +38,15 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
      *  @details    x
      */
     /********************************************************************************************************************************/
-	init(table : UICustomTableView) {
+    init(table : UICustomTableView) {
 
+        //Store
         self.table = table;
+        
+        //Init
+        self.rowHeight = 100;                                   /* std. val                                                         */
+        //Super
+        super.init();
         
         if(verbose){ print("CustomTableViewHandler.init():      the CustomTableViewHandler was initialized"); }
 
@@ -79,6 +72,26 @@ class UICustomTableViewHandler : NSObject, UITableViewDataSource, UITableViewDel
         return table.getCellCount();                                            /* return how many rows you want printed....!       */
     }
     
+    
+    /********************************************************************************************************************************/
+    /** @fcn        tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+     *  @brief      set row height of each row in table
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        let height : CGFloat = rowHeight;
+        
+        let isSecondRow = (indexPath.item == 2);
+        
+        if(isSecondRow) {
+            //cellHeight = 75;                                          /* make smaller for visible example if wanted               */
+        }
+        
+        return height;
+    }
+
     
     /********************************************************************************************************************************/
 	/**	@fcn		tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell

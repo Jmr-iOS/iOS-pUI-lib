@@ -77,7 +77,7 @@ class UICheckbox: UIView {
         checkBoxImg.frame = CGRect(x: xCoord, y: yCoord, width: check_dim, height: check_dim);
 
         //Super
-        super.init(frame:CGRect(x: 0, y: 0, width: cell_xOffs, height: row_height));  //make it to the tap size you want
+        super.init(frame:CGRect(x: 0, y: 0, width: cellXOffs, height: cellHeight));    /* make it to the tap size you want     */
         
         //handle taps
         addTapRecognizer();

@@ -45,18 +45,23 @@ class ANoteTableView : UICustomTableView {
         /****************************************************************************************************************************/
         /*                                              aNote cell-styles                                                           */
         /****************************************************************************************************************************/
-        separatorColor = UIColor(red:0.90, green:0.90, blue:0.90, alpha:1.0);      /* #e6e6e6                                  */
+        separatorColor = tableSepColor;
         separatorStyle = .singleLine;
         separatorInset = UIEdgeInsetsMake(0, 43, 0, 0);
 
+        //Set background color
+        self.backgroundColor = tableBakColor;
+
         //Set the row height
-        rowHeight = (row_height);
+        rowHeight = (rowHeight);
         
         //Allow for selection
         allowsSelection = true;
         
         //Exit
         if(verbose){print("ANoteTableView.init():              initialized"); }
+        
+        print(self.frame);
         
         return;
     }

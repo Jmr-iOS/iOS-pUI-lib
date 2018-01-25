@@ -126,7 +126,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         /****************************************************************************************************************************/
         let rChunk_width = UIScreen.main.bounds.width - tv_xOffs - tv_width;
         
-        let subjFieldWidth : CGFloat = UIScreen.main.bounds.width - cell_xOffs - rChunk_width - tv_width;
+        let subjFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width - tv_width;
         
         if(myVerbose) { print("ANoteTableViewCell.initialize():    grabbing \(indexPath.item)"); }
         
@@ -151,7 +151,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         /****************************************************************************************************************************/
         /*                                                  Description Text                                                        */
         /****************************************************************************************************************************/
-        let descrFieldWidth : CGFloat = UIScreen.main.bounds.width - cell_xOffs - rChunk_width;
+        let descrFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
         
         descripField = UILabel(frame: CGRect(x: descr_xOffs,
                                              y: descr_yOffs,
@@ -170,7 +170,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         /****************************************************************************************************************************/
         /*                                                      Bott Text                                                           */
         /****************************************************************************************************************************/
-        let bottFieldWidth : CGFloat = UIScreen.main.bounds.width - cell_xOffs - rChunk_width;
+        let bottFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
         
         bottField = UILabel(frame: CGRect(x:bott_xOffs, y: bott_yOffs, width: bottFieldWidth, height:  bott_height));
 
@@ -287,9 +287,9 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
 
         //Apply color
         if(isWithinHour) {
-            timeView.backgroundColor = nearColor_val;
+            timeView.backgroundColor = stdTimeColor;
         } else {
-            timeView.backgroundColor = farColor_val;
+            timeView.backgroundColor = normTimeColor;
         }
 
         if(myVerbose) { print("ANoteTableViewCell.setTimeLabel():  time label value changed"); }

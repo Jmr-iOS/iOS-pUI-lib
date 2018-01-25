@@ -19,9 +19,6 @@ class ANoteTableViewHandler : UICustomTableViewHandler {
     var vc         : ViewController!;
     var mainView   : UIView!;
     var aNoteTable : ANoteTableView!;
-    
-    let nearColor:UIColor = UIColor(red: 255/255, green:  60/255, blue:  60/255, alpha: 1);
-    let farColor :UIColor = UIColor(red: 210/255, green: 210/255, blue: 210/255, alpha: 1);
 
 
     /********************************************************************************************************************************/
@@ -32,6 +29,7 @@ class ANoteTableViewHandler : UICustomTableViewHandler {
         
         super.init(table: ANoteTable);
         
+        self.rowHeight = cellHeight;
         self.vc = vc;
         self.mainView = mainView;
         self.aNoteTable = ANoteTable;
