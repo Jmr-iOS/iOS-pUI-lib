@@ -18,50 +18,57 @@ class ANoteTableView : UICustomTableView {
     
     
     /********************************************************************************************************************************/
-    /** @fcn        init(frame: CGRect, style: UITableViewStyle, items: [String])
+    /** @fcn        init(frame: CGRect, style: UITableViewStyle, yOffs : CGFloat)
      *  @brief      init table with items contents
      *  @details    table sized to items.count & populated with items values
      *
      *  @param      [in] (CGRect) frame - view frame for insertion
      *  @param      [in] (UITableViewStyle) style - style to apply to table
+     *  @param      [in] (CGFloat) yOffs - starting y address of table on main screen
      *
      *  @section    Opens
      *      x
      */
     /********************************************************************************************************************************/
-    init(frame: CGRect, style: UITableViewStyle, i : Int) {
+    init(frame: CGRect, style: UITableViewStyle, yOffs : CGFloat) {
         
         print("ANoteTableView.init():              currently configured to UITableViewCell usage");
 
+        //Calc frame
+        let tFrame = CGRect(x: frame.origin.x,
+                              y: frame.origin.y,
+                              width:  UIScreen.main.bounds.width,
+                              height: (UIScreen.main.bounds.height - yOffs - lower_bar_height));
         
         /****************************************************************************************************************************/
         /*                                                  UITableView                                                             */
         /****************************************************************************************************************************/
-        super.init(frame: frame, style: style);
-        
+        super.init(frame: tFrame, style: style);
         register(ANoteTableViewCell.self, forCellReuseIdentifier: "cell");
         translatesAutoresizingMaskIntoConstraints = false;
-                
+        
+        //Set background color
+        self.backgroundColor = tableBakColor;
+        
+        //Set the row height
+        rowHeight = (rowHeight);
+        
+        //Allow for selection
+        allowsSelection = true;
+
+        
         /****************************************************************************************************************************/
         /*                                              aNote cell-styles                                                           */
         /****************************************************************************************************************************/
         separatorColor = tableSepColor;
         separatorStyle = .singleLine;
         separatorInset = UIEdgeInsetsMake(0, 43, 0, 0);
-
-        //Set background color
-        self.backgroundColor = tableBakColor;
-
-        //Set the row height
-        rowHeight = (rowHeight);
         
-        //Allow for selection
-        allowsSelection = true;
-        
+        //Disable the empty cell borders
+        self.tableFooterView = UIView();
+
         //Exit
         if(verbose){print("ANoteTableView.init():              initialized"); }
-        
-        print(self.frame);
         
         return;
     }
