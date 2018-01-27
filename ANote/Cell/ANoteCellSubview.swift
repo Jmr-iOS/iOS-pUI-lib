@@ -40,8 +40,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     var mainText   : UITextView;
     var menuBar    : UIView;
     
-    //Temp-UI
+    //Dev UI
     var retButton  : UIButton!;                                     /* return button of the subview                                 */
+    var addButton  : UIButton!;                                     /* add time button                                              */
     
     //Config
     private let verbose : Bool = true;                              /* for this class                                               */
@@ -79,6 +80,10 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         mainText = UITextView();
         menuBar = UIView();
         
+        //Dev UI
+        retButton = UIButton(type: UIButtonType.roundedRect);
+        addButton = UIButton(type: UIButtonType.roundedRect);
+
         super.init(frame: UIScreen.main.bounds);
         
         //Store
@@ -91,7 +96,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         
         
         //**************************************************************************************************************************//
-        //                                              BACKGROUND                                                                  //
+        //                                                        BACKGROUND                                                        //
         //**************************************************************************************************************************//
         let images : [String] = getCellBackgrounds();                       /* get all backgrounds                                  */
         bkgndView.frame = UIScreen.main.bounds;                             /* fullscreen                                           */
@@ -106,7 +111,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         
         
         //**************************************************************************************************************************//
-        //                                              TOP BAR                                                                     //
+        //                                                         TOP BAR                                                          //
         //**************************************************************************************************************************//
         topBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 37);
         topBar.backgroundColor = UIColor.lightGray;
@@ -121,7 +126,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //Bookmark Icon
         
         //**************************************************************************************************************************//
-        //                                              TITLE BAR                                                                   //
+        //                                                        TITLE BAR                                                         //
         //**************************************************************************************************************************//
         titleBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 40);
         y = (y + titleBar.bounds.height);
@@ -142,7 +147,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         
         
         //**************************************************************************************************************************//
-        //                                               DATE BAR                                                                   //
+        //                                                         DATE BAR                                                         //
         //**************************************************************************************************************************//
         dateBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 33);
         dateBar.backgroundColor = UIColor.darkGray;
@@ -150,7 +155,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
 
         
         //**************************************************************************************************************************//
-        //                                             DATE VIEW                                                                    //
+        //                                                        DATE VIEW                                                         //
         // @todo    only inserted when date is present                                                                              //
         //**************************************************************************************************************************//
         datePlace.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 81);
@@ -159,7 +164,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         
         
         //**************************************************************************************************************************//
-        //                                             MAIN TEXT                                                                    //
+        //                                                        MAIN TEXT                                                         //
         //**************************************************************************************************************************//
         mainText.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 312);
         mainText.returnKeyType = UIReturnKeyType.done;
@@ -170,22 +175,29 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         
         
         //**************************************************************************************************************************//
-        //                                             MENU BAR                                                                     //
+        //                                                        MENU BAR                                                          //
         //**************************************************************************************************************************//
         menuBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - y));
         menuBar.backgroundColor = UIColor.purple;
 
 
         //**************************************************************************************************************************//
-        //                                          RETURN BUTTON                                                                   //
+        //                                                         BUTTONS                                                          //
         //**************************************************************************************************************************//
-        retButton = UIButton(type: UIButtonType.roundedRect);
-        
+        //Return Button
         retButton.translatesAutoresizingMaskIntoConstraints = true;
         retButton.setTitle("Return",      for: UIControlState());
         retButton.sizeToFit();
-        retButton.center = CGPoint(x: frame.width/2, y: 500);
+        retButton.center = CGPoint(x: frame.width/2-50, y: 500);
         retButton.addTarget(self, action: #selector(returnPress(_:)), for:  .touchUpInside);
+
+        //Add Button
+        addButton.translatesAutoresizingMaskIntoConstraints = true;
+        addButton.setTitle("Set Time",      for: UIControlState());
+        addButton.sizeToFit();
+        addButton.center = CGPoint(x: frame.width/2+50, y: 500);
+        addButton.addTarget(self, action: #selector(setPress(_:)), for:  .touchUpInside);
+
         
         //Init all hidden
         setContentsAlpha(0);
@@ -202,7 +214,8 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         addSubview(menuBar);
         
         addSubview(retButton);
-
+        addSubview(addButton);
+        
         if(verbose) { print("CellSubview.init():                 my cell #\(parentCell.getNumber()) subview init"); }
  
         return;
@@ -222,8 +235,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         
         var rslts = [String]();
         
-        let x = Bundle.main.bundleURL;
-        let fileEnumerator = FileManager.default.enumerator(at: x, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions());
+        let url    = Bundle.main.bundleURL;
+        let opts = FileManager.DirectoryEnumerationOptions();
+        let fileEnumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: nil, options: opts);
         
         while let file = fileEnumerator?.nextObject() {
             let s : String = (file as! NSURL).lastPathComponent!;
@@ -264,6 +278,28 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         return;
     }
     
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        setPress(_ sender: UIButton!)
+     *  @brief      x
+     *
+     *  @param      [in] (UIButton!) sender - button pressed
+     *  @note       @objc exposed to enabled handleTap() access, not sure why
+     */
+    /********************************************************************************************************************************/
+    @objc func setPress(_ sender: UIButton!) {
+        
+        if(verbose) { print("CellSubview.setPress():             add was pressed"); }
+
+        //Init view
+        let p = ANoteTimeSelect(parentCell.vc, parentCell, date: parentCell.date);
+        
+        //Grab new time
+        p.show(parentCell.vc);
+        
+        return;
+    }
     
     /********************************************************************************************************************************/
     /* @fcn       setContentsAlpha(_ alpha : CGFloat)                                                                               */
