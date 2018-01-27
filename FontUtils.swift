@@ -107,7 +107,7 @@ class FontUtils : NSObject {
             fatalError("font \(newFontName) not supported");
         }
         
-        if(verbose) { print("FontUtils.updateFont():  returning \(newFontName)"); }
+        if(verbose) { print("FontUtils.updateFont():             returning \(newFontName)"); }
         
         return newFont!;
     }
