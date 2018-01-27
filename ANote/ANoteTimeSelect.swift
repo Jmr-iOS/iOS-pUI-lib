@@ -92,7 +92,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell");   /* I have no idea why we do this                */
         tableView.translatesAutoresizingMaskIntoConstraints = false;                /* Std                                          */
-        
+
         tableView.separatorColor = UIColor.gray;
         tableView.separatorStyle = .singleLine;
         
@@ -561,12 +561,16 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
      */
     /********************************************************************************************************************************/
     func load_row6() -> UITableViewCell {
-        
+
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
         
+        //Gen fullsize frame (cell not sized yet)
+        let f = cell?.frame;
+        let bFrame = CGRect(x: (f?.origin.x)!, y: (f?.origin.y)!, width: UIScreen.main.bounds.width, height: (f?.height)!);
+        
         //Init Button
-        let button : UIButton = UIButton(frame:(cell?.frame)!);
+        let button : UIButton = UIButton(frame:bFrame);
         button.setTitle("Remove To-do Info", for: .normal);
         button.titleLabel?.font = UIFont(descriptor: (button.titleLabel?.font.fontDescriptor)!,
                                          size:       ((button.titleLabel?.font.pointSize)!-2));
