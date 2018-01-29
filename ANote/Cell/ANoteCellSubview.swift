@@ -205,7 +205,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //Load UI
         mainView.reloadInputViews();
         addSubview(bkgndView);
-        addSubview(retButton);
         addSubview(topBar);
         addSubview(titleBar);
         addSubview(dateBar);
@@ -245,7 +244,11 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
             var type = (file as! NSURL).pathExtension;
             type = type?.lowercased();                                  /* handle both cases                                        */
             
-            let valid : Bool = ((type?.contains("png"))! || (type?.contains("jpg"))! || (type?.contains("jpeg"))!);
+            //Filter Images
+            var valid : Bool = ((type?.contains("png"))! || (type?.contains("jpg"))! || (type?.contains("jpeg"))!);
+            
+            //Filter Icons
+            valid = (valid && !s.contains("AppIcon"));
             
             //Append
             if(valid) {
