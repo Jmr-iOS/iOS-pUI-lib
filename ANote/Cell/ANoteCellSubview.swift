@@ -193,29 +193,29 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //**************************************************************************************************************************//
         //                                                         BUTTONS                                                          //
         //**************************************************************************************************************************//
+        let yDevBtns = (UIScreen.main.bounds.height-70);                            /* arb selection                                */
+        
         //Return Button
         retButton.translatesAutoresizingMaskIntoConstraints = true;
         retButton.setTitle("Return",      for: UIControlState());
         retButton.sizeToFit();
-        retButton.center = CGPoint(x: frame.width/2-75, y: 500);
+        retButton.center = CGPoint(x: frame.width/2-75, y: yDevBtns);
         retButton.addTarget(self, action: #selector(returnPress(_:)), for:  .touchUpInside);
 
         //Add Button
         addButton.translatesAutoresizingMaskIntoConstraints = true;
         addButton.setTitle("Set Time",      for: UIControlState());
         addButton.sizeToFit();
-        addButton.center = CGPoint(x: frame.width/2, y: 500);
+        addButton.center = CGPoint(x: frame.width/2, y: yDevBtns);
         addButton.addTarget(self, action: #selector(setPress(_:)), for:  .touchUpInside);
 
         //Toggle Button
         togButton.translatesAutoresizingMaskIntoConstraints = true;
         togButton.setTitle("Toggle",      for: UIControlState());
         togButton.sizeToFit();
-        togButton.center = CGPoint(x: frame.width/2+75, y: 500);
+        togButton.center = CGPoint(x: frame.width/2+75, y: yDevBtns);
         togButton.addTarget(self, action: #selector(togPress(_:)), for:  .touchUpInside);
 
-        
-        
         //Init all hidden
         setContentsAlpha(0);
         
@@ -433,8 +433,10 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         P1 = CGPoint(x: x0-w, y: y0+h);
         P2 = CGPoint(x: x0,   y: y0+2*h);
         
+        let yDevBtns = (UIScreen.main.bounds.height-50);                            /* arb selection                                */
+        
         //Init
-        backButtonView = UIView(frame: CGRect(x: 0, y: 520, width: UIScreen.main.bounds.width, height: 45));
+        backButtonView = UIView(frame: CGRect(x: 0, y: yDevBtns, width: UIScreen.main.bounds.width, height: 45));
         backButtonPath = UIBezierPath();
         backButtonPath.move(to: P0);
         backButtonPath.addLine(to: P1);
@@ -472,7 +474,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         P2 = CGPoint(x: x0,   y: y0+2*h);
         
         //Init
-        infoButtonView = UIView(frame: CGRect(x: 0, y: 520, width: UIScreen.main.bounds.width, height: 45));
+        infoButtonView = UIView(frame: CGRect(x: 0, y: yDevBtns, width: UIScreen.main.bounds.width, height: 45));
         infoButtonPath = UIBezierPath();
         infoButtonPath.move(to: P0);
         infoButtonPath.addLine(to: P1);
@@ -510,7 +512,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         P2 = CGPoint(x: x0,   y: y0+2*h);
         
         //Init
-        clipButtonView = UIView(frame: CGRect(x: 0, y: 520, width: UIScreen.main.bounds.width, height: 45));
+        clipButtonView = UIView(frame: CGRect(x: 0, y: yDevBtns, width: UIScreen.main.bounds.width, height: 45));
         clipButtonPath = UIBezierPath();
         clipButtonPath.move(to: P0);
         clipButtonPath.addLine(to: P1);
@@ -548,7 +550,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         P2 = CGPoint(x: x0,   y: y0+2*h);
         
         //Init
-        sendButtonView = UIView(frame: CGRect(x: 0, y: 520, width: UIScreen.main.bounds.width, height: 45));
+        sendButtonView = UIView(frame: CGRect(x: 0, y: yDevBtns, width: UIScreen.main.bounds.width, height: 45));
         sendButtonPath = UIBezierPath();
         sendButtonPath.move(to: P0);
         sendButtonPath.addLine(to: P1);
@@ -586,7 +588,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         P2 = CGPoint(x: x0,   y: y0+2*h);
         
         //Init
-        plusButtonView = UIView(frame: CGRect(x: 0, y: 520, width: UIScreen.main.bounds.width, height: 45));
+        plusButtonView = UIView(frame: CGRect(x: 0, y: yDevBtns, width: UIScreen.main.bounds.width, height: 45));
         plusButtonPath = UIBezierPath();
         plusButtonPath.move(to: P0);
         plusButtonPath.addLine(to: P1);
