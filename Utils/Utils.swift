@@ -116,7 +116,7 @@ class Utils : NSObject {
     class func randN(_ max : Int) -> Int {
         
         //Calc value
-        let x : Double = (drand48() * Double(max));
+        let x : Double = (rand() * Double(max));
         
         //Convert units
         return Int(x);
@@ -131,7 +131,7 @@ class Utils : NSObject {
     class func randN(_ min : Int,_ max : Int) -> Int {
         
         //Calc value
-        let x : Double = (drand48() * (Double(max-min)) + Double(min));     /* offset past min by delta                             */
+        let x : Double = (rand() * (Double(max-min)) + Double(min));        /* offset past min by delta                             */
                 
         //Convert units
         return Int(x);
