@@ -83,7 +83,9 @@ class Utils : NSObject {
      */
     /********************************************************************************************************************************/
     class func rand() -> Double {
-        return drand48();
+        let randInt : UInt32 = arc4random();                                /* true random seed & unique each call                  */
+        let randDbl : Double = Double(randInt)/Double(UInt32.max);          /* convert to Double                                    */
+        return randDbl;
     }
     
     
@@ -130,7 +132,7 @@ class Utils : NSObject {
         
         //Calc value
         let x : Double = (drand48() * (Double(max-min)) + Double(min));     /* offset past min by delta                             */
-        
+                
         //Convert units
         return Int(x);
     }

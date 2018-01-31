@@ -54,15 +54,13 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     
     //Config
     private let verbose : Bool = true;                              /* for this class                                               */
-    
-    private static var bkgnd_ctr : Int =  0;                        /* background index to use for specified call                   */
-    var bkgnd_ind : Int;                                            /* index of background for cell                                 */
-    let bkgndView : UIImageView;                                    /* view holding background image                                */
- 
-    var temp_i : Int = 0;
-    var rslts = [String]();
-    
 
+    //Background
+    var bkgnds    : [String]!;
+    var bkgnd_ind : Int!;                                            /* index of background for cell                                 */
+    let bkgndView : UIImageView;                                    /* view holding background image                                */
+
+    
     /********************************************************************************************************************************/
 	/**	@fcn		init(mainView : UIView, parentCell : ANoteTableViewCell)
 	 *  @brief		x
@@ -77,7 +75,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         
         //Prep Background
         bkgndView = UIImageView();
-        bkgnd_ind = ANoteCellSubview.bkgnd_ctr;                                 /* grab index for use                               */
         
         //Init UI
         topBar = UIView();
@@ -107,13 +104,11 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //**************************************************************************************************************************//
         //                                                        BACKGROUND                                                        //
         //**************************************************************************************************************************//
-        let images : [String] = getCellBackgrounds();                       /* get all backgrounds                                  */
+        bkgnds    = getCellBackgrounds();                                   /* get all backgrounds                                  */
+        bkgnd_ind = Utils.randN(0, bkgnds.count);                           /* pick random selection                                */
         bkgndView.frame = UIScreen.main.bounds;                             /* fullscreen                                           */
         bkgndView.contentMode = .scaleToFill;                               /* set unscaled                                         */
-        bkgndView.image = UIImage(named: images[bkgnd_ind]);                /* acquire next background                              */
-
-        //update ctr
-        ANoteCellSubview.bkgnd_ctr = (ANoteCellSubview.bkgnd_ctr + 1);      /* update for next after use                            */
+        bkgndView.image = UIImage(named: bkgnds[bkgnd_ind]);                /* acquire next background                              */
 
         //Track view offset
         var y : CGFloat = UIApplication.shared.statusBarFrame.height;       /* height to begin view placement                       */
@@ -258,7 +253,8 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         let fileEnumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: nil, options: opts);
         
         while let file = fileEnumerator?.nextObject() {
-            let s : String = "IMG_0720.PNG";                            /* <TEMP>(file as! NSURL).lastPathComponent!;               */
+            //<DEV>let s : String = "IMG_0720.PNG";
+            let s : String = (file as! NSURL).lastPathComponent!;
             
             var type = (file as! NSURL).pathExtension;
             type = type?.lowercased();                                  /* handle both cases                                        */
