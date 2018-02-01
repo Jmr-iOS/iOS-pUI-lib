@@ -32,6 +32,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     var infoButton : UIButton!;
     var clipButton : UIButton!;
     var sendButton : UIButton!;
+    var plusButton : UIButton!;
     
     //Ref
     var mainView   : UIView!;                                       /* main view of app                                             */
@@ -46,19 +47,23 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     var mainText   : UITextView;
     var menuBar    : UIView;
     
-    //Dev UI
-    var retButton  : UIButton!;                                     /* return button of the subview                                 */
-    var addButton  : UIButton!;                                     /* add time button                                              */
-    var togButton  : UIButton!;                                     /* add toggle button                                            */
-    
     //Config
     private let verbose : Bool = true;                              /* for this class                                               */
 
     //Background
     var bkgnds    : [String]!;
-    var bkgnd_ind : Int!;                                            /* index of background for cell                                 */
+    var bkgnd_ind : Int!;                                           /* index of background for cell                                 */
     let bkgndView : UIImageView;                                    /* view holding background image                                */
 
+    //Angle Definitions
+    let RIGHT = CGFloat(0);
+    let DOWN  = CGFloat(Double.pi/2);
+    let LEFT  = CGFloat(Double.pi);
+    let UP    = CGFloat(3*Double.pi/2);
+    
+    //(temp)
+    var v : UIView!;
+    
     
     /********************************************************************************************************************************/
 	/**	@fcn		init(mainView : UIView, parentCell : ANoteTableViewCell)
@@ -84,11 +89,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         mainText = UITextView();
         menuBar = UIView();
         
-        //Dev UI
-        retButton = UIButton(type: UIButtonType.roundedRect);
-        addButton = UIButton(type: UIButtonType.roundedRect);
-        togButton = UIButton(type: UIButtonType.roundedRect);
-
         super.init(frame: UIScreen.main.bounds);
         
         //Store
@@ -183,33 +183,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         menuBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - y));
         menuBar.backgroundColor = UIColor.purple;
 
-
-        //**************************************************************************************************************************//
-        //                                                         BUTTONS                                                          //
-        //**************************************************************************************************************************//
-        let yDevBtns = (UIScreen.main.bounds.height-70);                            /* arb selection                                */
-        
-        //Return Button
-        retButton.translatesAutoresizingMaskIntoConstraints = true;
-        retButton.setTitle("Return",      for: UIControlState());
-        retButton.sizeToFit();
-        retButton.center = CGPoint(x: frame.width/2-75, y: yDevBtns);
-        retButton.addTarget(self, action: #selector(returnPress(_:)), for:  .touchUpInside);
-
-        //Add Button
-        addButton.translatesAutoresizingMaskIntoConstraints = true;
-        addButton.setTitle("Set Time",      for: UIControlState());
-        addButton.sizeToFit();
-        addButton.center = CGPoint(x: frame.width/2, y: yDevBtns);
-        addButton.addTarget(self, action: #selector(setPress(_:)), for:  .touchUpInside);
-
-        //Toggle Button
-        togButton.translatesAutoresizingMaskIntoConstraints = true;
-        togButton.setTitle("Toggle",      for: UIControlState());
-        togButton.sizeToFit();
-        togButton.center = CGPoint(x: frame.width/2+75, y: yDevBtns);
-        togButton.addTarget(self, action: #selector(togPress(_:)), for:  .touchUpInside);
-
         //Init all hidden
         setContentsAlpha(0);
         
@@ -224,15 +197,11 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
 //        addSubview(menuBar);
         addDevToolbar(parentCell.vc.view);
         
-        addSubview(retButton);
-        addSubview(addButton);
-        addSubview(togButton);
-        
         if(verbose) { print("CellSubview.init():                 my cell #\(parentCell.getNumber()) subview init"); }
  
         return;
     }
-//</PREV>
+
     /********************************************************************************************************************************/
     /** @fcn        getCellBackgrounds() -> [String]
      *  @brief      get listing of all available images for background use
@@ -252,8 +221,8 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         let fileEnumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: nil, options: opts);
         
         while let file = fileEnumerator?.nextObject() {
-            let s : String = "cellsubview_ref.PNG";
-            //...let s : String = (file as! NSURL).lastPathComponent!;
+            //let s : String = "cellsubview_ref.PNG";
+            let s : String = (file as! NSURL).lastPathComponent!;
             
             var type = (file as! NSURL).pathExtension;
             type = type?.lowercased();                                  /* handle both cases                                        */
@@ -264,7 +233,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
             //Filter Icons
             valid = (valid && !s.contains("AppIcon"));
             
-//            valid = (valid && s.contains("cellSubview"));
+            valid = (valid && s.contains("cellSubview"));
             
             //Append
             if(valid) {
@@ -273,72 +242,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         }
         
         return rslts;
-    }
-
-    
-    /********************************************************************************************************************************/
-	/**	@fcn		returnPress(_ sender: UIButton!)
-	 *  @brief		return was pressed, return to main
-     *
-     *  @param      [in] (UIButton!) sender - button pressed
-     *  @note      @objc exposed to enabled handleTap() access, not sure why
-     */
-	/********************************************************************************************************************************/
-    @objc func returnPress(_ sender: UIButton!) {
-        
-        if(verbose) { print("CellSubview.returnPress():  return was pressed, dismissing view"); }
-        
-        //Move Frame offscreen
-        self.frame = getCSFrame(onscreen: false);
-
-        //Dismiss
-        self.dismissSubView();
-        
-        return;
-    }
-    
-    
-    
-    /********************************************************************************************************************************/
-    /** @fcn        setPress(_ sender: UIButton!)
-     *  @brief      x
-     *
-     *  @param      [in] (UIButton!) sender - button pressed
-     *  @note       @objc exposed to enabled handleTap() access, not sure why
-     */
-    /********************************************************************************************************************************/
-    @objc func setPress(_ sender: UIButton!) {
-        
-        if(verbose) { print("CellSubview.setPress():             add was pressed"); }
-
-        //Init view
-        let p = ANoteTimeSelect(parentCell.vc, parentCell, date: parentCell.date);
-        
-        //Grab new time
-        p.show(parentCell.vc);
-        
-        return;
-    }
-    
-    
-    /********************************************************************************************************************************/
-    /** @fcn        togPress(_ sender: UIButton!)
-     *  @brief      x
-     *
-     *  @param      [in] (UIButton!) sender - button pressed
-     *  @note       @objc exposed to enabled handleTap() access, not sure why
-     */
-    /********************************************************************************************************************************/
-    @objc func togPress(_ sender: UIButton!) {
-        
-        backButton.isHidden = !backButton.isHidden;
-        infoButton.isHidden = !infoButton.isHidden;
-        clipButton.isHidden = !clipButton.isHidden;
-        sendButton.isHidden = !sendButton.isHidden;
-        
-        if(verbose) { print("CellSubview.togPress():             add was pressed"); }
-        
-        return;
     }
     
     
@@ -349,7 +252,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     func setContentsAlpha(_ alpha : CGFloat) {
         
         //Apply alpha to all
-        retButton.alpha  = alpha;
         topBar.alpha     = alpha;
         titleBar.alpha   = alpha;
         datePlace.alpha  = alpha;
@@ -386,12 +288,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     }
 
     
-    //Angle Definitions
-    let RIGHT = CGFloat(0);
-    let DOWN  = CGFloat(Double.pi/2);
-    let LEFT  = CGFloat(Double.pi);
-    let UP    = CGFloat(3*Double.pi/2);
-
     /********************************************************************************************************************************/
     /** @fcn        addDevToolbar(_ view : UIView)
      *  @brief      add toolbar manually for dev
@@ -405,6 +301,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     /********************************************************************************************************************************/
     func addDevToolbar(_ view : UIView) {
 
+        let x0    : CGFloat = 28;
+        let xOffs : CGFloat = 65;
+        
         
         //**************************************************************************************************************************//
         //                                             1 - RETURN ARROW                                                             //
@@ -412,9 +311,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         backButton = UIButton(type: UIButtonType.roundedRect);
         backButton.translatesAutoresizingMaskIntoConstraints = true;
         backButton.sizeToFit();
-        backButton.center = CGPoint(x: 28, y: 640);
+        backButton.center = CGPoint(x: x0, y: 540);
         backButton.setBackgroundImage(UIImage(named:"subview_back.png"), for: UIControlState());
-        //backButton(self, action: #selector(ViewController.secondPressed(_:)), for:  .touchUpInside);
+        backButton.addTarget(self, action: #selector(backPress(_:)), for:  .touchUpInside);
         
        self.addSubview(backButton);
 
@@ -425,9 +324,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         infoButton = UIButton(type: UIButtonType.roundedRect);
         infoButton.translatesAutoresizingMaskIntoConstraints = true;
         infoButton.sizeToFit();
-        infoButton.center = CGPoint(x: 113, y: 640);
+        infoButton.center = CGPoint(x: x0+1*xOffs, y: 540);
         infoButton.setBackgroundImage(UIImage(named:"subview_info.png"), for: UIControlState());
-        //infoButton(self, action: #selector(ViewController.secondPressed(_:)), for:  .touchUpInside);
+        infoButton.addTarget(self, action: #selector(infoPress(_:)), for:  .touchUpInside);
         
         self.addSubview(infoButton);
         
@@ -435,12 +334,12 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //**************************************************************************************************************************//
         //                                             3 - PAPERCLIP                                                                //
         //**************************************************************************************************************************//
-        let clipButton = UIButton(type: UIButtonType.roundedRect);
+        clipButton = UIButton(type: UIButtonType.roundedRect);
         clipButton.translatesAutoresizingMaskIntoConstraints = true;
         clipButton.sizeToFit();
-        clipButton.center = CGPoint(x: 187, y: 640);
+        clipButton.center = CGPoint(x: x0+2*xOffs, y: 540);
         clipButton.setBackgroundImage(UIImage(named:"subview_paperclip.png"), for: UIControlState());
-        //clipButton(self, action: #selector(ViewController.secondPressed(_:)), for:  .touchUpInside);
+        clipButton.addTarget(self, action: #selector(clipPress(_:)), for:  .touchUpInside);
         
         self.addSubview(clipButton);
         
@@ -448,12 +347,12 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //**************************************************************************************************************************//
         //                                             4 - SEND ICON                                                                //
         //**************************************************************************************************************************//
-        let sendButton = UIButton(type: UIButtonType.roundedRect);
+        sendButton = UIButton(type: UIButtonType.roundedRect);
         sendButton.translatesAutoresizingMaskIntoConstraints = true;
         sendButton.sizeToFit();
-        sendButton.center = CGPoint(x: 263, y: 640);
+        sendButton.center = CGPoint(x: x0+3*xOffs, y: 540);
         sendButton.setBackgroundImage(UIImage(named:"subview_send.png"), for: UIControlState());
-        //sendButton(self, action: #selector(ViewController.secondPressed(_:)), for:  .touchUpInside);
+        sendButton.addTarget(self, action: #selector(sendPressed(_:)), for:  .touchUpInside);
         
         self.addSubview(sendButton);
         
@@ -461,17 +360,132 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //**************************************************************************************************************************//
         //                                             5 - PLUS BUTTON                                                              //
         //**************************************************************************************************************************//
+        v = UIView(frame:CGRect(x:285,y:540,width:3,height:4));
+        
         //Circle
-        //!!! @todo     implement Plus Button
-        //Vertical Line
+        let p1 = PathUtils.drawCirclePath(CGPoint(x:0, y:0), 22);
+        let p2 = PathUtils.drawLinePath(CGPoint(x:-10,y:0),   CGPoint(x:+10, y:0));
+        let p3 = PathUtils.drawLinePath(CGPoint(x:0,  y:-10), CGPoint(x:0,   y:+10));
         
-        //Horizontal Line
+        PathUtils.addPathToView(v, p1, 1, nil, UIColor.orange);
+        PathUtils.addPathToView(v, p2, 2, UIColor.white, nil);
+        PathUtils.addPathToView(v, p3, 2, UIColor.white, nil);
         
-        if(verbose) { print("CellSubview.addDevToolb():          return was pressed, dismissing view"); }
+        plusButton = UIButton(type: UIButtonType.roundedRect);
+        plusButton.translatesAutoresizingMaskIntoConstraints = true;
+        plusButton.sizeToFit();
+        plusButton.frame = CGRect(x:0, y:0, width:45, height:45);
+        plusButton.center = CGPoint(x: 334, y: 538);
+        plusButton.addTarget(self, action: #selector(plusPress(_:)), for:  .touchUpInside);
+
+        self.addSubview(v);
+        self.addSubview(plusButton);
+        
+        
+        if(verbose) { print("CellSubview.addDevToolb():          toolbar population complete"); }
         
         return;
     }
     
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        backPress(_ sender: UIButton!)
+     *  @brief        return was pressed, return to main
+     *
+     *  @param      [in] (UIButton!) sender - button pressed
+     *  @note      @objc exposed to enabled handleTap() access, not sure why
+     */
+    /********************************************************************************************************************************/
+    @objc func backPress(_ sender: UIButton!) {
+        
+        if(verbose) { print("CellSubview.backPress():  back was pressed, dismissing view"); }
+
+        //Move Frame offscreen
+        self.frame = getCSFrame(onscreen: false);
+        
+        //Dismiss
+        self.dismissSubView();
+        
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        infoPress(_ sender: UIButton!)
+     *  @brief        return was pressed, return to main
+     *
+     *  @param      [in] (UIButton!) sender - button pressed
+     *  @note      @objc exposed to enabled handleTap() access, not sure why
+     */
+    /********************************************************************************************************************************/
+    @objc func infoPress(_ sender: UIButton!) {
+        
+        backButton.isHidden = !backButton.isHidden;
+        //infoButton.isHidden = !infoButton.isHidden;
+        clipButton.isHidden = !clipButton.isHidden;
+        sendButton.isHidden = !sendButton.isHidden;
+        v.isHidden          = !v.isHidden;
+ 
+        if(verbose) { print("CellSubview.infoPress():    info was pressed"); }
+
+        return;
+    }
+
+    
+    /********************************************************************************************************************************/
+    /** @fcn        clipPress(_ sender: UIButton!)
+     *  @brief        return was pressed, return to main
+     *
+     *  @param      [in] (UIButton!) sender - button pressed
+     *  @note      @objc exposed to enabled handleTap() access, not sure why
+     */
+    /********************************************************************************************************************************/
+    @objc func clipPress(_ sender: UIButton!) {
+        
+        //Init view
+        let p = ANoteTimeSelect(parentCell.vc, parentCell, date: parentCell.date);
+        
+        //Grab new time
+        p.show(parentCell.vc);
+
+        if(verbose) { print("CellSubview.clipPress():    clip was pressed"); }
+
+        return;
+    }
+
+    
+    /********************************************************************************************************************************/
+    /** @fcn        sendPressed(_ sender: UIButton!)
+     *  @brief        return was pressed, return to main
+     *
+     *  @param      [in] (UIButton!) sender - button pressed
+     *  @note      @objc exposed to enabled handleTap() access, not sure why
+     */
+    /********************************************************************************************************************************/
+    @objc func sendPressed(_ sender: UIButton!) {
+        
+        if(verbose) { print("CellSubview.sendPressed():  send was pressed"); }
+
+        return;
+    }
+
+    
+    /********************************************************************************************************************************/
+    /** @fcn        plusPress(_ sender: UIButton!)
+     *  @brief        return was pressed, return to main
+     *
+     *  @param      [in] (UIButton!) sender - button pressed
+     *  @note      @objc exposed to enabled handleTap() access, not sure why
+     */
+    /********************************************************************************************************************************/
+    @objc func plusPress(_ sender: UIButton!) {
+        
+        if(verbose) { print("CellSubview.returnPress():  plus was pressed"); }
+        
+        return;
+    }
+
     
 //**********************************************************************************************************************************//
 //                                                     UITEXTFIELD DELEGATE                                                         //
