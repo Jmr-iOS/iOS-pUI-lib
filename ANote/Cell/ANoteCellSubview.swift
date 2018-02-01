@@ -28,15 +28,14 @@ import UIKit
 class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     
     //New
-    var backButtonView : UIView!;
-    var infoButtonView : UIView!;
-    var clipButtonView : UIView!;
-    var sendButtonView : UIView!;
-    var plusButtonView : UIView!;
+    var backButton : UIButton!;
+    var infoButton : UIButton!;
+    var clipButton : UIButton!;
+    var sendButton : UIButton!;
     
     //Ref
-    var mainView     : UIView!;                                     /* main view of app                                             */
-    var parentCell   : ANoteTableViewCell!;
+    var mainView   : UIView!;                                       /* main view of app                                             */
+    var parentCell : ANoteTableViewCell!;
     
     //UI
     var topBar     : UIView;
@@ -253,8 +252,8 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         let fileEnumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: nil, options: opts);
         
         while let file = fileEnumerator?.nextObject() {
-            //<DEV>let s : String = "IMG_0720.PNG";
-            let s : String = (file as! NSURL).lastPathComponent!;
+            let s : String = "cellsubview_ref.PNG";
+            //...let s : String = (file as! NSURL).lastPathComponent!;
             
             var type = (file as! NSURL).pathExtension;
             type = type?.lowercased();                                  /* handle both cases                                        */
@@ -264,6 +263,8 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
             
             //Filter Icons
             valid = (valid && !s.contains("AppIcon"));
+            
+//            valid = (valid && s.contains("cellSubview"));
             
             //Append
             if(valid) {
@@ -329,12 +330,11 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
      */
     /********************************************************************************************************************************/
     @objc func togPress(_ sender: UIButton!) {
-
-        backButtonView.isHidden = !backButtonView.isHidden;
-        infoButtonView.isHidden = !infoButtonView.isHidden;
-        clipButtonView.isHidden = !clipButtonView.isHidden;
-        sendButtonView.isHidden = !sendButtonView.isHidden;
-        plusButtonView.isHidden = !plusButtonView.isHidden;
+        
+        backButton.isHidden = !backButton.isHidden;
+        infoButton.isHidden = !infoButton.isHidden;
+        clipButton.isHidden = !clipButton.isHidden;
+        sendButton.isHidden = !sendButton.isHidden;
         
         if(verbose) { print("CellSubview.togPress():             add was pressed"); }
         
@@ -386,6 +386,12 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     }
 
     
+    //Angle Definitions
+    let RIGHT = CGFloat(0);
+    let DOWN  = CGFloat(Double.pi/2);
+    let LEFT  = CGFloat(Double.pi);
+    let UP    = CGFloat(3*Double.pi/2);
+
     /********************************************************************************************************************************/
     /** @fcn        addDevToolbar(_ view : UIView)
      *  @brief      add toolbar manually for dev
@@ -398,220 +404,74 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
      */
     /********************************************************************************************************************************/
     func addDevToolbar(_ view : UIView) {
-        
-        var x0 : CGFloat;
-        var y0 : CGFloat;
-        var h : CGFloat;
-        var w : CGFloat;
-        var lineWidth : CGFloat
-        var P0 : CGPoint;
-        var P1 : CGPoint;
-        var P2 : CGPoint;
-        var shapeLayer : CAShapeLayer;
-        
-        var backButtonPath  : UIBezierPath!;
-        var infoButtonPath : UIBezierPath!;
-        var clipButtonPath : UIBezierPath!;
-        var sendButtonPath : UIBezierPath!;
-        var plusButtonPath : UIBezierPath!;
 
         
         //**************************************************************************************************************************//
         //                                             1 - RETURN ARROW                                                             //
         //**************************************************************************************************************************//
-        x0 = 29;
-        y0 = 14;
-        h = 8;
-        w = 9;
-        lineWidth = 2;
+        backButton = UIButton(type: UIButtonType.roundedRect);
+        backButton.translatesAutoresizingMaskIntoConstraints = true;
+        backButton.sizeToFit();
+        backButton.center = CGPoint(x: 28, y: 640);
+        backButton.setBackgroundImage(UIImage(named:"subview_back.png"), for: UIControlState());
+        //backButton(self, action: #selector(ViewController.secondPressed(_:)), for:  .touchUpInside);
         
-        P0 = CGPoint(x: x0,   y: y0);
-        P1 = CGPoint(x: x0-w, y: y0+h);
-        P2 = CGPoint(x: x0,   y: y0+2*h);
-        
-        let yDevBtns = (UIScreen.main.bounds.height-50);                            /* arb selection                                */
-        
-        //Init
-        backButtonView = UIView(frame: CGRect(x: 0, y: yDevBtns, width: UIScreen.main.bounds.width, height: 45));
-        backButtonPath = UIBezierPath();
-        backButtonPath.move(to: P0);
-        backButtonPath.addLine(to: P1);
-        backButtonPath.addLine(to: P2);
-
-        //Init
-        shapeLayer = CAShapeLayer();
-        
-        //Rounded edges?
-        shapeLayer.lineJoin = "round";
-        shapeLayer.lineCap  = "round";
-        
-        //Draw
-        shapeLayer.path = backButtonPath.cgPath;
-        shapeLayer.strokeColor = UIColor.blue.cgColor;
-        shapeLayer.fillColor = nil;
-        shapeLayer.lineWidth = lineWidth;
-        
-        //Add to view
-        backButtonView.layer.addSublayer(shapeLayer);
-        self.addSubview(backButtonView);
+       self.addSubview(backButton);
 
         
         //**************************************************************************************************************************//
         //                                             2 - INFO BUTTON                                                              //
         //**************************************************************************************************************************//
-        x0 = 95;
-        y0 = 14;
-        h = 8;
-        w = 9;
-        lineWidth = 2;
+        infoButton = UIButton(type: UIButtonType.roundedRect);
+        infoButton.translatesAutoresizingMaskIntoConstraints = true;
+        infoButton.sizeToFit();
+        infoButton.center = CGPoint(x: 113, y: 640);
+        infoButton.setBackgroundImage(UIImage(named:"subview_info.png"), for: UIControlState());
+        //infoButton(self, action: #selector(ViewController.secondPressed(_:)), for:  .touchUpInside);
         
-        P0 = CGPoint(x: x0,   y: y0);
-        P1 = CGPoint(x: x0-w, y: y0+h);
-        P2 = CGPoint(x: x0,   y: y0+2*h);
+        self.addSubview(infoButton);
         
-        //Init
-        infoButtonView = UIView(frame: CGRect(x: 0, y: yDevBtns, width: UIScreen.main.bounds.width, height: 45));
-        infoButtonPath = UIBezierPath();
-        infoButtonPath.move(to: P0);
-        infoButtonPath.addLine(to: P1);
-        infoButtonPath.addLine(to: P2);
-        
-        //Init
-        shapeLayer = CAShapeLayer();
-        
-        //Rounded edges?
-        shapeLayer.lineJoin = "round";
-        shapeLayer.lineCap  = "round";
-        
-        //Draw
-        shapeLayer.path = infoButtonPath.cgPath;
-        shapeLayer.strokeColor = UIColor.blue.cgColor;
-        shapeLayer.fillColor = nil;
-        shapeLayer.lineWidth = lineWidth;
-        
-        //Add to view
-        infoButtonView.layer.addSublayer(shapeLayer);
-        self.addSubview(infoButtonView);
-
         
         //**************************************************************************************************************************//
         //                                             3 - PAPERCLIP                                                                //
         //**************************************************************************************************************************//
-        x0 = 160;
-        y0 = 14;
-        h = 8;
-        w = 9;
-        lineWidth = 2;
+        let clipButton = UIButton(type: UIButtonType.roundedRect);
+        clipButton.translatesAutoresizingMaskIntoConstraints = true;
+        clipButton.sizeToFit();
+        clipButton.center = CGPoint(x: 187, y: 640);
+        clipButton.setBackgroundImage(UIImage(named:"subview_paperclip.png"), for: UIControlState());
+        //clipButton(self, action: #selector(ViewController.secondPressed(_:)), for:  .touchUpInside);
         
-        P0 = CGPoint(x: x0,   y: y0);
-        P1 = CGPoint(x: x0-w, y: y0+h);
-        P2 = CGPoint(x: x0,   y: y0+2*h);
-        
-        //Init
-        clipButtonView = UIView(frame: CGRect(x: 0, y: yDevBtns, width: UIScreen.main.bounds.width, height: 45));
-        clipButtonPath = UIBezierPath();
-        clipButtonPath.move(to: P0);
-        clipButtonPath.addLine(to: P1);
-        clipButtonPath.addLine(to: P2);
-        
-        //Init
-        shapeLayer = CAShapeLayer();
-        
-        //Rounded edges?
-        shapeLayer.lineJoin = "round";
-        shapeLayer.lineCap  = "round";
-        
-        //Draw
-        shapeLayer.path = clipButtonPath.cgPath;
-        shapeLayer.strokeColor = UIColor.blue.cgColor;
-        shapeLayer.fillColor = nil;
-        shapeLayer.lineWidth = lineWidth;
-        
-        //Add to view
-        clipButtonView.layer.addSublayer(shapeLayer);
-        self.addSubview(clipButtonView);
+        self.addSubview(clipButton);
         
         
         //**************************************************************************************************************************//
         //                                             4 - SEND ICON                                                                //
         //**************************************************************************************************************************//
-        x0 = 225;
-        y0 = 14;
-        h = 8;
-        w = 9;
-        lineWidth = 2;
+        let sendButton = UIButton(type: UIButtonType.roundedRect);
+        sendButton.translatesAutoresizingMaskIntoConstraints = true;
+        sendButton.sizeToFit();
+        sendButton.center = CGPoint(x: 263, y: 640);
+        sendButton.setBackgroundImage(UIImage(named:"subview_send.png"), for: UIControlState());
+        //sendButton(self, action: #selector(ViewController.secondPressed(_:)), for:  .touchUpInside);
         
-        P0 = CGPoint(x: x0,   y: y0);
-        P1 = CGPoint(x: x0-w, y: y0+h);
-        P2 = CGPoint(x: x0,   y: y0+2*h);
-        
-        //Init
-        sendButtonView = UIView(frame: CGRect(x: 0, y: yDevBtns, width: UIScreen.main.bounds.width, height: 45));
-        sendButtonPath = UIBezierPath();
-        sendButtonPath.move(to: P0);
-        sendButtonPath.addLine(to: P1);
-        sendButtonPath.addLine(to: P2);
-        
-        //Init
-        shapeLayer = CAShapeLayer();
-        
-        //Rounded edges?
-        shapeLayer.lineJoin = "round";
-        shapeLayer.lineCap  = "round";
-        
-        //Draw
-        shapeLayer.path = sendButtonPath.cgPath;
-        shapeLayer.strokeColor = UIColor.blue.cgColor;
-        shapeLayer.fillColor = nil;
-        shapeLayer.lineWidth = lineWidth;
-        
-        //Add to view
-        sendButtonView.layer.addSublayer(shapeLayer);
-        self.addSubview(sendButtonView);
+        self.addSubview(sendButton);
         
         
         //**************************************************************************************************************************//
         //                                             5 - PLUS BUTTON                                                              //
         //**************************************************************************************************************************//
-        x0 = 285;
-        y0 = 14;
-        h = 8;
-        w = 9;
-        lineWidth = 2;
+        //Circle
+        //!!! @todo     implement Plus Button
+        //Vertical Line
         
-        P0 = CGPoint(x: x0,   y: y0);
-        P1 = CGPoint(x: x0-w, y: y0+h);
-        P2 = CGPoint(x: x0,   y: y0+2*h);
-        
-        //Init
-        plusButtonView = UIView(frame: CGRect(x: 0, y: yDevBtns, width: UIScreen.main.bounds.width, height: 45));
-        plusButtonPath = UIBezierPath();
-        plusButtonPath.move(to: P0);
-        plusButtonPath.addLine(to: P1);
-        plusButtonPath.addLine(to: P2);
-        
-        //Init
-        shapeLayer = CAShapeLayer();
-        
-        //Rounded edges?
-        shapeLayer.lineJoin = "round";
-        shapeLayer.lineCap  = "round";
-        
-        //Draw
-        shapeLayer.path = plusButtonPath.cgPath;
-        shapeLayer.strokeColor = UIColor.blue.cgColor;
-        shapeLayer.fillColor = nil;
-        shapeLayer.lineWidth = lineWidth;
-        
-        //Add to view
-        plusButtonView.layer.addSublayer(shapeLayer);
-        self.addSubview(plusButtonView);
-        
+        //Horizontal Line
         
         if(verbose) { print("CellSubview.addDevToolb():          return was pressed, dismissing view"); }
         
         return;
     }
+    
     
 //**********************************************************************************************************************************//
 //                                                     UITEXTFIELD DELEGATE                                                         //
