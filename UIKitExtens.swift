@@ -72,7 +72,7 @@ extension UIImageView {
      */
     /********************************************************************************************************************************/
     func sizeToImage() {
-        
+
         //Grab loc
         let xC = self.center.x;
         let yC = self.center.y;
@@ -82,7 +82,7 @@ extension UIImageView {
         
         //Move to loc
         self.center = CGPoint(x:xC, y:yC);
-        
+
         return;
     }
 }

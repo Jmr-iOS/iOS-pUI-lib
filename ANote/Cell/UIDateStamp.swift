@@ -33,33 +33,35 @@ class UIDateStamp : UIView {
     
     
     /********************************************************************************************************************************/
-    /** @fcn        init(height:CGFloat)
+    /** @fcn        init(y0 : CGFloat)
      *  @brief      x
      *  @details    x
      */
     /********************************************************************************************************************************/
-    init(center : CGPoint) {
+    init(y0 : CGFloat) {
 
+        //Vars
+        var wS, hI : CGFloat;
+        
         //Init vars
         img = UIImage(named: "datestamp_nosel.png")!;
+        wS  = UIScreen.main.bounds.width;
+        hI  = (img.size.height/2);                                             /* 2x scale                                         */
         
-        let wI = img.size.width;
-        let hI = img.size.height;
-        
+        //Init UI
         dateBox = UIImageView(image: img);
         
         //Super
-        super.init(frame: CGRect(x:0 , y:0, width:wI, height:hI));          /* dims & loc initialized below from image & center     */
+        super.init(frame: CGRect(x:0 , y:y0, width:wS, height:hI));             /* dims & loc initialized below from image & center */
         
         //Config dateBox
         dateBox.sizeToImage();
+        dateBox.center = CGPoint(x: wS/2, y: hI/2);
 
         //Add view
         self.addSubview(dateBox);
 
-        //Config self
-        self.center = center;
-
+        //Config delegate
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapResponse));
         self.addGestureRecognizer(tap);
 

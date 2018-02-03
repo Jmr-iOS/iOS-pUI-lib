@@ -223,11 +223,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //                                                        DATE VIEW                                                         //
         // @todo    only inserted when date is present                                                                              //
         //**************************************************************************************************************************//
-        let yImg = UIDateStamp.getInitDims().height;
-        let yC   = (y+(yImg/2)-31);                                         /* source of '-31' visually established, src unknown    */
-        let dateStamp = UIDateStamp(center:CGPoint(x:UIScreen.main.bounds.width/2,y: yC));
+        let dateStamp = UIDateStamp(y0: y);
         dateStamp.setDelegate(self);
-        y = (y + dateStamp.bounds.height - 61);
+        y = (y + dateStamp.bounds.height);
         
         
         //**************************************************************************************************************************//
@@ -236,7 +234,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         mainText.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 312);
         mainText.returnKeyType = UIReturnKeyType.done;
         mainText.textColor = UIColor.lightGray;
-        mainText.backgroundColor = nil;
+        mainText.backgroundColor = nil;                                 /* set to transparent (dflt:white)                          */
         mainText.delegate = self;
         mainText.text = "";
         y = (y + mainText.bounds.height);
@@ -246,7 +244,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //                                                        MENU BAR                                                          //
         //**************************************************************************************************************************//
         menuBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - y));
-        menuBar.backgroundColor = UIColor.purple;
 
         //Init all hidden
         setContentsAlpha(0);
