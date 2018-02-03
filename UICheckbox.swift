@@ -16,7 +16,12 @@
 /************************************************************************************************************************************/
 import UIKit
 
-//@todo     ...
+
+/********************************************************************************************************************************/
+/** @prot       UICheckBoxDelegate
+ *  @brief      provide response to checkbox selections
+ */
+/********************************************************************************************************************************/
 protocol UICheckBoxDelegate {
     func checkBoxResp(_ checked : Bool);
 }
@@ -42,15 +47,16 @@ class UICheckbox: UIView {
 
 
     /********************************************************************************************************************************/
-    /* @fcn       init(view: UIView, parentCell: ANoteTableViewCell, type: CellType, xCoord: CGFloat, yCoord: CGFloat)              */
-    /* @brief                                                                                                                       */
-    /*                                                                                                                              */
-    /*  @param      [in] (UIView) view - view box is added to                                                                       */
-    /*  @param      [in] (ANoteTableViewCell) parentCell - cell box is added to                                                     */
-    /*  @param      [in] (CellType) type - type of checkbox to display                                                              */
-    /*  @param      [in] (CGFloat) xCoord - x coordinates of box                                                                    */
-    /*  @param      [in] (CGFloat) yCoord - y coordinates of box                                                                    */
-    /*                                                                                                                              */
+    /** @fcn        init(view: UIView, parentCell: ANoteTableViewCell, delegate: UICheckBoxDelegate, type: CellType,
+     *                   xCoord: CGFloat, yCoord: CGFloat)                                                                            
+     *  @brief
+     *
+     *  @param      [in] (UIView) view - view box is added to
+     *  @param      [in] (ANoteTableViewCell) parentCell - cell box is added to
+     *  @param      [in] (CellType) type - type of checkbox to display
+     *  @param      [in] (CGFloat) xCoord - x coordinates of box
+     *  @param      [in] (CGFloat) yCoord - y coordinates of box
+     */
     /********************************************************************************************************************************/
     init(view: UIView, parentCell: ANoteTableViewCell, delegate: UICheckBoxDelegate, type: CellType, xCoord: CGFloat, yCoord: CGFloat) {
 
@@ -120,8 +126,6 @@ class UICheckbox: UIView {
     /********************************************************************************************************************************/
     @objc func handleTap(_ recognizer:UITapGestureRecognizer) {
         
-        if(verbose) { print("UICheckbox.handleTap():             handling tap response"); }
-        
         //Get state
         let prevState : Bool =  (self.checkBoxImg.image == checkedImage);           /* was previously selected?                     */
         let newState  : Bool = !prevState;                                          /* inverted on selection                        */
@@ -136,7 +140,6 @@ class UICheckbox: UIView {
         
         fadeAnim.delegate = self as? CAAnimationDelegate;
         
-        
         //Update ImageView & State
         state = (prevState) ? false : true;                                      /* if it was unchecked, now it's checked, true!    */
 
@@ -149,6 +152,8 @@ class UICheckbox: UIView {
         
         //Handle Parent Response
         delegate.checkBoxResp(newState);
+        
+        if(verbose){print("UICheckbox.handleTap():             tap response complete");}
         
         return;
     }
