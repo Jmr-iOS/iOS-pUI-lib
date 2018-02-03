@@ -12,6 +12,7 @@
  *      ...
  *      main view here is scrollable
  *      mainText & titleText feature 'return' keyboard (after menu bar added for keyboard dismissal)
+ *      text and graphics colors adjust to selected background (e.g. darker text for darker bkgnds etc.)
  *
  *  @section    Data Architecture
  *      each row represents a data entry whose data is captured in completion by the row's cell subview, presented here. all data
@@ -224,6 +225,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //**************************************************************************************************************************//
         mainText.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 312);
         mainText.returnKeyType = UIReturnKeyType.done;
+        mainText.textColor = UIColor.lightGray;
         mainText.backgroundColor = nil;
         mainText.delegate = self;
         mainText.text = "";
@@ -247,7 +249,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         addSubview(dateBar);
 //      addSubview(datePlace);
         addSubview(divider);
-//      addSubview(mainText);
+        addSubview(mainText);
 //      addSubview(menuBar);
         addDevToolbar(parentCell.vc.view);
         
