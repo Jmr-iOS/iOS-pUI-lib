@@ -37,7 +37,7 @@
 import UIKit
 
 
-class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
+class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDateStampDelegate {
     
     //New
     var backButton : UIButton!;
@@ -224,8 +224,10 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         // @todo    only inserted when date is present                                                                              //
         //**************************************************************************************************************************//
         let yImg = UIDateStamp.getInitDims().height;
-        let dateStamp = UIDateStamp(center:CGPoint(x:UIScreen.main.bounds.width/2,y: (y+yImg/2)));
-        y = (y + dateStamp.bounds.height);
+        let yC   = (y+(yImg/2)-31);                                         /* source of '-31' visually established, src unknown    */
+        let dateStamp = UIDateStamp(center:CGPoint(x:UIScreen.main.bounds.width/2,y: yC));
+        dateStamp.setDelegate(self);
+        y = (y + dateStamp.bounds.height - 61);
         
         
         //**************************************************************************************************************************//
@@ -396,6 +398,25 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         return;
     }
     
+    
+    /********************************************************************************************************************************/
+    /** @fcn        tapResponse(i : Int)
+     *  @brief      tap response to dateStamp selection
+     *  @details    x
+     *
+     *  @section    Opens
+     *      implement response & handle on selection
+     */
+    /********************************************************************************************************************************/
+    @objc func tapResponse(i : Int) {
+
+        let ts = ANoteTimeSelect(parentCell.vc, parentCell, Date());
+        
+        ts.show(parentCell.vc);
+        
+        return;
+    }
+
     
     /********************************************************************************************************************************/
     /* @fcn       dismissSubView()                                                                                                  */

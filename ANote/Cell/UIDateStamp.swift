@@ -26,8 +26,11 @@ import UIKit
 
 class UIDateStamp : UIView {
 
-    let dateBox : UIImageView;
-    let img : UIImage;
+	//Vars
+    let dateBox  : UIImageView;
+    let img      : UIImage;
+    var delegate : UIDateStampDelegate!;
+    
     
     /********************************************************************************************************************************/
     /** @fcn        init(height:CGFloat)
@@ -39,28 +42,61 @@ class UIDateStamp : UIView {
 
         //Init vars
         img = UIImage(named: "datestamp_nosel.png")!;
+        
+        let wI = img.size.width;
+        let hI = img.size.height;
+        
         dateBox = UIImageView(image: img);
         
         //Super
-        super.init(frame: CGRect());                                /* dims & loc initialized below from image & center             */
+        super.init(frame: CGRect(x:0 , y:0, width:wI, height:hI));          /* dims & loc initialized below from image & center     */
         
-        //Config self
-        self.sizeToFit();
-        self.center = center;
-
         //Config dateBox
         dateBox.sizeToImage();
-        dateBox.center = CGPoint(x:(self.frame.width/2), y:(self.frame.height/2));
-        
+
         //Add view
         self.addSubview(dateBox);
+
+        //Config self
+        self.center = center;
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapResponse));
+        self.addGestureRecognizer(tap);
 
         if(verbose) { print("UIDateStamp.init():  initialization complete"); }
 
         return;
     }
-    
 
+
+    /********************************************************************************************************************************/
+    /** @fcn        myTapResponse()
+     *  @brief      wrapper to perform delegate response to tap selection
+     *  @details    x
+     *
+     *  @param      [in] (UIDateStampDelegate) delegate - tap responder set
+     */
+    /********************************************************************************************************************************/
+    @objc func tapResponse() {
+        delegate.tapResponse(i:1);
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        setDelegate(_ delegate : UIDateStampDelegate)
+     *  @brief      set tap response delegate
+     *  @details    x
+     *
+     *  @param      [in] (UIDateStampDelegate) delegate - tap responder set
+     */
+    /********************************************************************************************************************************/
+    func setDelegate(_ delegate : UIDateStampDelegate) {
+        self.delegate = delegate;
+        return;
+    }
+    
+    
     /********************************************************************************************************************************/
     /** @fcn        class func getInitDims() -> CGSize
      *  @brief      get initial dims of view on init
@@ -86,5 +122,10 @@ class UIDateStamp : UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented");
     }
+}
+
+//Response Protocol
+protocol UIDateStampDelegate {
+   func tapResponse(i : Int);
 }
 
