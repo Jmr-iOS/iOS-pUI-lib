@@ -17,6 +17,9 @@
  *      each row represents a data entry whose data is captured in completion by the row's cell subview, presented here. all data
  *      fields are thus represented as fields of the cell subview (e.g. nameLabel, etc.)
  *
+ *  @section    Opens
+ *      none listed
+ *
  * 	@section	Legal Disclaimer
  * 			All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
  * 			Corporation. Do not distribute. Do not copy.
@@ -46,6 +49,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     var datePlace  : UIView;
     var mainText   : UITextView;
     var menuBar    : UIView;
+    var bookmark   : UIButton;
     
     //Config
     private let verbose : Bool = true;                              /* for this class                                               */
@@ -61,8 +65,15 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     let LEFT  = CGFloat(Double.pi);
     let UP    = CGFloat(3*Double.pi/2);
     
+    //Images
+    let bookSelImg   = UIImage(named:"bookmark_selected.png");
+    let bookUnselImg = UIImage(named:"bookmark_unselected.png");
+    
+    
     //(temp)
-    var v : UIView!;
+    var v       : UIView!;
+    var foldV   : UIView!;                                          /* folder listing, topbar                                       */
+    var bookSel : Bool;
     
     
     /********************************************************************************************************************************/
@@ -81,14 +92,19 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         bkgndView = UIImageView();
         
         //Init UI
-        topBar = UIView();
-        titleBar = UIView();
+        topBar     = UIView();
+        titleBar   = UIView();
         titleField = UITextField();
-        dateBar = UIView();
-        datePlace = UIView();
-        mainText = UITextView();
-        menuBar = UIView();
+        dateBar    = UIView();
+        datePlace  = UIView();
+        mainText   = UITextView();
+        menuBar    = UIView();
+        bookmark   = UIButton(type: UIButtonType.roundedRect);
+
+        //Init Vars
+        bookSel = false;
         
+        //Super
         super.init(frame: UIScreen.main.bounds);
         
         //Store
@@ -117,16 +133,14 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //                                                         TOP BAR                                                          //
         //**************************************************************************************************************************//
         topBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 37);
-        topBar.backgroundColor = UIColor.lightGray;
         y = (y + topBar.bounds.height);
-        
-        //@todo  Draw Folder
-        
-        //@todo  Text
-        
-        //@todo  Draw Folder
+
+        //Section Label
+        initSectLabel(topBar);
         
         //Bookmark Icon
+        initBookmark(topBar);
+        
         
         //**************************************************************************************************************************//
         //                                                        TITLE BAR                                                         //
@@ -189,18 +203,20 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //Load UI
         mainView.reloadInputViews();
         addSubview(bkgndView);
-//        addSubview(topBar);
-//        addSubview(titleBar);
-//        addSubview(dateBar);
-//        addSubview(datePlace);
-//        addSubview(mainText);
-//        addSubview(menuBar);
+        addSubview(topBar);
+        addSubview(titleBar);
+//      addSubview(dateBar);
+//      addSubview(datePlace);
+//      addSubview(mainText);
+//      addSubview(menuBar);
         addDevToolbar(parentCell.vc.view);
+        
         
         if(verbose) { print("CellSubview.init():                 my cell #\(parentCell.getNumber()) subview init"); }
  
         return;
     }
+    
 
     /********************************************************************************************************************************/
     /** @fcn        getCellBackgrounds() -> [String]
@@ -246,18 +262,101 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     
     
     /********************************************************************************************************************************/
+    /** @fcn        initBookmark(_ view : UIView)
+     *  @brief      initialize bookmark button
+     *
+     *  @param      [in] (UIView) view - view to add bookmark into
+     *
+     *  @pre    bookmark is initialized
+     */
+    /********************************************************************************************************************************/
+    func initBookmark(_ view : UIView) {
+
+        let x0 : CGFloat = (UIScreen.main.bounds.width - 37);
+        let y0 : CGFloat = 9;
+        
+        //Config
+        bookmark.translatesAutoresizingMaskIntoConstraints = true;
+        bookmark.frame = CGRect(x: x0, y: y0, width:30, height:30);
+        bookmark.setBackgroundImage(bookUnselImg, for: UIControlState());
+        bookmark.addTarget(self, action: #selector(bookPress(_:)), for:  .touchUpInside);
+        bookmark.sizeToFit();
+        
+        //Add
+        view.addSubview(bookmark);
+
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        initSectLabel(_ view : UIView)
+     *  @brief      initialize bookmark button
+     *
+     *  @param      [in] (UIView) view - view to add bookmark into
+     *
+     *  @pre    bookmark is initialized
+     */
+    /********************************************************************************************************************************/
+    func initSectLabel(_ view : UIView) {
+        
+        //Text
+        foldV = UIView(frame: CGRect(x:8, y:11, width:60, height:20));
+        let fPh = UIView(frame: CGRect(x:5, y:5, width:10, height:10));
+        let t   = UILabel(frame: CGRect(x:10, y:5, width:0, height:0));
+        t.center = CGPoint(x:20, y:2);
+        
+        //Setup Text
+        t.font = UIFont(name: "HelveticaNeue-Medium", size: 12);
+        t.textColor = UIColor.lightGray;
+        t.textAlignment = .center;
+        t.translatesAutoresizingMaskIntoConstraints = true;
+        t.text = "Today";
+        t.sizeToFit();
+        
+        //@todo  Draw Folder (5)
+        let foldImg = UIImageView();
+        foldImg.frame = CGRect(x:5, y:3, width:277/21, height:255/20);    /* scale by x18                                           */
+        foldImg.contentMode = .scaleToFill;                               /* set unscaled                                           */
+        foldImg.image = UIImage(named: "folder_icon.png");                /* acquire next background                                */
+
+        
+        //@todo  Text+Folder Response (6)
+        
+        
+        //Integrate
+        foldV.addSubview(t);
+        //foldV.addSubview(fPh);
+        foldV.addSubview(foldImg);
+        foldV.sizeToFit();
+        
+        //Add
+        view.addSubview(foldV);
+        
+        //Dev indication colors
+        //topBar.backgroundColor = UIColor.lightGray;
+        //v.backgroundColor = UIColor.blue;
+        fPh.backgroundColor = UIColor.orange;
+        //t.backgroundColor = UIColor.gray;
+
+        return;
+    }
+    
+    
+    
+    /********************************************************************************************************************************/
     /* @fcn       setContentsAlpha(_ alpha : CGFloat)                                                                               */
     /* @details   set alpha of all UI contents                                                                                      */
     /********************************************************************************************************************************/
     func setContentsAlpha(_ alpha : CGFloat) {
         
         //Apply alpha to all
-        topBar.alpha     = alpha;
-        titleBar.alpha   = alpha;
-        datePlace.alpha  = alpha;
-        dateBar.alpha    = alpha;
-        mainText.alpha   = alpha;
-        menuBar.alpha    = alpha;
+        topBar.alpha    = alpha;
+        titleBar.alpha  = alpha;
+        datePlace.alpha = alpha;
+        dateBar.alpha   = alpha;
+        mainText.alpha  = alpha;
+        menuBar.alpha   = alpha;
         
         return;
     }
@@ -301,9 +400,12 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     /********************************************************************************************************************************/
     func addDevToolbar(_ view : UIView) {
 
-        let x0    : CGFloat = 28;
-        let xOffs : CGFloat = 65;
+        let w    : CGFloat = UIScreen.main.bounds.width;
         
+        let x0    : CGFloat = 33;
+        let y0    : CGFloat = UIScreen.main.bounds.height - 28;
+        let xOffs : CGFloat = (w-2*x0)/4;
+
         
         //**************************************************************************************************************************//
         //                                             1 - RETURN ARROW                                                             //
@@ -311,7 +413,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         backButton = UIButton(type: UIButtonType.roundedRect);
         backButton.translatesAutoresizingMaskIntoConstraints = true;
         backButton.sizeToFit();
-        backButton.center = CGPoint(x: x0, y: 540);
+        backButton.center = CGPoint(x: x0, y: y0);
         backButton.setBackgroundImage(UIImage(named:"subview_back.png"), for: UIControlState());
         backButton.addTarget(self, action: #selector(backPress(_:)), for:  .touchUpInside);
         
@@ -324,7 +426,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         infoButton = UIButton(type: UIButtonType.roundedRect);
         infoButton.translatesAutoresizingMaskIntoConstraints = true;
         infoButton.sizeToFit();
-        infoButton.center = CGPoint(x: x0+1*xOffs, y: 540);
+        infoButton.center = CGPoint(x: x0+1*xOffs, y: y0);
         infoButton.setBackgroundImage(UIImage(named:"subview_info.png"), for: UIControlState());
         infoButton.addTarget(self, action: #selector(infoPress(_:)), for:  .touchUpInside);
         
@@ -337,7 +439,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         clipButton = UIButton(type: UIButtonType.roundedRect);
         clipButton.translatesAutoresizingMaskIntoConstraints = true;
         clipButton.sizeToFit();
-        clipButton.center = CGPoint(x: x0+2*xOffs, y: 540);
+        clipButton.center = CGPoint(x: x0+2*xOffs, y: y0);
         clipButton.setBackgroundImage(UIImage(named:"subview_paperclip.png"), for: UIControlState());
         clipButton.addTarget(self, action: #selector(clipPress(_:)), for:  .touchUpInside);
         
@@ -350,7 +452,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         sendButton = UIButton(type: UIButtonType.roundedRect);
         sendButton.translatesAutoresizingMaskIntoConstraints = true;
         sendButton.sizeToFit();
-        sendButton.center = CGPoint(x: x0+3*xOffs, y: 540);
+        sendButton.center = CGPoint(x: x0+3*xOffs, y: y0);
         sendButton.setBackgroundImage(UIImage(named:"subview_send.png"), for: UIControlState());
         sendButton.addTarget(self, action: #selector(sendPressed(_:)), for:  .touchUpInside);
         
@@ -360,7 +462,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //**************************************************************************************************************************//
         //                                             5 - PLUS BUTTON                                                              //
         //**************************************************************************************************************************//
-        v = UIView(frame:CGRect(x:285,y:540,width:3,height:4));
+        v = UIView(frame:CGRect(x:x0+4*xOffs,y:y0,width:3,height:4));
         
         //Circle
         let p1 = PathUtils.drawCirclePath(CGPoint(x:0, y:0), 22);
@@ -375,7 +477,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         plusButton.translatesAutoresizingMaskIntoConstraints = true;
         plusButton.sizeToFit();
         plusButton.frame = CGRect(x:0, y:0, width:45, height:45);
-        plusButton.center = CGPoint(x: 334, y: 538);
+        plusButton.center = CGPoint(x: 334, y: y0-2);
         plusButton.addTarget(self, action: #selector(plusPress(_:)), for:  .touchUpInside);
 
         self.addSubview(v);
@@ -386,7 +488,33 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         
         return;
     }
+
     
+//**********************************************************************************************************************************//
+//                                                       BUTTON RESPONSES                                                           //
+//**********************************************************************************************************************************//
+    
+    /********************************************************************************************************************************/
+    /** @fcn        bookPress(_ sender: UIButton!)
+     *  @brief      bookmark was pressed
+     *
+     *  @param      [in] (UIButton!) sender - button pressed
+     */
+    /********************************************************************************************************************************/
+    @objc func bookPress(_ sender: UIButton!) {
+        
+        if(bookSel) {
+            bookmark.setBackgroundImage(bookUnselImg, for: UIControlState());
+        } else {
+            bookmark.setBackgroundImage(bookSelImg, for: UIControlState());
+        }
+        
+        bookSel = !bookSel;
+        
+        if(verbose) { print("CellSubview.bookPress():    bookmark pressed"); }
+        
+        return;
+    }
     
     
     /********************************************************************************************************************************/
@@ -420,13 +548,15 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
      */
     /********************************************************************************************************************************/
     @objc func infoPress(_ sender: UIButton!) {
-        
+
+//<DEV>
         backButton.isHidden = !backButton.isHidden;
         //infoButton.isHidden = !infoButton.isHidden;
         clipButton.isHidden = !clipButton.isHidden;
         sendButton.isHidden = !sendButton.isHidden;
         v.isHidden          = !v.isHidden;
- 
+//<DEV>
+
         if(verbose) { print("CellSubview.infoPress():    info was pressed"); }
 
         return;
