@@ -18,7 +18,7 @@
  *      fields are thus represented as fields of the cell subview (e.g. nameLabel, etc.)
  *
  *  @section    Opens
- *      none listed
+ *      have divider update color for brown background (hard to see)
  *
  * 	@section	Legal Disclaimer
  * 			All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
@@ -50,8 +50,14 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     var mainText   : UITextView;
     var menuBar    : UIView;
     var bookmark   : UIButton;
+
+    //Star bar
+    var stars    : [UIImageView];
+    var starView : UIView!;
+    var starCt   : Int!;
     
     //Config
+    let numStars = 5;
     private let verbose : Bool = true;                              /* for this class                                               */
 
     //Background
@@ -66,15 +72,16 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     let UP    = CGFloat(3*Double.pi/2);
     
     //Images
-    let bookSelImg   = UIImage(named:"bookmark_selected.png");
-    let bookUnselImg = UIImage(named:"bookmark_unselected.png");
-    
+    let bookImg_sel   = UIImage(named:"bookmark_selected.png");
+    let bookImg_unsel = UIImage(named:"bookmark_unselected.png");
+    let starImg_on  = UIImage(named: "star_on.png");
+    let starImg_off = UIImage(named: "star_off.png");
     
     //(temp)
-    var v       : UIView!;
-    var foldV   : UIView!;                                          /* folder listing, topbar                                       */
-    var bookSel : Bool;
-    
+    var v        : UIView!;
+    var foldV    : UIView!;                                         /* folder listing, topbar                                       */
+    var bookSel  : Bool;
+
     
     /********************************************************************************************************************************/
 	/**	@fcn		init(mainView : UIView, parentCell : ANoteTableViewCell)
@@ -103,7 +110,8 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
 
         //Init Vars
         bookSel = false;
-        
+        stars   = [UIImageView]();
+
         //Super
         super.init(frame: UIScreen.main.bounds);
         
@@ -162,14 +170,21 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //Add to bar
         titleBar.addSubview(titleField);
         
+        //Divider
+        let divider = UIView(frame: CGRect(x:13, y: (y+1), width: (UIScreen.main.bounds.width-2*13), height: 0.5));
+        divider.backgroundColor = UIColor.gray;
+        divider.alpha = 0.20;
+
         
         //**************************************************************************************************************************//
         //                                                         DATE BAR                                                         //
         //**************************************************************************************************************************//
         dateBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 33);
-        dateBar.backgroundColor = UIColor.darkGray;
         y = (y + dateBar.bounds.height);
 
+        //Add Stars
+        initStars(dateBar);
+        
         
         //**************************************************************************************************************************//
         //                                                        DATE VIEW                                                         //
@@ -205,8 +220,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         addSubview(bkgndView);
         addSubview(topBar);
         addSubview(titleBar);
-//      addSubview(dateBar);
+        addSubview(dateBar);
 //      addSubview(datePlace);
+        addSubview(divider);
 //      addSubview(mainText);
 //      addSubview(menuBar);
         addDevToolbar(parentCell.vc.view);
@@ -278,7 +294,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         //Config
         bookmark.translatesAutoresizingMaskIntoConstraints = true;
         bookmark.frame = CGRect(x: x0, y: y0, width:30, height:30);
-        bookmark.setBackgroundImage(bookUnselImg, for: UIControlState());
+        bookmark.setBackgroundImage(bookImg_unsel, for: UIControlState());
         bookmark.addTarget(self, action: #selector(bookPress(_:)), for:  .touchUpInside);
         bookmark.sizeToFit();
         
@@ -302,7 +318,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         
         //Text
         foldV = UIView(frame: CGRect(x:8, y:11, width:60, height:20));
-        let fPh = UIView(frame: CGRect(x:5, y:5, width:10, height:10));
         let t   = UILabel(frame: CGRect(x:10, y:5, width:0, height:0));
         t.center = CGPoint(x:20, y:2);
         
@@ -320,10 +335,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         foldImg.contentMode = .scaleToFill;                               /* set unscaled                                           */
         foldImg.image = UIImage(named: "folder_icon.png");                /* acquire next background                                */
 
-        
-        //@todo  Text+Folder Response (6)
-        
-        
         //Integrate
         foldV.addSubview(t);
         //foldV.addSubview(fPh);
@@ -332,17 +343,51 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         
         //Add
         view.addSubview(foldV);
-        
-        //Dev indication colors
-        //topBar.backgroundColor = UIColor.lightGray;
-        //v.backgroundColor = UIColor.blue;
-        fPh.backgroundColor = UIColor.orange;
-        //t.backgroundColor = UIColor.gray;
 
         return;
     }
+
     
-    
+    /********************************************************************************************************************************/
+    /** @fcn        initStars(_ view : UIView)
+     *  @brief      initialize stars bar
+     *  @details    one button overlaid on five star images
+     *
+     *  @param      [in] (UIView) view - view to add bookmark into
+     *
+     *  @pre    bookmark & stars initialized
+     */
+    /********************************************************************************************************************************/
+    func initStars(_ view : UIView) {
+        
+        let xOffs = (UIScreen.main.bounds.width - 85);
+        
+        //Init view
+        starView = UIView(frame: CGRect(x: xOffs, y:10, width:68, height: 20));
+        starCt   = 0;
+        
+        //Populate stars
+        for i in 0...(numStars-1) {
+            //Init
+            let star = UIImageView(frame: CGRect(x:5+(i*12), y:2, width:10, height: 10));
+            star.image = starImg_off;                                       /* init all to off                                      */
+            star.contentMode = .scaleToFill;
+
+            //Add
+            stars.append(star);                                             /* to member var for later access                       */
+            starView.addSubview(star);                                      /* to view                                              */
+        }
+        
+        //Add action
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(starResponse(_:)));
+        starView.addGestureRecognizer(tapGestureRecognizer);
+        
+        //Add to view
+        view.addSubview(starView);
+
+        return;
+    }
+
     
     /********************************************************************************************************************************/
     /* @fcn       setContentsAlpha(_ alpha : CGFloat)                                                                               */
@@ -491,8 +536,60 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
 
     
 //**********************************************************************************************************************************//
-//                                                       BUTTON RESPONSES                                                           //
+//                                                      BUTTON & VIEW RESPONSES                                                     //
 //**********************************************************************************************************************************//
+
+    /********************************************************************************************************************************/
+    /** @fcn        starResponse(_ sender: UIButton!)
+     *  @brief      star bar was pressed
+     *
+     *  @param      [in] (UIButton!) sender - button pressed
+     */
+    /********************************************************************************************************************************/
+    @objc func starResponse(_ gestureRecognizer: UITapGestureRecognizer) {
+        
+        //Increment count
+        starCt = (starCt+1)%(numStars+1);                                           /* selection to advance                         */
+        
+        //Set stars
+        for i in 0...(numStars-1) {
+        
+            var img = starImg_off;
+            
+            if(i < starCt) {
+                img = starImg_on;
+            }
+            
+            //Update the new star
+            stars[i].image = img;
+        }
+        
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        starPress(_ sender: UIButton!)
+     *  @brief      star bar was pressed
+     *
+     *  @param      [in] (UIButton!) sender - button pressed
+     */
+    /********************************************************************************************************************************/
+    @objc func starPress(_ sender: UIButton!) {
+        
+        if(bookSel) {
+            bookmark.setBackgroundImage(bookImg_unsel, for: UIControlState());
+        } else {
+            bookmark.setBackgroundImage(bookImg_sel, for: UIControlState());
+        }
+        
+        bookSel = !bookSel;
+        
+        if(verbose) { print("CellSubview.starPress():    stars were pressed"); }
+        
+        return;
+    }
+
     
     /********************************************************************************************************************************/
     /** @fcn        bookPress(_ sender: UIButton!)
@@ -504,9 +601,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     @objc func bookPress(_ sender: UIButton!) {
         
         if(bookSel) {
-            bookmark.setBackgroundImage(bookUnselImg, for: UIControlState());
+            bookmark.setBackgroundImage(bookImg_unsel, for: UIControlState());
         } else {
-            bookmark.setBackgroundImage(bookSelImg, for: UIControlState());
+            bookmark.setBackgroundImage(bookImg_sel, for: UIControlState());
         }
         
         bookSel = !bookSel;
