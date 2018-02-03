@@ -72,6 +72,58 @@ class UIDateStamp : UIView {
 
 
     /********************************************************************************************************************************/
+    /** @fcn        setStamp(_ tempSel : Int)
+     *  @brief      x
+     *  @details    x
+     *
+     *  @param      [in] (Int) tempSel - selection 0-2
+     */
+    /********************************************************************************************************************************/
+    func setStamp(_ tempSel : Int) {
+        
+        //Vars
+        var img : UIImage?;
+        var wS, hI : CGFloat;
+        
+        //Init vars
+
+        
+        //Select image
+        switch(tempSel) {
+            case 0:
+                img = UIImage(named: "datestamp_nosel.png")!;
+                break;
+            case 1:
+                img = UIImage(named: "datestamp_sel.png")!;
+                break;
+            case 2:
+                img = nil;
+                break;
+        default:
+            fatalError("Invalid selection");
+        }
+        
+        //Update image
+        dateBox.image = img;
+
+        //Resize to fill
+        if(tempSel != 2) {
+            //Calc vars
+            wS  = UIScreen.main.bounds.width;
+            hI  = (img!.size.height/2);                                             /* 2x scale                                         */
+
+            //Apply dims
+            dateBox.sizeToImage();
+            dateBox.center = CGPoint(x: wS/2, y: hI/2);
+        }
+        
+        print("A\(tempSel)");
+        
+        return;
+    }
+    
+
+    /********************************************************************************************************************************/
     /** @fcn        myTapResponse()
      *  @brief      wrapper to perform delegate response to tap selection
      *  @details    x

@@ -60,8 +60,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     var menuBar    : UIView;
     var bookmark   : UIButton;
 
-    //Date label
-    var dateLabel  : UILabel!;
+    //Date
+    var dateLabel : UILabel!;
+    var dateStamp : UIDateStamp!;
     
     //Star bar
     var stars    : [UIImageView];
@@ -223,7 +224,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //                                                        DATE VIEW                                                         //
         // @todo    only inserted when date is present                                                                              //
         //**************************************************************************************************************************//
-        let dateStamp = UIDateStamp(y0: y);
+        dateStamp = UIDateStamp(y0: y);
         dateStamp.setDelegate(self);
         y = (y + dateStamp.bounds.height);
         
@@ -688,6 +689,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         return;
     }
 
+    var devCtr : Int = 1;
     
     /********************************************************************************************************************************/
     /** @fcn        sendPressed(_ sender: UIButton!)
@@ -699,7 +701,11 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     @objc func sendPressed(_ sender: UIButton!) {
         
-        if(verbose) { print("CellSubview.sendPressed():  send was pressed"); }
+        //Swap nil, empty, date
+        dateStamp.setStamp(devCtr);        
+        devCtr = (devCtr+1)%3;
+        
+        if(verbose) { print("CellSubview.sendPressed():          send was pressed"); }
 
         return;
     }
