@@ -401,7 +401,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     func getRowValue() -> ANoteRow {
         return vc.rows[tableIndex];
     }
-    
+
     
     /********************************************************************************************************************************/
     /** @fcn        updateSelection(selected : Bool)

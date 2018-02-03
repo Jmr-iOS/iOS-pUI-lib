@@ -13,13 +13,21 @@
  *      main view here is scrollable
  *      mainText & titleText feature 'return' keyboard (after menu bar added for keyboard dismissal)
  *      text and graphics colors adjust to selected background (e.g. darker text for darker bkgnds etc.)
+ *           have divider update color for brown background (hard to see)
  *
  *  @section    Data Architecture
  *      each row represents a data entry whose data is captured in completion by the row's cell subview, presented here. all data
  *      fields are thus represented as fields of the cell subview (e.g. nameLabel, etc.)
  *
  *  @section    Opens
- *      have divider update color for brown background (hard to see)
+ *      Gen as new class
+ *      white box
+ *      box tap selection
+ *      Add lines
+ *      Add text
+ *      Add checkbox w/delegate
+ *      Add due date stamp
+ *      Add icons
  *
  * 	@section	Legal Disclaimer
  * 			All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
@@ -209,15 +217,15 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     
         //Add to view
         dateBar.addSubview(dateLabel);
-        
+
         
         //**************************************************************************************************************************//
         //                                                        DATE VIEW                                                         //
         // @todo    only inserted when date is present                                                                              //
         //**************************************************************************************************************************//
-        datePlace.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 81);
-        datePlace.backgroundColor = UIColor.blue;
-        y = (y + datePlace.bounds.height);
+        let yImg = UIDateStamp.getInitDims().height;
+        let dateStamp = UIDateStamp(center:CGPoint(x:UIScreen.main.bounds.width/2,y: (y+yImg/2)));
+        y = (y + dateStamp.bounds.height);
         
         
         //**************************************************************************************************************************//
@@ -247,10 +255,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         addSubview(topBar);
         addSubview(titleBar);
         addSubview(dateBar);
-//      addSubview(datePlace);
+        addSubview(dateStamp);
         addSubview(divider);
         addSubview(mainText);
-//      addSubview(menuBar);
         addDevToolbar(parentCell.vc.view);
         
         
