@@ -47,7 +47,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
 
     
     /********************************************************************************************************************************/
-    /** @fcn        init(_ vc : ViewController,_ parentCell : ANoteTableViewCell, date : Date?)
+    /** @fcn        init(_ vc : ViewController,_ parentCell : ANoteTableViewCell,_ date : Date?)
      *  @brief      x
      *  @details    x
      *
@@ -55,7 +55,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
      *      View has correct height
      */
     /********************************************************************************************************************************/
-    init(_ vc : ViewController,_ parentCell : ANoteTableViewCell, date : Date?) {
+    init(_ vc : ViewController,_ parentCell : ANoteTableViewCell,_ date : Date?) {
 
         //Init Constants
         //@pre (temp)

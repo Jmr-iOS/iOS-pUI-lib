@@ -540,7 +540,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     func raiseTimePicker() {
 
         //Generate aNote TimePicker View to Slide Up
-        let x : ANoteTimeSelect = ANoteTimeSelect(vc, self, date: date);
+        let x : ANoteTimeSelect = ANoteTimeSelect(vc, self, date);
 
         //Give correct print()
         if(viewOpen) {

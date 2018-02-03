@@ -51,6 +51,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     var menuBar    : UIView;
     var bookmark   : UIButton;
 
+    //Date label
+    var dateLabel  : UILabel!;
+    
     //Star bar
     var stars    : [UIImageView];
     var starView : UIView!;
@@ -182,8 +185,29 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         dateBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 33);
         y = (y + dateBar.bounds.height);
 
+        //Init text
+        let dateLabel   = UILabel(frame: CGRect(x:14, y:10, width:0, height:0));
+        
+        //Setup Text
+        dateLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 12);
+        dateLabel.textColor = UIColor.lightGray;
+        dateLabel.textAlignment = .left;
+        dateLabel.translatesAutoresizingMaskIntoConstraints = true;
+        dateLabel.text = "Thu, Jul 7, 2016";
+        dateLabel.sizeToFit();
+    
+        //Add action
+        let tapGesture : UITapGestureRecognizer = UITapGestureRecognizer();
+        tapGesture.numberOfTapsRequired = 1;
+        dateLabel.addGestureRecognizer(tapGesture);
+        dateLabel.isUserInteractionEnabled = true;
+        tapGesture.addTarget(self, action: #selector(dateLabelPress(_:)));
+        
         //Add Stars
         initStars(dateBar);
+    
+        //Add to view
+        dateBar.addSubview(dateLabel);
         
         
         //**************************************************************************************************************************//
@@ -231,49 +255,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         if(verbose) { print("CellSubview.init():                 my cell #\(parentCell.getNumber()) subview init"); }
  
         return;
-    }
-    
-
-    /********************************************************************************************************************************/
-    /** @fcn        getCellBackgrounds() -> [String]
-     *  @brief      get listing of all available images for background use
-     *
-     *  @return     ([String]?) all local images found on phone
-     *
-     *  @section    Supported Types
-     *      png, jpg, jpeg
-     */
-    /********************************************************************************************************************************/
-    func getCellBackgrounds() -> [String] {
-        
-        var rslts = [String]();
-        
-        let url    = Bundle.main.bundleURL;
-        let opts = FileManager.DirectoryEnumerationOptions();
-        let fileEnumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: nil, options: opts);
-        
-        while let file = fileEnumerator?.nextObject() {
-            //let s : String = "cellsubview_ref.PNG";
-            let s : String = (file as! NSURL).lastPathComponent!;
-            
-            var type = (file as! NSURL).pathExtension;
-            type = type?.lowercased();                                  /* handle both cases                                        */
-            
-            //Filter Images
-            var valid : Bool = ((type?.contains("png"))! || (type?.contains("jpg"))! || (type?.contains("jpeg"))!);
-            
-            //Filter Icons
-            valid = (valid && !s.contains("AppIcon"));
-            
-            valid = (valid && s.contains("cellSubview"));
-            
-            //Append
-            if(valid) {
-                rslts.append(s);
-            }
-        }
-        
-        return rslts;
     }
     
     
@@ -540,6 +521,28 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
 //**********************************************************************************************************************************//
 
     /********************************************************************************************************************************/
+    /** @fcn        dateLabelPress(_ gestureRecognizer: UITapGestureRecognizer)
+     *  @brief      date label was pressed
+     *
+     *  @param      [in] (UIButton!) sender - button pressed
+     */
+    /********************************************************************************************************************************/
+    @objc func dateLabelPress(_ gestureRecognizer: UITapGestureRecognizer) {
+        
+        let vc = parentCell.vc!;
+        let date = Date();
+        
+        //(temp for disp)
+        let ts = ANoteTimeSelect(vc, parentCell, date);
+        ts.show(vc);
+        
+        if(verbose) { print("CellSubview.dateLblPr():            date was pressed"); }
+        
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
     /** @fcn        starResponse(_ sender: UIButton!)
      *  @brief      star bar was pressed
      *
@@ -549,7 +552,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     @objc func starResponse(_ gestureRecognizer: UITapGestureRecognizer) {
         
         //Increment count
-        starCt = (starCt+1)%(numStars+1);                                           /* selection to advance                         */
+        starCt = ((starCt+1)%(numStars+1));                                         /* selection to advance                         */
         
         //Set stars
         for i in 0...(numStars-1) {
@@ -563,29 +566,6 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
             //Update the new star
             stars[i].image = img;
         }
-        
-        return;
-    }
-    
-    
-    /********************************************************************************************************************************/
-    /** @fcn        starPress(_ sender: UIButton!)
-     *  @brief      star bar was pressed
-     *
-     *  @param      [in] (UIButton!) sender - button pressed
-     */
-    /********************************************************************************************************************************/
-    @objc func starPress(_ sender: UIButton!) {
-        
-        if(bookSel) {
-            bookmark.setBackgroundImage(bookImg_unsel, for: UIControlState());
-        } else {
-            bookmark.setBackgroundImage(bookImg_sel, for: UIControlState());
-        }
-        
-        bookSel = !bookSel;
-        
-        if(verbose) { print("CellSubview.starPress():    stars were pressed"); }
         
         return;
     }
@@ -671,7 +651,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
     @objc func clipPress(_ sender: UIButton!) {
         
         //Init view
-        let p = ANoteTimeSelect(parentCell.vc, parentCell, date: parentCell.date);
+        let p = ANoteTimeSelect(parentCell.vc, parentCell, parentCell.date);
         
         //Grab new time
         p.show(parentCell.vc);
@@ -713,7 +693,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
         return;
     }
 
-    
+
 //**********************************************************************************************************************************//
 //                                                     UITEXTFIELD DELEGATE                                                         //
 //**********************************************************************************************************************************//
@@ -760,6 +740,64 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate {
 
         return true;
     }
+
+
+//**********************************************************************************************************************************//
+//                                                          HELPERS                                                                 //
+//**********************************************************************************************************************************//
+    
+    //@todo     header
+    func updateDate(date : Date) {
+        //apply to all fields
+        dateLabel.text = "Thu, Jul 8, 2016";
+        print("todo");
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        getCellBackgrounds() -> [String]
+     *  @brief      get listing of all available images for background use
+     *
+     *  @return     ([String]?) all local images found on phone
+     *
+     *  @section    Supported Types
+     *      png, jpg, jpeg
+     */
+    /********************************************************************************************************************************/
+    func getCellBackgrounds() -> [String] {
+        
+        var rslts = [String]();
+        
+        let url    = Bundle.main.bundleURL;
+        let opts = FileManager.DirectoryEnumerationOptions();
+        let fileEnumerator = FileManager.default.enumerator(at: url, includingPropertiesForKeys: nil, options: opts);
+        
+        while let file = fileEnumerator?.nextObject() {
+            //let s : String = "cellsubview_ref.PNG";
+            let s : String = (file as! NSURL).lastPathComponent!;
+            
+            var type = (file as! NSURL).pathExtension;
+            type = type?.lowercased();                                  /* handle both cases                                        */
+            
+            //Filter Images
+            var valid : Bool = ((type?.contains("png"))! || (type?.contains("jpg"))! || (type?.contains("jpeg"))!);
+            
+            //Filter Icons
+            valid = (valid && !s.contains("AppIcon"));
+            
+            valid = (valid && s.contains("cellSubview"));
+            
+            //Append
+            if(valid) {
+                rslts.append(s);
+            }
+        }
+        
+        return rslts;
+    }
+    
+    
 
     
     /********************************************************************************************************************************/
