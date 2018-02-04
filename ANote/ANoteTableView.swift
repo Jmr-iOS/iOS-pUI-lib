@@ -50,7 +50,7 @@ class ANoteTableView : UITableView {
         super.init(frame:frame, style:style);
         
         //Load
-        for i in 0...5 {
+        for i in 0...(numRows-1) {
             let cell : ANoteTableViewCell = ANoteTableViewCell(vc: self.vc,
                                                                mainView: vc.view,
                                                                style: UITableViewCellStyle.default,
@@ -100,6 +100,25 @@ class ANoteTableView : UITableView {
     }
     
     
+    //@todo     header
+    //@note     temp debug
+    func updateCellTitles() {
+        
+        let n = self.vc.rows.count;
+        
+        for i in 0...(n-1) {
+            
+            let name = vc.rows[i].main;
+            
+            myCustomCells[i].textLabel?.text = name;
+            
+            print("-->\(name!)");
+        }
+        
+        print("done");
+    }
+    
+    
     /********************************************************************************************************************************/
 	/**	@fcn		removeCell(_ index : Int)
 	 *  @brief		x
@@ -134,10 +153,16 @@ class ANoteTableView : UITableView {
         
         let n = getCellCount();
         
+        let vc = self.vc;
+        let rows = vc.rows;
+        let table = vc.aNoteTable;
+
+
         print("n: \(n)");
 
         for i in 0...(n-1) {
-            print("[\(i)]");
+            let cell = rows[i];
+            print("[\(i)]: '\(cell.main!)', '\(table!.myCustomCells[i].textLabel!.text!)'");
         }
         
         //refresh table
