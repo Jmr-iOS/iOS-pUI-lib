@@ -1,106 +1,145 @@
 /************************************************************************************************************************************/
-/** @file       ANoteTableView.swift
- *  @brief      x
- *  @details    x
+/** @file		ANoteTableView.swift
+ *  @project    x
+ * 	@brief		x
+ * 	@details	x
  *
- *  @section    Opens
- *      x
+ * 	@author		Justin Reina, Firmware Engineer, Jaostech
+ *  @created    ?
+ *  @last rev   ?
  *
- *  @section    Legal Disclaimer
- *       All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
- *       Corporation. Do not distribute. Do not copy.
+ *
+ * 	@notes		x
+ *
+ * 	@section	Opens
+ * 			none current
+ *
+ *  @section    Reference
+ *      (awesome) http://code.tutsplus.com/tutorials/ios-sdk-crafting-custom-uitableview-cells--mobile-15702
+ *
+ * 	@section	Legal Disclaimer
+ * 			All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
+ * 			Corporation. Do not distribute. Do not copy.
  */
 /************************************************************************************************************************************/
 import UIKit
 
 
-class ANoteTableView : UICustomTableView {
+class ANoteTableView : UITableView {
+    
+    let verbose : Bool = false;
+
+	var myCustomCells : [UICustomTableViewCell] = [UICustomTableViewCell]();
     
     
     /********************************************************************************************************************************/
-    /** @fcn        init(frame: CGRect, style: UITableViewStyle, yOffs : CGFloat)
-     *  @brief      init table with items contents
-     *  @details    table sized to items.count & populated with items values
-     *
-     *  @param      [in] (CGRect) frame - view frame for insertion
-     *  @param      [in] (UITableViewStyle) style - style to apply to table
-     *  @param      [in] (CGFloat) yOffs - starting y address of table on main screen
-     *
-     *  @section    Opens
-     *      x
-     */
+	/**	@fcn		init(frame: CGRect, style: UITableViewStyle)
+	 *  @brief		x
+	 *  @details	x
+	 */
+	/********************************************************************************************************************************/
+	override init(frame: CGRect, style: UITableViewStyle) {
+        super.init(frame:frame, style:style);
+        
+        for i in 0...5 {
+            let cell : UICustomTableViewCell = UICustomTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "nbd");
+            
+            cell.textLabel?.text = "Table Row \(i)";
+            
+            myCustomCells.append(cell);
+        }
+        
+        //Configure scrolling & selection
+        self.allowsSelection = false;
+        self.isScrollEnabled = true;
+        
+        register(UICustomTableViewCell.self, forCellReuseIdentifier: "cell");               /* I have no idea why we do this        */
+        
+        translatesAutoresizingMaskIntoConstraints = false;                                  /* Std                                  */
+        
+        if(verbose){ print("CustomTableView.init():             the CustomTableView was initialized"); }
+
+        return;
+    }
+    
+    
     /********************************************************************************************************************************/
-    init(frame: CGRect, style: UITableViewStyle, yOffs : CGFloat) {
+	/**	@fcn		addNewCell(_ cellString : String)
+	 *  @brief		x
+	 *  @details	x
+     *
+	 *  @param		[in] (String) cellString - text to display in cell
+     *
+	 */
+	/********************************************************************************************************************************/
+	func addNewCell(_ cellString : String) {
+            
+        let newCell : UICustomTableViewCell = UICustomTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "eww?");
         
-        print("ANoteTableView.init():              currently configured to UITableViewCell usage");
+        myCustomCells.append(newCell);
+        
+        reloadData();
+        
+        if(verbose){ print("CustomTableView.addCell():          a new cell was added"); }
 
-        //Calc frame
-        let tFrame = CGRect(x: frame.origin.x,
-                              y: frame.origin.y,
-                              width:  UIScreen.main.bounds.width,
-                              height: (UIScreen.main.bounds.height - yOffs - lower_bar_height));
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+	/**	@fcn		removeCell(_ index : Int)
+	 *  @brief		x
+	 *  @details	x
+	 */
+	/********************************************************************************************************************************/
+	func removeCell(_ index : Int) {
         
-        /****************************************************************************************************************************/
-        /*                                                  UITableView                                                             */
-        /****************************************************************************************************************************/
-        super.init(frame: tFrame, style: style);
-        register(ANoteTableViewCell.self, forCellReuseIdentifier: "cell");
-        translatesAutoresizingMaskIntoConstraints = false;
+        myCustomCells.remove(at: index);
         
-        //Set background color
-        self.backgroundColor = tableBakColor;
+        reloadData();
         
-        //Set the row height
-        rowHeight = (rowHeight);
+        sizeToFit();
         
-        //Allow for selection
-        allowsSelection = true;
+        //turn mode off (just cause, for demo's sake)
+        setEditing(false, animated: true);
 
-        
-        /****************************************************************************************************************************/
-        /*                                              aNote cell-styles                                                           */
-        /****************************************************************************************************************************/
-        separatorColor = tableSepColor;
-        separatorStyle = .singleLine;
-        separatorInset = UIEdgeInsetsMake(0, 43, 0, 0);
-        
-        //Disable the empty cell borders
-        self.tableFooterView = UIView();
-
-        //Exit
-        if(verbose){print("ANoteTableView.init():              initialized"); }
+        print("CustomTableView.removeCell():        cell removed");
         
         return;
     }
     
     
     /********************************************************************************************************************************/
+	/**	@fcn		getCell(_ index: Int) -> UICustomTableViewCell
+	 *  @brief		x
+	 *  @details	x
+	 */
+	/********************************************************************************************************************************/
+	func getCell(_ index: Int) -> UICustomTableViewCell {
+    
+        let cell : UICustomTableViewCell = myCustomCells[index];
+
+        return cell;
+    }
+    
+    
+    /********************************************************************************************************************************/
+	/**	@fcn		getCellCount() -> Int
+	 *  @brief		x
+	 *  @details	x
+	 */
+	/********************************************************************************************************************************/
+	func getCellCount() -> Int {
+        return myCustomCells.count;
+    }
+
+
+    /********************************************************************************************************************************/
     /** @fcn        required init?(coder aDecoder: NSCoder)
      *  @brief      x
+     *  @details    x
      */
     /********************************************************************************************************************************/
-    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    
-    
-    /********************************************************************************************************************************/
-    /** @fcn        func getItems(rows :[ANoteRow]) -> [String]
-     *  @brief      x
-     *
-     *  @param  [in] ([Row]) row - rows for table
-     *
-     *  @return     ([String]) items - items to se in tableview initialization
-     */
-    /********************************************************************************************************************************/
-    func getItems(rows :[ANoteRow]) -> [String]{
-        
-        var  items : [String] = [String]();
-        
-        for r in rows {
-            items.append(r.main!);
-        }
-        
-        return items;
-    }
+	required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 }
 

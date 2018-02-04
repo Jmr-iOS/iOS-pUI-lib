@@ -1,110 +1,248 @@
 /************************************************************************************************************************************/
-/** @file       ANoteTableViewHandler.swift
- *  @brief      x
- *  @details    x
+/** @file		ANoteTableViewHandler.swift
+ *  @project    x
+ * 	@brief		x
+ * 	@details	x
  *
- *  @section    Opens
- *      x
+ * 	@author		Justin Reina, Firmware Engineer, Jaostech
+ *  @created    ?
+ *  @last rev   ?
  *
- *  @section    Legal Disclaimer
- *       All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
- *       Corporation. Do not distribute. Do not copy.
+ * 	@note you need to create a custom handler to ensure the cell's are CREATED and ACCESSED differently in this example code
+ *        differently than the standard table example. It's not that a seperate class is REQUIRED, it's just dramatically cleaner and
+ *        safer for longterm retention!
+ *
+ * 	@section	Opens
+ * 			full review & completion
+ *
+ * 	@section	Legal Disclaimer
+ * 			All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
+ * 			Corporation. Do not distribute. Do not copy.
  */
 /************************************************************************************************************************************/
 import UIKit
 
 
-class ANoteTableViewHandler : UICustomTableViewHandler {
+class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelegate {
+   
+    let verbose : Bool = false;
     
-    var vc         : ViewController!;
-    var mainView   : UIView!;
-    var aNoteTable : ANoteTableView!;
+    //Vars
+	var table     : ANoteTableView!;                            /* table for handler to control                                     */
+    var rowHeight : CGFloat;                                    /* uniform height for all rows                                      */
 
+    
+    /********************************************************************************************************************************/
+    /** @fcn        init(table : UICustomTableView)
+     *  @brief      x
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    init(table : ANoteTableView) {
 
-    /********************************************************************************************************************************/
-    /* @fcn       init()                                                                                                            */
-    /* @details                                                                                                                     */
-    /********************************************************************************************************************************/
-    init(vc : ViewController, mainView : UIView, ANoteTable : ANoteTableView) {
+        //Store
+        self.table = table;
         
-        super.init(table: ANoteTable);
+        //Init
+        self.rowHeight = 50;                                    /* std. val                                                         */
+        //Super
+        super.init();
         
-        self.rowHeight = cellHeight;
-        self.vc = vc;
-        self.mainView = mainView;
-        self.aNoteTable = ANoteTable;
-        print("1");
-        if(verbose){ print("ANoteTableViewHandler.init():       initialized"); }
-        
+        if(verbose){ print("CustomTableViewHandler.init():      the CustomTableViewHandler was initialized"); }
+
         return;
     }
-    
-    
-    /********************************************************************************************************************************/
-    /* @fcn       tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int                                      */
-    /* @details   get how many rows in specified section                                                                            */
-    /********************************************************************************************************************************/
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        if(verbose){ print("ANoteTableViewHandler.tableView():  The table will now have \(self.vc.rows.count), cause I just said so..."); }
-        print("2");
-        return self.vc.rows.count;
+    
+/************************************************************************************************************************************/
+/*                                  UITableViewDataSource, UITableViewDelegate Interfaces                                        	*/
+/************************************************************************************************************************************/
+
+
+    /********************************************************************************************************************************/
+	/**	@fcn		tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+	 *  @brief		x
+	 *  @details	x
+	 */
+	/********************************************************************************************************************************/
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        if(verbose){ print("Handler.tableView():                (numberOfRowsInSection) The table will now have \(self.table.getCellCount()), cause I just said so..."); }
+        
+        return table.getCellCount();                                            /* return how many rows you want printed....!       */
     }
-
+    
     
     /********************************************************************************************************************************/
-    /* @fcn       tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> ANoteTableViewCell             */
-    /* @details   add a cell to the table                                                                                           */
+    /** @fcn        tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+     *  @brief      set row height of each row in table
+     *  @details    x
+     */
     /********************************************************************************************************************************/
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        let  cellId  :String = "Cell"+String(indexPath.row);
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        var cell : ANoteTableViewCell? = tableView.dequeueReusableCell(withIdentifier: cellId) as! ANoteTableViewCell?;
+        let height : CGFloat = rowHeight;
         
-        if (cell == nil){
-            cell = ANoteTableViewCell(vc: self.vc, mainView: self.mainView, style: .default, reuseIdentifier: cellId);
+        let isSecondRow = (indexPath.item == 2);
+        
+        if(isSecondRow) {
+            //cellHeight = 75;                                          /* make smaller for visible example if wanted               */
         }
-
-        cell?.initialize(indexPath, aNoteTable: aNoteTable);
-
-        print("3: \(cell!.getTitle())");
-
-        return cell! as UITableViewCell;
+        
+        return height;
     }
-
 
     
     /********************************************************************************************************************************/
-    /* @fcn       tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)                                 */
-    /* @details   handle cell tap                                                                                                   */
+	/**	@fcn		tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+	 *  @brief		x
+	 *  @details	x
+	 */
+	/********************************************************************************************************************************/
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+        let cell : UICustomTableViewCell = table.myCustomCells[(indexPath as NSIndexPath).item];
+        
+        return cell;
+    }
+    
+    
     /********************************************************************************************************************************/
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+	/**	@fcn		tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+	 *  @brief		x
+	 *  @details	x
+	 */
+	/********************************************************************************************************************************/
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+       
+        if(true){ print("CustomTableViewHandler.tableView(): handling a cell tap of \((indexPath as NSIndexPath).item)"); }
+
+        //CUSTOM
+        table.deselectRow(at: indexPath, animated:true);
         
-        tableView.deselectRow(at: indexPath, animated:true);
+        //eww... the traditional access method...
+        //let currCell : UICustomTableViewCell = customTable.dequeueReusableCellWithIdentifier("cell") as! UICustomTableViewCell;
         
-        let cell : ANoteTableViewCell = self.getCell(indexPath);
+        let cell : UICustomTableViewCell = table.getCell((indexPath as NSIndexPath).item);
+        
+        print("Handler.tableView():                (didSelectRowAt) We have cell '\((cell.textLabel?.text)!)...'");
 
-        if(verbose){ print("ANoteTableViewHandler.tableView():  handling a cell tap of \(cell.tableIndex!)"); }
-
-        //Launch the SubView
-        cell.launchSubView();
-
-        print("4");
+        /****************************************************************************************************************************/
+        /* scroll to the top or change the bar color                                                                                */
+        /****************************************************************************************************************************/
+        switch((indexPath as NSIndexPath).row) {
+        case (0):
+            print("Handler.tableView():                (didSelectRowAt) top selected. Scrolling to the bottom");
+            table.scrollToRow(at: IndexPath(row: self.table.getCellCount()-1, section: 0), at: UITableViewScrollPosition.bottom, animated: true);
+            break;
+        case (1):
+            table.addNewCell("Woot Woot!");
+            print("Handler.tableView():                (didSelectRowAt) added a cell?");
+            break;
+        case (2):
+            table.setEditing(true, animated: true);
+            print("Handler.tableView():                (didSelectRowAt) editing is enabled");
+            break;
+        case (table.getCellCount()-4):
+            print("Handler.tableView():                (didSelectRowAt) swapped the seperator color to blue");
+            table.separatorColor = UIColor.blue;
+            break;
+        case (table.getCellCount()-3):
+            print("Handler.tableView():                (didSelectRowAt) scrolling to the top with a Rect and fade");
+            table.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:true);           //slow scroll to top
+            break;
+        case (table.getCellCount()-2):
+            print("Handler.tableView():                (didSelectRowAt) scrolling to the top with a Rect and no fade");
+            table.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:false);          //immediate scroll to top
+            break;
+        case (table.getCellCount()-1):
+            print("Handler.tableView():                (didSelectRowAt) scrolling to the top with scrollToRowAtIndexPath");
+            table.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true);
+            break;
+        default:
+            print("Handler.tableView():                (didSelectRowAt) I didn't program a reaction for this case. I was lazy...");
+            break;
+        }
+        
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+	/**	@fcn		tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool
+	 *  @brief		x
+	 *  @details	x
+	 *
+	 *  @section	Source
+	 *		http://stackoverflow.com/questions/24103069/swift-add-swipe-to-delete-tableviewcell
+	 */
+	/********************************************************************************************************************************/
+	func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true;
+    }
+    
+    
+    /********************************************************************************************************************************/
+	/**	@fcn		tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
+	 *  @brief		x
+	 *  @details	x
+	 */
+	/********************************************************************************************************************************/
+	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if(table.myCustomCells.count > 0) {
+            table.removeCell((indexPath as NSIndexPath).item);                      /* handle delete (by removing the data from     */
+        }                                                                           /* your array and updating the tableview)       */
         
         return;
     }
 
-
+    
+/************************************************************************************************************************************/
+/*                                                        Helpers                                                                   */
+/************************************************************************************************************************************/
+    
     /********************************************************************************************************************************/
-    /* @fcn       getCell(indexPath: NSIndexPath) -> aNoteTableViewCell                                                             */
-    /* @details   acquire a cell from the table                                                                                     */
-    /********************************************************************************************************************************/
-    func getCell(_ indexPath: IndexPath) -> ANoteTableViewCell {
-        
-        if(verbose){ print("ANoteTableViewHandler.getCell():    returning cell \(indexPath.item)"); }
-        
-        return aNoteTable.cellForRow(at: indexPath) as! ANoteTableViewCell!;
+	/**	@fcn		getCharName(_ i : Int) -> String
+	 *  @brief		x
+	 *  @details	x
+	 */
+	/********************************************************************************************************************************/
+	func getCharName(_ i : Int) -> String {
+        return String(describing: UnicodeScalar(i + Int(("A" as UnicodeScalar).value)));
     }
+    
+    
+    /********************************************************************************************************************************/
+	/**	@fcn		getRowLabel(_ charName : String, index: Int) -> String
+	 *  @brief		x
+	 *  @details	x
+	 */
+	/********************************************************************************************************************************/
+	func getRowLabel(_ charName : String, index: Int) -> String {
+        return String(format: "Item '%@' (%d)", charName, index);
+    }
+    
+    
+    /********************************************************************************************************************************/
+	/**	@fcn		addNewRow()
+	 *  @brief		x
+	 *  @details	x
+	 */
+	/********************************************************************************************************************************/
+	func addNewRow() {
+        
+        let charName : String = getCharName(self.table.getCellCount());
+        
+        let newLabel : String = getRowLabel(charName, index: table.getCellCount());
+  
+        table.addNewCell(newLabel);
+        
+        table.reloadData();
+        
+        print("Handler.tableView():                new row was added '\(newLabel)'");
+        
+        return;
+    }
+    
 }
-
