@@ -48,7 +48,7 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     
     //Config
     let cell_fontName : String = cellFont;
-    let myVerbose : Bool = true;                            /* unknown class collisions mitigation                                  */
+    let myVerbose     : Bool = true;                        /* unknown class collisions mitigation                                  */
 
 
     /********************************************************************************************************************************/
@@ -220,7 +220,15 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         return;
     }
 
+    
+    //@todo     header
+    //@todo     implement uniformly, cleanly
+    func getTitle() -> String {
+        print("I am Bob");
+        return getRowValue().main!;
+    }
 
+    
     /********************************************************************************************************************************/
     /** @fcn        setDateLabel(_ date : Date?)
      *  @brief      x
@@ -401,6 +409,19 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
     func getRowValue() -> ANoteRow {
         return vc.rows[tableIndex];
     }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        storeRowValue(_ row : ANoteRow)
+     *  @brief      set cell contents
+     *  @details    x
+     *
+     *  @return     (ANoteRow) row contents for cell
+     */
+    /********************************************************************************************************************************/
+    func storeRowValue(_ row : ANoteRow) {
+        return vc.rows[tableIndex] = row;
+    }
 
     
     /********************************************************************************************************************************/
@@ -578,6 +599,22 @@ class ANoteTableViewCell: UICustomTableViewCell, UICheckBoxDelegate {
         if(myVerbose) { print("ANoteTableViewCell.updateDate():    date was updated to '\(respStr)'"); }
         
         return;
+    }
+
+//**********************************************************************************************************************************//
+//                                                         CELL INFO UPDATE                                                         //
+//**********************************************************************************************************************************//
+    
+    //@todo     header
+    func updateTitle(_ title : String) {
+        
+        var x : ANoteRow = getRowValue();
+        
+        x.main = title;
+        
+        storeRowValue(x);
+        
+        print("todo: \(title)");
     }
 }
 

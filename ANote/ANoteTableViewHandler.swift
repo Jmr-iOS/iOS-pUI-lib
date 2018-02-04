@@ -33,7 +33,7 @@ class ANoteTableViewHandler : UICustomTableViewHandler {
         self.vc = vc;
         self.mainView = mainView;
         self.aNoteTable = ANoteTable;
-        
+        print("1");
         if(verbose){ print("ANoteTableViewHandler.init():       initialized"); }
         
         return;
@@ -47,7 +47,7 @@ class ANoteTableViewHandler : UICustomTableViewHandler {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         if(verbose){ print("ANoteTableViewHandler.tableView():  The table will now have \(self.vc.rows.count), cause I just said so..."); }
-
+        print("2");
         return self.vc.rows.count;
     }
 
@@ -67,7 +67,9 @@ class ANoteTableViewHandler : UICustomTableViewHandler {
         }
 
         cell?.initialize(indexPath, aNoteTable: aNoteTable);
-        
+
+        print("3: \(cell!.getTitle())");
+
         return cell! as UITableViewCell;
     }
 
@@ -88,6 +90,8 @@ class ANoteTableViewHandler : UICustomTableViewHandler {
         //Launch the SubView
         cell.launchSubView();
 
+        print("4");
+        
         return;
     }
 

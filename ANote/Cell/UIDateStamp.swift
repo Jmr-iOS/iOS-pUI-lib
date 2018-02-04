@@ -85,9 +85,6 @@ class UIDateStamp : UIView {
         var img : UIImage?;
         var wS, hI : CGFloat;
         
-        //Init vars
-
-        
         //Select image
         switch(tempSel) {
             case 0:

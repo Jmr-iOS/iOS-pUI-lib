@@ -632,7 +632,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     @objc func backPress(_ sender: UIButton!) {
         
-        if(verbose) { print("CellSubview.backPress():  back was pressed, dismissing view"); }
+        if(verbose) { print("CellSubview.backPress():            back was pressed, dismissing view"); }
 
         //Move Frame offscreen
         self.frame = getCSFrame(onscreen: false);
@@ -737,10 +737,15 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     func textFieldShouldReturn(_ textField : UITextField) -> Bool {
         
+        //@todo     handle other fields
+        
+        //Update
+        parentCell.updateTitle(titleField.text!);
+        
         //dismiss
         textField.resignFirstResponder();
-        
-        if(verbose) { print("ViewController.txtFieldShldRtrn():  return key pressed and exiting"); }
+
+        if(verbose) { print("CellSubview.txtFieldShldRtrn():     return key pressed and exiting"); }
         
         return true;                                                        /* normal behavior                                      */
     }
@@ -755,7 +760,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /* @details   dismiss keyboard on completion       (1/2)                                                                        */
     /********************************************************************************************************************************/
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        if(verbose) { print("ViewController.txtViewShldEnd():    return key pressed and signaling exit"); }
+        if(verbose) { print("CellSubview.txtViewShldEnd():       return key pressed and signaling exit"); }
         return true;
     }
     
@@ -767,7 +772,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if(text == "\n") {
             mainText.resignFirstResponder();
-            if(verbose) { print("ViewController.textView(SCT):       return key pressed and exiting"); }
+            if(verbose) { print("CellSubview.textView(SCT):          return key pressed and exiting"); }
             return false;
         }
 
