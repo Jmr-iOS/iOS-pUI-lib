@@ -258,10 +258,10 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         addSubview(dateStamp);
         addSubview(divider);
         addSubview(mainText);
-        addDevToolbar(parentCell.vc.view);
+//???   addDevToolbar(parentCell.vc.view);
         
         
-        if(verbose) { print("CellSubview.init():                 my cell #\(parentCell.getNumber()) subview init"); }
+//!!!   if(verbose) { print("CellSubview.init():                 my cell #\(parentCell.getNumber()) subview init"); }
  
         return;
     }
@@ -408,9 +408,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     @objc func tapResponse(i : Int) {
 
-        let ts = ANoteTimeSelect(parentCell.vc, parentCell, Date());
-        
-        ts.show(parentCell.vc);
+//!!!   let ts = ANoteTimeSelect(parentCell.vc, parentCell, Date());
+       
+//!!!   ts.show(parentCell.vc);
         
         return;
     }
@@ -557,12 +557,12 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     @objc func dateLabelPress(_ gestureRecognizer: UITapGestureRecognizer) {
         
-        let vc = parentCell.vc!;
-        let date = Date();
+//!!!   let vc = parentCell.vc!;
+//!!!   let date = Date();
         
         //(temp for disp)
-        let ts = ANoteTimeSelect(vc, parentCell, date);
-        ts.show(vc);
+//!!!   let ts = ANoteTimeSelect(vc, parentCell, date);
+//!!!   ts.show(vc);
         
         if(verbose) { print("CellSubview.dateLblPr():            date was pressed"); }
         
@@ -679,10 +679,10 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     @objc func clipPress(_ sender: UIButton!) {
         
         //Init view
-        let p = ANoteTimeSelect(parentCell.vc, parentCell, parentCell.date);
-        
+//!!!   let p = ANoteTimeSelect(parentCell.vc, parentCell, parentCell.date);
+
         //Grab new time
-        p.show(parentCell.vc);
+//!!!   p.show(parentCell.vc);
 
         if(verbose) { print("CellSubview.clipPress():    clip was pressed"); }
 
@@ -740,7 +740,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //@todo     handle other fields
         
         //Update
-        parentCell.updateTitle(titleField.text!);
+//!!!   parentCell.updateTitle(titleField.text!);
         
         //dismiss
         textField.resignFirstResponder();
