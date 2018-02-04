@@ -101,7 +101,7 @@ class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelega
 	/********************************************************************************************************************************/
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let cell : UICustomTableViewCell = table.myCustomCells[(indexPath as NSIndexPath).item];
+        let cell : ANoteTableViewCell = table.myCustomCells[(indexPath as NSIndexPath).item];
         
         return cell;
     }
@@ -123,8 +123,8 @@ class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelega
         //eww... the traditional access method...
         //let currCell : UICustomTableViewCell = customTable.dequeueReusableCellWithIdentifier("cell") as! UICustomTableViewCell;
         
-        let cell : UICustomTableViewCell = table.getCell((indexPath as NSIndexPath).item);
-        
+        let cell : ANoteTableViewCell = table.getCell((indexPath as NSIndexPath).item) as! ANoteTableViewCell;
+
         print("Handler.tableView():                (didSelectRowAt) We have cell '\((cell.textLabel?.text)!)...'");
 
         /****************************************************************************************************************************/

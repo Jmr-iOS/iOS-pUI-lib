@@ -29,21 +29,32 @@ class ANoteTableView : UITableView {
     
     let verbose : Bool = false;
 
-	var myCustomCells : [UICustomTableViewCell] = [UICustomTableViewCell]();
+    var vc : ViewController;
+    
+    var myCustomCells : [ANoteTableViewCell];
     
     
     /********************************************************************************************************************************/
-	/**	@fcn		init(frame: CGRect, style: UITableViewStyle)
+	/**	@fcn		init(vc: ViewController, frame: CGRect, style: UITableViewStyle)
 	 *  @brief		x
 	 *  @details	x
 	 */
 	/********************************************************************************************************************************/
-	override init(frame: CGRect, style: UITableViewStyle) {
+    init(vc: ViewController, frame: CGRect, style: UITableViewStyle) {
+
+        //Init
+        self.vc = vc;
+        self.myCustomCells = [ANoteTableViewCell]();
+        
+        //Super
         super.init(frame:frame, style:style);
         
+        //Load
         for i in 0...5 {
-            let cell : UICustomTableViewCell = UICustomTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "nbd");
-            
+            let cell : ANoteTableViewCell = ANoteTableViewCell(vc: self.vc,
+                                                               mainView: vc.view,
+                                                               style: UITableViewCellStyle.default,
+                                                               reuseIdentifier: "nbd");
             cell.textLabel?.text = "Table Row \(i)";
             
             myCustomCells.append(cell);
@@ -74,7 +85,10 @@ class ANoteTableView : UITableView {
 	/********************************************************************************************************************************/
 	func addNewCell(_ cellString : String) {
             
-        let newCell : UICustomTableViewCell = UICustomTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "eww?");
+        let newCell : ANoteTableViewCell = ANoteTableViewCell(vc: self.vc,
+                                                              mainView: self.vc.view,
+                                                              style: UITableViewCellStyle.default,
+                                                              reuseIdentifier: "eww?");
         
         myCustomCells.append(newCell);
         
@@ -104,6 +118,35 @@ class ANoteTableView : UITableView {
         setEditing(false, animated: true);
 
         print("CustomTableView.removeCell():        cell removed");
+        
+        return;
+    }
+    
+    
+
+    /********************************************************************************************************************************/
+    /** @fcn        refreshTable()
+     *  @brief      refresh table contents for display
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func refreshTable() {
+        
+        let n = getCellCount();
+        
+        print("n: \(n)");
+
+        for i in 0...(n-1) {
+            print("[\(i)]");
+        }
+        
+        //refresh table
+        self.reloadRows(at: [IndexPath(row:0, section:0)], with: .none);
+        self.reloadRows(at: [IndexPath(row:1, section:0)], with: .none);
+        self.reloadRows(at: [IndexPath(row:2, section:0)], with: .none);
+        self.reloadRows(at: [IndexPath(row:3, section:0)], with: .none);
+        
+        self.reloadData();
         
         return;
     }
