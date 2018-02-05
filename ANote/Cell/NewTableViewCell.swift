@@ -88,11 +88,14 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
 
         //Dev setup
         setName("R\(index)");
+        dbgLabel.textColor = UIColor.orange;
         verbose = false;                                                        /* set cell verbose prints                          */
 
         //Add to view
         self.addSubview(dbgLabel);
         
+        //Dev-debug
+        self.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: cellHeight);
         
         if(verbose){ print("NewTableViewCell.init():            cell initialized"); }
         
@@ -107,14 +110,17 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
     /********************************************************************************************************************************/
     func initialize() {
         
+        //@pre  safety
         if(isComplete) {
             fatalError("cell was initialized but initialize() called again, aborting");
         }
         
-        
-        self.cellSubView = ANoteCellSubview(mainView: self.mainView, parentCell: self);
-        
-//!     self.mainView.addSubview(self.cellSubView);
+        //Update height (oops)
+        self.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: cellHeight);
+  
+        //Gen subview
+        cellSubView = ANoteCellSubview(mainView: self.mainView, parentCell: self);
+        mainView.addSubview(self.cellSubView);
         
         //Get Current Cell's Info
         let currRow = getRowValue();
@@ -198,8 +204,8 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         bellIcon.image = UIImage(named:"bell");
         
         //add it
-//!     self.addSubview(bottField);
-//!     self.addSubview(bellIcon);
+        self.addSubview(bottField);
+        self.addSubview(bellIcon);
         
         
         /****************************************************************************************************************************/
@@ -226,7 +232,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         
         //Add it to view
         timeView.addSubview(timeLabel);
-//!     addSubview(timeView);
+        addSubview(timeView);
    
         //Mark completion
         isComplete = true;                                                      /* mark completion                                  */

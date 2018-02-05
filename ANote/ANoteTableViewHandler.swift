@@ -44,7 +44,8 @@ class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelega
         self.table = table;
         
         //Init
-        self.rowHeight = 50;                                    /* std. val                                                         */
+        self.rowHeight = cellHeight;                            /* std. val                                                         */
+        
         //Super
         super.init();
 
