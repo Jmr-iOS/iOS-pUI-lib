@@ -31,7 +31,7 @@ class ANoteTableView : UITableView {
 
     var vc : ViewController;
     
-    var myCustomCells : [ANoteTableViewCell];
+    var myCustomCells : [NewTableViewCell];
     
     
     /********************************************************************************************************************************/
@@ -44,17 +44,17 @@ class ANoteTableView : UITableView {
 
         //Init
         self.vc = vc;
-        self.myCustomCells = [ANoteTableViewCell]();
+        self.myCustomCells = [NewTableViewCell]();
         
         //Super
         super.init(frame:frame, style:style);
         
         //Load
         for i in 0...(numRows-1) {
-            let cell : ANoteTableViewCell = ANoteTableViewCell(vc: self.vc,
-                                                               mainView: vc.view,
-                                                               style: UITableViewCellStyle.default,
-                                                               reuseIdentifier: "nbd");
+            let cell : NewTableViewCell = NewTableViewCell(vc: self.vc,
+                                                           mainView: vc.view,
+                                                           style: UITableViewCellStyle.default,
+                                                           reuseIdentifier: "nbd");
             cell.textLabel?.text = "Table Row \(i)";
             
             myCustomCells.append(cell);
@@ -85,10 +85,10 @@ class ANoteTableView : UITableView {
 	/********************************************************************************************************************************/
 	func addNewCell(_ cellString : String) {
             
-        let newCell : ANoteTableViewCell = ANoteTableViewCell(vc: self.vc,
-                                                              mainView: self.vc.view,
-                                                              style: UITableViewCellStyle.default,
-                                                              reuseIdentifier: "eww?");
+        let newCell : NewTableViewCell = NewTableViewCell(vc: self.vc,
+                                                          mainView: self.vc.view,
+                                                          style: UITableViewCellStyle.default,
+                                                          reuseIdentifier: "eww?");
         
         myCustomCells.append(newCell);
         

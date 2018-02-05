@@ -1,5 +1,5 @@
 /************************************************************************************************************************************/
-/** @file       ANoteTableViewCell.swift
+/** @file       ANoteTableViewCell_depr.swift
  *  @brief      x
  *  @details    x
  *
@@ -17,7 +17,7 @@
 import UIKit
 
 
-class ANoteTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
+class ANoteTableViewCell_depr : UICustomTableViewCell, UICheckBoxDelegate {
     
     //Parent
     var vc : ViewController!;
