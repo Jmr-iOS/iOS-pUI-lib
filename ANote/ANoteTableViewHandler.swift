@@ -47,8 +47,8 @@ class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelega
         self.rowHeight = 50;                                    /* std. val                                                         */
         //Super
         super.init();
-        
-        if(verbose){ print("CustomTableViewHandler.init():      the CustomTableViewHandler was initialized"); }
+
+        if(verbose){ print("ANoteTableViewHandler.init():       the CustomTableViewHandler was initialized"); }
 
         return;
     }
@@ -101,7 +101,7 @@ class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelega
 	/********************************************************************************************************************************/
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        let cell : NewTableViewCell = table.myCustomCells[(indexPath as NSIndexPath).item];
+        let cell : NewTableViewCell = table.myCustomCells2[(indexPath as NSIndexPath).item];
         
         return cell;
     }
@@ -115,7 +115,7 @@ class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelega
 	/********************************************************************************************************************************/
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
-        if(true){ print("CustomTableViewHandler.tableView(): handling a cell tap of \((indexPath as NSIndexPath).item)"); }
+        if(true){ print("ANoteTableViewHandler.tableView():     handling a cell tap of \((indexPath as NSIndexPath).item)"); }
 
         //CUSTOM
         table.deselectRow(at: indexPath, animated:true);
@@ -123,7 +123,7 @@ class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelega
         //eww... the traditional access method...
         //let currCell : UICustomTableViewCell = customTable.dequeueReusableCellWithIdentifier("cell") as! UICustomTableViewCell;
         
-        let cell : NewTableViewCell = table.getCell((indexPath as NSIndexPath).item) as! NewTableViewCell;
+        let cell : NewTableViewCell = table.getCell(indexPath.item);
 
         print("Handler.tableView():                (didSelectRowAt) We have cell '\((cell.textLabel?.text)!)...'");
 
@@ -189,8 +189,8 @@ class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelega
 	/********************************************************************************************************************************/
 	func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
-        if(table.myCustomCells.count > 0) {
-            table.removeCell((indexPath as NSIndexPath).item);                      /* handle delete (by removing the data from     */
+        if(table.myCustomCells2.count > 0) {
+            table.removeCell(indexPath.item);                                       /* handle delete (by removing the data from     */
         }                                                                           /* your array and updating the tableview)       */
         
         return;

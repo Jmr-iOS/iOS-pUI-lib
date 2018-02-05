@@ -24,24 +24,28 @@ class ANoteTableView : UICustomTableView {
     var vc : ViewController;
     
     //UI
-    var myCustomCells : [NewTableViewCell];
+    var myCustomCells2 : [NewTableViewCell];
 
     /********************************************************************************************************************************/
-    /** @fcn        init(frame: CGRect, style: UITableViewStyle, yOffs : CGFloat)
+    /** @fcn        init(frame: CGRect, style: UITableViewStyle, vc: ViewController, yOffs : CGFloat)
      *  @brief      init table with items contents
      *  @details    table sized to items.count & populated with items values
      *
      *  @param      [in] (CGRect) frame - view frame for insertion
      *  @param      [in] (UITableViewStyle) style - style to apply to table
+     *  @param      [in] (ViewController) vc - root view controller
      *  @param      [in] (CGFloat) yOffs - starting y address of table on main screen
      *
      *  @section    Opens
      *      x
      */
     /********************************************************************************************************************************/
-    init(frame: CGRect, style: UITableViewStyle, yOffs : CGFloat) {
+    init(frame: CGRect, style: UITableViewStyle, vc: ViewController, yOffs : CGFloat) {
         
-        print("ANoteTableView.init():              currently configured to UITableViewCell usage");
+        self.vc = vc;                                               /* not sure on use                                              */
+        
+        //Init Cells
+        myCustomCells2 = [NewTableViewCell]();
         
         //Calc frame
         let tFrame = CGRect(x: frame.origin.x,
@@ -49,13 +53,20 @@ class ANoteTableView : UICustomTableView {
                             width:  UIScreen.main.bounds.width,
                             height: (UIScreen.main.bounds.height - yOffs - lower_bar_height));
         
-        
+        print("ANoteTableView.init():              currently configured to UITableViewCell usage");
+
         /****************************************************************************************************************************/
         /*                                                  UITableView                                                             */
         /****************************************************************************************************************************/
         super.init(frame: tFrame, style: style);
         register(NewTableViewCell.self, forCellReuseIdentifier: "cell");
         translatesAutoresizingMaskIntoConstraints = false;
+
+        //Load cells
+        for i in 0...(numRows-1) {
+            let cell = NewTableViewCell(vc:vc, aNoteTable:self, index:i, style: UITableViewCellStyle.default, reuseIdentifier: "cell");
+            myCustomCells2.append(cell);
+        }
         
         //Set background color
         self.backgroundColor = tableBakColor;
@@ -83,6 +94,87 @@ class ANoteTableView : UICustomTableView {
         return;
     }
     
+    
+    /********************************************************************************************************************************/
+    /** @fcn        getCellCount() -> Int
+     *  @brief      x
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    override func getCellCount() -> Int {
+        return myCustomCells2.count;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        getCell(_ index: Int) -> NewTableViewCell
+     *  @brief      x
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    override func getCell(_ index: Int) -> NewTableViewCell {
+        
+        let cell : NewTableViewCell = myCustomCells2[index];
+        
+        return cell;
+    }
+
+    /********************************************************************************************************************************/
+    /** @fcn        refreshTable()
+     *  @brief      refresh table contents for display
+     *  @details    x
+     *
+     *  @section    Opens
+     *      port to library
+     */
+    /********************************************************************************************************************************/
+    func refreshTable() {
+        
+        let vc = self.vc;
+        let rows = vc.rows;
+        let table = vc.aNoteTable;
+        
+        
+        print("n: \(numRows)");
+        
+        for i in 0...(numRows-1) {
+            let cell = rows[i];
+            print("[\(i)]: '\(cell.main!)', '\(table!.myCustomCells[i].textLabel!.text!)'");
+        }
+        
+        //refresh table
+        self.reloadRows(at: [IndexPath(row:0, section:0)], with: .none);
+        self.reloadRows(at: [IndexPath(row:1, section:0)], with: .none);
+        self.reloadRows(at: [IndexPath(row:2, section:0)], with: .none);
+        self.reloadRows(at: [IndexPath(row:3, section:0)], with: .none);
+        
+        self.reloadData();
+        
+        return;
+    }
+
+
+    /********************************************************************************************************************************/
+    /** @fcn    updateCellTitles()
+     *  @brief  dev tool to update all titles to display row contents
+     */
+    /********************************************************************************************************************************/
+    func updateCellTitles() {
+        
+        let n = self.vc.rows.count;
+        
+        for i in 0...(n-1) {
+            
+            let name = vc.rows[i].main;
+            
+            myCustomCells2[i].setName(name!);
+            
+            print("-->\(name!)");
+        }
+        
+        print("done");
+    }
+
     
     /********************************************************************************************************************************/
     /** @fcn        required init?(coder aDecoder: NSCoder)

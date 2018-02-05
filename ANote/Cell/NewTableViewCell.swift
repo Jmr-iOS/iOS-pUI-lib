@@ -85,7 +85,7 @@ class NewTableViewCell : UICustomTableViewCell {
 
         //Configure
         setName("R\(index)");
-        verbose = true;                                                         /* make cell verbose prints                         */
+        verbose = false;                                                        /* set cell verbose prints                          */
         initialize();                                                           /* lay the cell out (move pre super()?              */
         
         //Add to view
@@ -234,8 +234,8 @@ class NewTableViewCell : UICustomTableViewCell {
         //Mark completion
         isComplete = true;                                                      /* mark completion                                  */
         
-        print("something: was completed.");
-        
+        if(verbose) { print("ANoteTableViewCell.initialize():    layout complete"); }
+
         return;
     }
     

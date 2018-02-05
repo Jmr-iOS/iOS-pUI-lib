@@ -258,8 +258,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         addSubview(dateStamp);
         addSubview(divider);
         addSubview(mainText);
-//???   addDevToolbar(parentCell.vc.view);
-        
+//!!!   addDevToolbar(parentCell.vc.view);
         
 //!!!   if(verbose) { print("CellSubview.init():                 my cell #\(parentCell.getNumber()) subview init"); }
  

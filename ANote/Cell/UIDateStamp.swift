@@ -21,8 +21,6 @@
 /************************************************************************************************************************************/
 import UIKit
 
-//@note     global vars
-
 
 class UIDateStamp : UIView {
 
@@ -30,6 +28,9 @@ class UIDateStamp : UIView {
     let dateBox  : UIImageView;
     let img      : UIImage;
     var delegate : UIDateStampDelegate!;
+    
+    //Constants
+    let verbose  : Bool = false;
     
     
     /********************************************************************************************************************************/
