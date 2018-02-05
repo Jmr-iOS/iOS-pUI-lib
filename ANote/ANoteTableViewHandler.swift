@@ -116,53 +116,17 @@ class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelega
 	/********************************************************************************************************************************/
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        
+        let n = indexPath.item;
+        
         if(true){ print("ANoteTableViewHandler.tableView():     handling a cell tap of \((indexPath as NSIndexPath).item)"); }
 
-        //CUSTOM
+        //Display selection
         table.deselectRow(at: indexPath, animated:true);
-        
-        //eww... the traditional access method...
-        //let currCell : UICustomTableViewCell = customTable.dequeueReusableCellWithIdentifier("cell") as! UICustomTableViewCell;
-        
-        let cell : NewTableViewCell = table.getCell(indexPath.item);
 
-        print("Handler.tableView():                (didSelectRowAt) We have cell '\((cell.textLabel?.text)!)...'");
+        //Launch subview
+        table.getCell(n).launchSubview();
 
-        /****************************************************************************************************************************/
-        /* scroll to the top or change the bar color                                                                                */
-        /****************************************************************************************************************************/
-        switch((indexPath as NSIndexPath).row) {
-        case (0):
-            print("Handler.tableView():                (didSelectRowAt) top selected. Scrolling to the bottom");
-            table.scrollToRow(at: IndexPath(row: self.table.getCellCount()-1, section: 0), at: UITableViewScrollPosition.bottom, animated: true);
-            break;
-        case (1):
-            print("Handler.tableView():                (didSelectRowAt) row[1] was selected");
-            break;
-        case (2):
-            table.setEditing(true, animated: true);
-            print("Handler.tableView():                (didSelectRowAt) editing is enabled");
-            break;
-        case (table.getCellCount()-4):
-            print("Handler.tableView():                (didSelectRowAt) swapped the seperator color to blue");
-            table.separatorColor = UIColor.blue;
-            break;
-        case (table.getCellCount()-3):
-            print("Handler.tableView():                (didSelectRowAt) scrolling to the top with a Rect and fade");
-            table.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:true);           //slow scroll to top
-            break;
-        case (table.getCellCount()-2):
-            print("Handler.tableView():                (didSelectRowAt) scrolling to the top with a Rect and no fade");
-            table.scrollRectToVisible(CGRect(x: 0,y: 0,width: 1,height: 1), animated:false);          //immediate scroll to top
-            break;
-        case (table.getCellCount()-1):
-            print("Handler.tableView():                (didSelectRowAt) scrolling to the top with scrollToRowAtIndexPath");
-            table.scrollToRow(at: IndexPath(row: 0, section: 0), at: UITableViewScrollPosition.top, animated: true);
-            break;
-        default:
-            print("Handler.tableView():                (didSelectRowAt) I didn't program a reaction for this case. I was lazy...");
-            break;
-        }
+        print("Handler.tableView():                (didSelectRowAt) We have cell '\(n)...'");
         
         return;
     }

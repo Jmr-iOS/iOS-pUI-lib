@@ -25,7 +25,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
     var aNoteTable : ANoteTableView;
     
     //Row
-    var cellSubView : ANoteCellSubview!;
+    var cellSubView : ANoteCellSubview?;
     
     //Main UI
     var checkBox     : UICheckbox!;
@@ -117,10 +117,6 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         
         //Update height (oops)
         self.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: cellHeight);
-  
-        //Gen subview
-        cellSubView = ANoteCellSubview(mainView: self.mainView, parentCell: self);
-        mainView.addSubview(self.cellSubView);
         
         //Get Current Cell's Info
         let currRow = getRowValue();
@@ -246,22 +242,30 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
     
     
     /********************************************************************************************************************************/
-    /* @fcn       launchSubView()                                                                                                   */
+    /* @fcn       launchSubview()                                                                                                   */
     /* @details   launch the subview                                                                                                */
     /********************************************************************************************************************************/
-    func launchSubView() {
+    func launchSubview() {
         
-        cellSubView.frame = getCSFrame(onscreen: false);
+        //@pre      Int
+        if(cellSubView == nil) {
+            cellSubView = ANoteCellSubview(mainView: self.mainView, parentCell: self);
+            cellSubView!.frame = getCSFrame(onscreen: false);
+            
+            //Add
+            mainView.addSubview(self.cellSubView!);
+        }
         
         //Slide in View
         UIView.animate(withDuration: launch_dur_s, delay: launch_del_s, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
             if(self.verbose) { print("ANoteTableViewCell.launchSubView(): sliding view in"); }
-            self.cellSubView.alpha = 1.0;
-            self.cellSubView.frame = getCSFrame(onscreen: true);
+            self.cellSubView!.alpha = 1.0;
+            self.cellSubView!.frame = getCSFrame(onscreen: true);
         }, completion: { (finished: Bool) -> Void in
             self.launchCompletion();
             if(self.verbose) { print("ANoteTableViewCell.launchSubView(): sliding view in completion"); }
-            self.cellSubView.frame = getCSFrame(onscreen: true);
+            self.cellSubView!.frame = getCSFrame(onscreen: true);
+            print("-->I am \(self.cellSubView!.frame.height) tall");
         });
         
         mainView.reloadInputViews();
@@ -278,7 +282,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         
         //fade in components
         UIView.animate(withDuration: 0.125, delay: 0.05, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
-            self.cellSubView.setContentsAlpha(1);
+            self.cellSubView!.setContentsAlpha(1);
             if(self.verbose) { print("ANoteTableViewCell.launchCompl():   fade in begin"); }
         }, completion: { (finished: Bool) -> Void in
             if(self.verbose) { print("ANoteTableViewCell.launchCompl():   fade in complete"); }
