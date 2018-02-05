@@ -55,7 +55,7 @@ class ANoteTableView : UITableView {
                                                            mainView: vc.view,
                                                            style: UITableViewCellStyle.default,
                                                            reuseIdentifier: "nbd");
-            cell.textLabel?.text = "Table Row \(i)";
+            cell.setName("Table Row \(i)");
             
             myCustomCells.append(cell);
         }
@@ -110,7 +110,7 @@ class ANoteTableView : UITableView {
             
             let name = vc.rows[i].main;
             
-            myCustomCells[i].textLabel?.text = name;
+            myCustomCells[i].setName(name!);
             
             print("-->\(name!)");
         }
