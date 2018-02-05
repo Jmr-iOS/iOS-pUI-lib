@@ -653,14 +653,10 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     @objc func infoPress(_ sender: UIButton!) {
 
-//<DEV>
-        backButton.isHidden = !backButton.isHidden;
-        //infoButton.isHidden = !infoButton.isHidden;
-        clipButton.isHidden = !clipButton.isHidden;
-        sendButton.isHidden = !sendButton.isHidden;
-        v.isHidden          = !v.isHidden;
-//<DEV>
-
+        var bkgnds = getCellBackgrounds();
+        bkgnd_ind  = ((bkgnd_ind+1)%bkgnds.count);
+        bkgndView.image = UIImage(named: bkgnds[bkgnd_ind]);                /* acquire next background                              */
+        
         if(verbose) { print("CellSubview.infoPress():    info was pressed"); }
 
         return;
