@@ -48,6 +48,7 @@ class NewTableViewCell : UICustomTableViewCell {
     
     //Config
     let cell_fontName : String = cellFont;
+    let numLines_main : Int = 2;                                            /* number of lines to apply to main text                */
     
     
     /********************************************************************************************************************************/
@@ -108,22 +109,22 @@ class NewTableViewCell : UICustomTableViewCell {
             fatalError("cell was initialized but initialize() called again, aborting");
         }
         
-//X     self.tableIndex = indexPath.item;
         
-//!     self.cellSubView = ANoteCellSubview(mainView: self.mainView, parentCell: self);
+        self.cellSubView = ANoteCellSubview(mainView: self.mainView, parentCell: self);
         
 //!     self.mainView.addSubview(self.cellSubView);
         
         //Get Current Cell's Info
-//!     let currRow = getRowValue();
+        let currRow = getRowValue();
         
-//!     if(myVerbose){print("aNoteTableViewCell.initialize():    adding: '\(currRow.main!)'");}
+        if(verbose) { print("aNoteTableViewCell.initialize():    adding: '\(currRow.main!)'"); }
+   
         
         /****************************************************************************************************************************/
         /*                                                      Checkbox                                                            */
         /****************************************************************************************************************************/
-//!     type = (indexPath.row>0) ? .list : .todo;
-        
+        type = (tableIndex>0) ? .list : .todo;
+
 //!     checkBox = UICheckbox(view:       self,
 //!                           parentCell: self,
 //!                           delegate:   self,
@@ -132,31 +133,31 @@ class NewTableViewCell : UICustomTableViewCell {
 //!                           yCoord:     check_yOffs);
         
 //!     self.addSubview(checkBox);
-        
+
         
         /****************************************************************************************************************************/
         /*                                                  Main(Subject) Text                                                      */
         /****************************************************************************************************************************/
-//!     let rChunk_width = UIScreen.main.bounds.width - tv_xOffs - tv_width;
+        let rChunk_width = UIScreen.main.bounds.width - tv_xOffs - tv_width;
         
-//!     let subjFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width - tv_width;
+        let subjFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width - tv_width;
         
-//!     if(myVerbose) { print("ANoteTableViewCell.initialize():    grabbing \(indexPath.item)"); }
+        if(verbose) { print("ANoteTableViewCell.initialize():    grabbing \(tableIndex)"); }
         
-//!     let font : UIFont = UIFont(name: cell_fontName, size: mt_size)!;
+        let font : UIFont = UIFont(name: cell_fontName, size: mt_size)!;
         
-//!     subjectField = UILabel(frame:  CGRect(x:      mt_xOffs,
-//!                                           y:      mt_yOffs,
-//!                                           width:  subjFieldWidth,
-//!                                           height: font.pointSize*CGFloat(self.numLines+1)));
-//!     subjectField.font = font;
-//!     subjectField.text = currRow.main;
-//!     subjectField.textAlignment = NSTextAlignment.left;
-//!     subjectField.textColor = UIColor(red:0.31, green:0.31, blue:0.31, alpha:1.0);               /* #4e4e4e                      */
+        subjectField = UILabel(frame:  CGRect(x:      mt_xOffs,
+                                              y:      mt_yOffs,
+                                              width:  subjFieldWidth,
+                                              height: font.pointSize*CGFloat(numLines_main+1)));
+        subjectField.font = font;
+        subjectField.text = currRow.main;
+        subjectField.textAlignment = NSTextAlignment.left;
+        subjectField.textColor = UIColor(red:0.31, green:0.31, blue:0.31, alpha:1.0);               /* #4e4e4e                      */
         
         //text-wrap
-//!     subjectField.numberOfLines = 0;                                         /* set to 0 for auto-wrap                           */
-//!     subjectField.lineBreakMode = .byWordWrapping;
+        subjectField.numberOfLines = 0;                                         /* set to 0 for auto-wrap                           */
+        subjectField.lineBreakMode = .byWordWrapping;
         
 //!     self.addSubview(subjectField);
         
@@ -164,18 +165,18 @@ class NewTableViewCell : UICustomTableViewCell {
         /****************************************************************************************************************************/
         /*                                                  Description Text                                                        */
         /****************************************************************************************************************************/
-//!     let descrFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
+        let descrFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
         
-//!     descripField = UILabel(frame: CGRect(x: descr_xOffs,
-//!                                          y: descr_yOffs,
-//!                                          width: descrFieldWidth,
-//!                                          height: descr_height));
+        descripField = UILabel(frame: CGRect(x: descr_xOffs,
+                                             y: descr_yOffs,
+                                             width: descrFieldWidth,
+                                             height: descr_height));
         
-//!     descripField.text = currRow.body;
+        descripField.text = currRow.body;
         
-//!     descripField.font = UIFont(name: cell_fontName, size: descr_size);
-//!     descripField.textAlignment = NSTextAlignment.left;
-//!     descripField.textColor = descr_color;
+        descripField.font = UIFont(name: cell_fontName, size: descr_size);
+        descripField.textAlignment = NSTextAlignment.left;
+        descripField.textColor = descr_color;
         
 //!     self.addSubview(descripField);
         
@@ -183,21 +184,21 @@ class NewTableViewCell : UICustomTableViewCell {
         /****************************************************************************************************************************/
         /*                                                      Bott Text                                                           */
         /****************************************************************************************************************************/
-//!     let bottFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
+        let bottFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
         
-//!     bottField = UILabel(frame: CGRect(x:bott_xOffs, y: bott_yOffs, width: bottFieldWidth, height:  bott_height));
+        bottField = UILabel(frame: CGRect(x:bott_xOffs, y: bott_yOffs, width: bottFieldWidth, height:  bott_height));
         
-//!     bottField.text = currRow.getDateString();
+        bottField.text = currRow.getDateString();
         
-//!     bottField.font = UIFont(name: cell_fontName, size: bott_size);
-//!     bottField.textAlignment = NSTextAlignment.left;
-//!     bottField.textColor = bott_color;
+        bottField.font = UIFont(name: cell_fontName, size: bott_size);
+        bottField.textAlignment = NSTextAlignment.left;
+        bottField.textColor = bott_color;
         
         
         //load bell icon
-//!     bellIcon  = UIImageView();
-//!     bellIcon.frame = CGRect(x: bell_xOffs, y: bell_yOffs, width: bell_width, height: bell_height);
-//!     bellIcon.image = UIImage(named:"bell");
+        bellIcon  = UIImageView();
+        bellIcon.frame = CGRect(x: bell_xOffs, y: bell_yOffs, width: bell_width, height: bell_height);
+        bellIcon.image = UIImage(named:"bell");
         
         //add it
 //!     self.addSubview(bottField);
@@ -207,29 +208,30 @@ class NewTableViewCell : UICustomTableViewCell {
         /****************************************************************************************************************************/
         /*                                                      Time Label                                                          */
         /****************************************************************************************************************************/
-//!     timeView = UIView(frame: CGRect(x:      tv_xOffs,
-//!                                     y:      tv_yOffs,
-//!                                     width:  tv_width,
-//!                                     height: tv_height));
+        timeView = UIView(frame: CGRect(x:      tv_xOffs,
+                                        y:      tv_yOffs,
+                                        width:  tv_width,
+                                        height: tv_height));
         
-//!     timeView.layer.cornerRadius = tv_corner;
+        timeView.layer.cornerRadius = tv_corner;
         
         
         //Setup
-//!     timeLabel = UILabel(frame: CGRect(x: tl_xOffs, y: tl_yOffs, width: tl_width, height:  tl_height));
-//!     timeLabel.font  =   UIFont(name: cell_fontName, size: tl_size);
-//!     setTimeLabel(getRowValue().time);
-//!     timeLabel.textColor     = UIColor.white;
-//!     timeLabel.textAlignment = NSTextAlignment.left;
+        timeLabel = UILabel(frame: CGRect(x: tl_xOffs, y: tl_yOffs, width: tl_width, height:  tl_height));
+        timeLabel.font  =   UIFont(name: cell_fontName, size: tl_size);
+        setTimeLabel(getRowValue().time);
+        timeLabel.textColor     = UIColor.white;
+        timeLabel.textAlignment = NSTextAlignment.left;
         
         //Add delegate
-//!     let tap = UITapGestureRecognizer(target: self, action: #selector(timeView_tapResponse));
-//!     timeView.addGestureRecognizer(tap);
+        let tap = UITapGestureRecognizer(target: self, action: #selector(timeView_tapResponse));
+        timeView.addGestureRecognizer(tap);
         
         //Add it to view
-//!     timeView.addSubview(timeLabel);
+        timeView.addSubview(timeLabel);
 //!     addSubview(timeView);
-        
+   
+        //Mark completion
         isComplete = true;                                                      /* mark completion                                  */
         
         print("something: was completed.");
@@ -631,7 +633,7 @@ class NewTableViewCell : UICustomTableViewCell {
     func numberOfLinesInLabel(_ yourString: NSString, labelWidth: CGFloat, labelHeight: CGFloat, font: UIFont) -> Int {
         
         fatalError("not sure why present, aborting");
-        
+/*
         let paragraphStyle = NSMutableParagraphStyle();
         
         paragraphStyle.minimumLineHeight = labelHeight;
@@ -646,6 +648,7 @@ class NewTableViewCell : UICustomTableViewCell {
         let numberOfLines = ceil(Double(stringWidth/constrain.width))
         
         return Int(numberOfLines);
+ */
     }
 
     

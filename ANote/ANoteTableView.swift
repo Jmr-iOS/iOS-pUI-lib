@@ -124,16 +124,14 @@ class ANoteTableView : UITableView {
     /********************************************************************************************************************************/
     func refreshTable() {
         
-        let n = getCellCount();
-        
         let vc = self.vc;
         let rows = vc.rows;
         let table = vc.aNoteTable;
 
 
-        print("n: \(n)");
+        print("n: \(numRows)");
 
-        for i in 0...(n-1) {
+        for i in 0...(numRows-1) {
             let cell = rows[i];
             print("[\(i)]: '\(cell.main!)', '\(table!.myCustomCells[i].textLabel!.text!)'");
         }
