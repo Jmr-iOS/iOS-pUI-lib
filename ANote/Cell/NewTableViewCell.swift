@@ -34,7 +34,7 @@ class NewTableViewCell : UICustomTableViewCell {
         
         super.init(style:style, reuseIdentifier:reuseIdentifier);
 
-        dbgLabel.text = "test";
+        setName("1");
 
         self.addSubview(dbgLabel);
         
@@ -43,7 +43,12 @@ class NewTableViewCell : UICustomTableViewCell {
         return;
     }
    
-    //@todo     debug temp
+    /********************************************************************************************************************************/
+    /** @fcn        setName(_ name: String)
+     *  @brief      set name uniformally for debug
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
     func setName(_ name: String) {
         
         dbgLabel.text = name;
@@ -51,6 +56,7 @@ class NewTableViewCell : UICustomTableViewCell {
         
         return;
     }
+
     
     /********************************************************************************************************************************/
 	/**	@fcn		init?(coder aDecoder: NSCoder)

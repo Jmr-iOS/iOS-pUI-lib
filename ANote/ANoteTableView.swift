@@ -55,7 +55,7 @@ class ANoteTableView : UITableView {
                                                            mainView: vc.view,
                                                            style: UITableViewCellStyle.default,
                                                            reuseIdentifier: "nbd");
-            cell.setName("Table Row \(i)");
+            cell.setName("R\(i)");
             
             myCustomCells.append(cell);
         }
