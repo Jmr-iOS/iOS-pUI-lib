@@ -129,25 +129,20 @@ class ANoteTableView : UICustomTableView {
      */
     /********************************************************************************************************************************/
     func refreshTable() {
-        
-        let vc = self.vc;
-        let rows = vc.rows;
-        let table = vc.aNoteTable;
-        
-        
-        print("n: \(numRows)");
-        
+
+        //Grab
+        let vc    = self.vc;
+        let rows  = vc.rows;
+  
         for i in 0...(numRows-1) {
-            let cell = rows[i];
-            print("[\(i)]: '\(cell.main!)', '\(table!.myCustomCells[i].textLabel!.text!)'");
+            //Reload
+            self.reloadRows(at: [IndexPath(row:0, section:0)], with: .none);
+            
+            //Dev print
+            print("[\(i)]: '\(rows[i].main!)'");
         }
         
         //refresh table
-        self.reloadRows(at: [IndexPath(row:0, section:0)], with: .none);
-        self.reloadRows(at: [IndexPath(row:1, section:0)], with: .none);
-        self.reloadRows(at: [IndexPath(row:2, section:0)], with: .none);
-        self.reloadRows(at: [IndexPath(row:3, section:0)], with: .none);
-        
         self.reloadData();
         
         return;
@@ -161,18 +156,20 @@ class ANoteTableView : UICustomTableView {
     /********************************************************************************************************************************/
     func updateCellTitles() {
         
+        //Grab count
         let n = self.vc.rows.count;
         
+        //Load row
         for i in 0...(n-1) {
-            
             let name = vc.rows[i].main;
             
             myCustomCells2[i].setName(name!);
-            
-            print("-->\(name!)");
         }
         
-        print("done");
+        //?
+        refreshTable();
+        
+        return;
     }
 
     

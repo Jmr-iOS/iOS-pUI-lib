@@ -17,7 +17,7 @@
 import UIKit
 
 
-class NewTableViewCell : UICustomTableViewCell {
+class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
     
     //App
     var vc : ViewController;
@@ -84,10 +84,12 @@ class NewTableViewCell : UICustomTableViewCell {
         super.init(style:style, reuseIdentifier:reuseIdentifier);
 
         //Configure
+        initialize();                                                           /* lay the cell out (move pre super()?              */
+
+        //Dev setup
         setName("R\(index)");
         verbose = false;                                                        /* set cell verbose prints                          */
-        initialize();                                                           /* lay the cell out (move pre super()?              */
-        
+
         //Add to view
         self.addSubview(dbgLabel);
         
@@ -125,52 +127,47 @@ class NewTableViewCell : UICustomTableViewCell {
         /****************************************************************************************************************************/
         type = (tableIndex>0) ? .list : .todo;
 
-//!     checkBox = UICheckbox(view:       self,
-//!                           parentCell: self,
-//!                           delegate:   self,
-//!                           type:       type,
-//!                           xCoord:     check_xOffs,
-//!                           yCoord:     check_yOffs);
+        checkBox = UICheckbox(view:       self,
+                              parentCell: self,
+                              delegate:   self,
+                              type:       type,
+                              xCoord:     check_xOffs,
+                              yCoord:     check_yOffs);
         
-//!     self.addSubview(checkBox);
+        self.addSubview(checkBox);
 
         
         /****************************************************************************************************************************/
         /*                                                  Main(Subject) Text                                                      */
         /****************************************************************************************************************************/
-        let rChunk_width = UIScreen.main.bounds.width - tv_xOffs - tv_width;
-        
-        let subjFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width - tv_width;
-        
         if(verbose) { print("ANoteTableViewCell.initialize():    grabbing \(tableIndex)"); }
         
-        let font : UIFont = UIFont(name: cell_fontName, size: mt_size)!;
-        
-        subjectField = UILabel(frame:  CGRect(x:      mt_xOffs,
-                                              y:      mt_yOffs,
-                                              width:  subjFieldWidth,
-                                              height: font.pointSize*CGFloat(numLines_main+1)));
+        //Calc
+        let rChunk_width = UIScreen.main.bounds.width - tv_xOffs - tv_width;
+        let font  = UIFont(name: cell_fontName, size: mt_size)!;
+        let hSubj = font.pointSize*CGFloat(numLines_main+1);
+        let wSubj : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width - tv_width;
+
+        //Init
+        subjectField = UILabel(frame: CGRect(x: mt_xOffs, y: mt_yOffs, width:  wSubj, height: hSubj));
         subjectField.font = font;
         subjectField.text = currRow.main;
         subjectField.textAlignment = NSTextAlignment.left;
-        subjectField.textColor = UIColor(red:0.31, green:0.31, blue:0.31, alpha:1.0);               /* #4e4e4e                      */
+        subjectField.textColor = cellSubjColor;
         
         //text-wrap
-        subjectField.numberOfLines = 0;                                         /* set to 0 for auto-wrap                           */
+        subjectField.numberOfLines = 0;                                         /* set to '0' for auto-wrap                         */
         subjectField.lineBreakMode = .byWordWrapping;
         
-//!     self.addSubview(subjectField);
+        self.addSubview(subjectField);
         
         
         /****************************************************************************************************************************/
         /*                                                  Description Text                                                        */
         /****************************************************************************************************************************/
-        let descrFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
+        let wDescr : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
         
-        descripField = UILabel(frame: CGRect(x: descr_xOffs,
-                                             y: descr_yOffs,
-                                             width: descrFieldWidth,
-                                             height: descr_height));
+        descripField = UILabel(frame: CGRect(x: descr_xOffs, y: descr_yOffs, width: wDescr, height: descr_height));
         
         descripField.text = currRow.body;
         
@@ -178,7 +175,7 @@ class NewTableViewCell : UICustomTableViewCell {
         descripField.textAlignment = NSTextAlignment.left;
         descripField.textColor = descr_color;
         
-//!     self.addSubview(descripField);
+        self.addSubview(descripField);
         
         
         /****************************************************************************************************************************/
@@ -588,14 +585,22 @@ class NewTableViewCell : UICustomTableViewCell {
      */
     /********************************************************************************************************************************/
     func setName(_ name: String) {
+
+        //Grab
+        var r = getRowValue();
         
         //Store
         vc.rows[tableIndex].main = name;
-
+        r.main = name;  //?
+        setRowValue(row:r); //?
+        
         //Update
         dbgLabel.text = name;
-        self.textLabel?.text = name;
-
+        
+        subjectField.text = name;
+        
+        //?aNoteTable.refreshTable();
+        
         return;
     }
 
