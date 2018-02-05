@@ -52,11 +52,10 @@ class ANoteTableView : UITableView {
         //Load
         for i in 0...(numRows-1) {
             let cell : NewTableViewCell = NewTableViewCell(vc: self.vc,
-                                                           mainView: vc.view,
+                                                           aNoteTable: self,
+                                                           index : i,
                                                            style: UITableViewCellStyle.default,
                                                            reuseIdentifier: "nbd");
-            cell.setName("R\(i)");
-            
             myCustomCells.append(cell);
         }
         
@@ -69,32 +68,6 @@ class ANoteTableView : UITableView {
         translatesAutoresizingMaskIntoConstraints = false;                                  /* Std                                  */
         
         if(verbose){ print("CustomTableView.init():             the CustomTableView was initialized"); }
-
-        return;
-    }
-    
-    
-    /********************************************************************************************************************************/
-	/**	@fcn		addNewCell(_ cellString : String)
-	 *  @brief		x
-	 *  @details	x
-     *
-	 *  @param		[in] (String) cellString - text to display in cell
-     *
-	 */
-	/********************************************************************************************************************************/
-	func addNewCell(_ cellString : String) {
-            
-        let newCell : NewTableViewCell = NewTableViewCell(vc: self.vc,
-                                                          mainView: self.vc.view,
-                                                          style: UITableViewCellStyle.default,
-                                                          reuseIdentifier: "eww?");
-        
-        myCustomCells.append(newCell);
-        
-        reloadData();
-        
-        if(verbose){ print("CustomTableView.addCell():          a new cell was added"); }
 
         return;
     }

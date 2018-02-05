@@ -136,8 +136,7 @@ class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelega
             table.scrollToRow(at: IndexPath(row: self.table.getCellCount()-1, section: 0), at: UITableViewScrollPosition.bottom, animated: true);
             break;
         case (1):
-            table.addNewCell("Woot Woot!");
-            print("Handler.tableView():                (didSelectRowAt) added a cell?");
+            print("Handler.tableView():                (didSelectRowAt) row[1] was selected");
             break;
         case (2):
             table.setEditing(true, animated: true);
@@ -196,53 +195,4 @@ class ANoteTableViewHandler : NSObject, UITableViewDataSource, UITableViewDelega
         
         return;
     }
-
-    
-/************************************************************************************************************************************/
-/*                                                        Helpers                                                                   */
-/************************************************************************************************************************************/
-    
-    /********************************************************************************************************************************/
-	/**	@fcn		getCharName(_ i : Int) -> String
-	 *  @brief		x
-	 *  @details	x
-	 */
-	/********************************************************************************************************************************/
-	func getCharName(_ i : Int) -> String {
-        return String(describing: UnicodeScalar(i + Int(("A" as UnicodeScalar).value)));
-    }
-    
-    
-    /********************************************************************************************************************************/
-	/**	@fcn		getRowLabel(_ charName : String, index: Int) -> String
-	 *  @brief		x
-	 *  @details	x
-	 */
-	/********************************************************************************************************************************/
-	func getRowLabel(_ charName : String, index: Int) -> String {
-        return String(format: "Item '%@' (%d)", charName, index);
-    }
-    
-    
-    /********************************************************************************************************************************/
-	/**	@fcn		addNewRow()
-	 *  @brief		x
-	 *  @details	x
-	 */
-	/********************************************************************************************************************************/
-	func addNewRow() {
-        
-        let charName : String = getCharName(self.table.getCellCount());
-        
-        let newLabel : String = getRowLabel(charName, index: table.getCellCount());
-  
-        table.addNewCell(newLabel);
-        
-        table.reloadData();
-        
-        print("Handler.tableView():                new row was added '\(newLabel)'");
-        
-        return;
-    }
-    
 }

@@ -19,7 +19,7 @@ import UIKit
 
 class UICustomTableViewCell : UITableViewCell {
     
-    let verbose : Bool = false;
+    var verbose : Bool = false;                                                 /* cell print verbosity (var to enable override)    */
     
     let cellSelectionFade : Bool = false;
 
