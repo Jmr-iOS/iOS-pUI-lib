@@ -596,20 +596,12 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
     /********************************************************************************************************************************/
     func setName(_ name: String) {
 
-        //Grab
-        var r = getRowValue();
-        
-        //Store
+        //Data store
         vc.rows[tableIndex].main = name;
-        r.main = name;  //?
-        setRowValue(row:r); //?
         
-        //Update
+        //UI update
         dbgLabel.text = name;
-        
         subjectField.text = name;
-        
-        //?aNoteTable.refreshTable();
         
         return;
     }
@@ -636,10 +628,10 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
      *  @brief      x
      *  @details    x
      *
-     *  @param      [in] (NSString) yourString - x
-     *  @param      [in] (CGFloat) labelWidth - x
-     *  @param      [in] (CGFloat) labelHeight - x
-     *  @param      [in] (UIFont) font - x
+     *  @param      [in] (NSString) yourString  - x
+     *  @param      [in] (CGFloat)  labelWidth  -  x
+     *  @param      [in] (CGFloat)  labelHeight - x
+     *  @param      [in] (UIFont)   font - x
      *
      *  @return     (Int) descrip
      *

@@ -407,9 +407,9 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     @objc func tapResponse(i : Int) {
 
-//!!!   let ts = ANoteTimeSelect(parentCell.vc, parentCell, Date());
+        let ts = ANoteTimeSelect(parentCell.vc, parentCell, Date());
        
-//!!!   ts.show(parentCell.vc);
+        ts.show(parentCell.vc);
         
         return;
     }
@@ -556,12 +556,12 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     @objc func dateLabelPress(_ gestureRecognizer: UITapGestureRecognizer) {
         
-//!!!   let vc = parentCell.vc!;
-//!!!   let date = Date();
+        let vc = parentCell.vc;
+        let date = Date();
         
         //(temp for disp)
-//!!!   let ts = ANoteTimeSelect(vc, parentCell, date);
-//!!!   ts.show(vc);
+        let ts = ANoteTimeSelect(vc, parentCell, date);
+        ts.show(vc);
         
         if(verbose) { print("CellSubview.dateLblPr():            date was pressed"); }
         
@@ -677,11 +677,14 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     @objc func clipPress(_ sender: UIButton!) {
         
+        //Grab row
+        let row = parentCell.getRowValue();
+        
         //Init view
-//!!!   let p = ANoteTimeSelect(parentCell.vc, parentCell, parentCell.date);
+        let p = ANoteTimeSelect(parentCell.vc, parentCell, row.time);
 
         //Grab new time
-//!!!   p.show(parentCell.vc);
+        p.show(parentCell.vc);
 
         if(verbose) { print("CellSubview.clipPress():    clip was pressed"); }
 
@@ -739,7 +742,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //@todo     handle other fields
         
         //Update
-//!!!   parentCell.updateTitle(titleField.text!);
+        parentCell.setName(titleField.text!);
         
         //dismiss
         textField.resignFirstResponder();

@@ -159,15 +159,12 @@ class ANoteTableView : UICustomTableView {
         //Grab count
         let n = self.vc.rows.count;
         
-        //Load row
+        //Load rows
         for i in 0...(n-1) {
             let name = vc.rows[i].main;
             
             myCustomCells2[i].setName(name!);
         }
-        
-        //?
-        refreshTable();
         
         return;
     }

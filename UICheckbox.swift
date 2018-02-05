@@ -148,7 +148,7 @@ class UICheckbox: UIView {
         checkBoxImg.layer.add(fadeAnim, forKey: "contents");
 
         //Update text
-//!!!   parentCell.updateSelection(selected: newState);
+        parentCell.updateSelection(selected: newState);
         
         //Handle Parent Response
         delegate.checkBoxResp(newState);

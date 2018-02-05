@@ -689,7 +689,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     @objc func donePressed(_ sender: UIButton!) {
 
         //Store date
-//!!!   parentCell.updateDate(picker.date);
+        parentCell.updateDate(picker.date);
         
         //Dismiss view
         dismiss(vc);
@@ -723,7 +723,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     @objc func removePressed(_ sender : (UIButton!)) {
         
         //Remove the date from cell
-//!!!   parentCell.updateDate(nil);                                 /* remove date from cell                                        */
+        parentCell.updateDate(nil);                                 /* remove date from cell                                        */
         
         //Dismiss view
         dismiss(vc);
