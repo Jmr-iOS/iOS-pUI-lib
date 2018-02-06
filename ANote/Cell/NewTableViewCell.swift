@@ -606,7 +606,25 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         return;
     }
 
-    
+
+    /********************************************************************************************************************************/
+    /** @fcn        setBody(_ body: String)
+     *  @brief      set body uniformally for debug
+     *  @details    x
+     */
+    /********************************************************************************************************************************/
+    func setBody(_ body: String) {
+
+        //Data store
+        vc.rows[tableIndex].body = body;
+
+        //UI update
+        descripField.text = body;
+
+        return;
+    }
+
+
     /********************************************************************************************************************************/
     /** @fcn        getName() -> String?
      *  @brief      get name value

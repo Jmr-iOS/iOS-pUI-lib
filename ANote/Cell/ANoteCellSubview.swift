@@ -56,7 +56,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     var titleField : UITextField;
     var dateBar    : UIView;
     var datePlace  : UIView;
-    var mainText   : UITextView;
+    var bodyText   : UITextView;
     var menuBar    : UIView;
     var bookmark   : UIButton;
 
@@ -118,7 +118,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         titleField = UITextField();
         dateBar    = UIView();
         datePlace  = UIView();
-        mainText   = UITextView();
+        bodyText   = UITextView();
         menuBar    = UIView();
         bookmark   = UIButton(type: UIButtonType.roundedRect);
 
@@ -144,7 +144,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //**************************************************************************************************************************//
         let r = getRowValue();
         let main : String = r.main!;
-//      let body : String = r.body!;
+        let body : String = r.body!;
 //      let time : Date   = r.time!;
         
         
@@ -241,15 +241,15 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         
         
         //**************************************************************************************************************************//
-        //                                                        MAIN TEXT                                                         //
+        //                                                        BODY TEXT                                                         //
         //**************************************************************************************************************************//
-        mainText.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 312);
-        mainText.returnKeyType = UIReturnKeyType.done;
-        mainText.textColor = UIColor.lightGray;
-        mainText.backgroundColor = nil;                                 /* set to transparent (dflt:white)                          */
-        mainText.delegate = self;
-        mainText.text = "";
-        y = (y + mainText.bounds.height);
+        bodyText.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 312);
+        bodyText.returnKeyType = UIReturnKeyType.done;
+        bodyText.textColor = UIColor.lightGray;
+        bodyText.backgroundColor = nil;                                 /* set to transparent (dflt:white)                          */
+        bodyText.delegate = self;
+        bodyText.text = body;
+        y = (y + bodyText.bounds.height);
         
         
         //**************************************************************************************************************************//
@@ -268,7 +268,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         addSubview(dateBar);
         addSubview(dateStamp);
         addSubview(divider);
-        addSubview(mainText);
+        addSubview(bodyText);
         addDevToolbar(parentCell.vc.view);
         
         if(verbose) { print("CellSubview.init():                 my cell #\(parentCell.getCellNumber()) subview init"); }
@@ -400,7 +400,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         titleBar.alpha  = alpha;
         datePlace.alpha = alpha;
         dateBar.alpha   = alpha;
-        mainText.alpha  = alpha;
+        bodyText.alpha  = alpha;
         menuBar.alpha   = alpha;
         
         return;
@@ -755,13 +755,14 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     func textFieldShouldReturn(_ textField : UITextField) -> Bool {
         
+        //Update row (do both each time)
+        parentCell.setName(titleField.text!);
+        parentCell.setBody(bodyText.text!);
+        
         //@todo     handle other fields
         
-        //Update
-        parentCell.setName(titleField.text!);
-        
         //dismiss
-        textField.resignFirstResponder();
+        textField.resignFirstResponder();                                   /* dismiss keyboard                                     */
 
         if(verbose) { print("CellSubview.txtFieldShldRtrn():     return key pressed and exiting"); }
         
@@ -778,6 +779,13 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /* @details   dismiss keyboard on completion       (1/2)                                                                        */
     /********************************************************************************************************************************/
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        
+        //Update row (do both each time)
+        parentCell.setName(titleField.text!);
+        parentCell.setBody(bodyText.text!);
+        
+        //@todo     handle other fields
+        
         if(verbose) { print("CellSubview.txtViewShldEnd():       return key pressed and signaling exit"); }
         return true;
     }
@@ -789,7 +797,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if(text == "\n") {
-            mainText.resignFirstResponder();
+            bodyText.resignFirstResponder();                            /* dismiss keyboard                                         */
             if(verbose) { print("CellSubview.textView(SCT):          return key pressed and exiting"); }
             return false;
         }
