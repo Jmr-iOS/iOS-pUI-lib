@@ -184,8 +184,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         mainField.frame = CGRect(x: 13, y: -1, width: mainBar.frame.width-13, height: mainBar.frame.height);
         mainField.placeholder = "Untitled";
         mainField.text = main;
-        mainField.font = UIFont(name: "HelveticaNeue-Medium", size: 46);                                                             //!!!to lib
-        mainField.font = FontUtils.updateFontSize(mainField.font!, 26);
+        mainField.font = fontF;
         mainField.clearButtonMode = .always;
         mainField.textColor = UIColor.darkGray;
         mainField.returnKeyType = UIReturnKeyType.done;
@@ -210,7 +209,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         let dateLabel   = UILabel(frame: CGRect(x:14, y:10, width:0, height:0));
         
         //Setup Text
-        dateLabel.font = UIFont(name: "HelveticaNeue-Medium", size: 12);
+        dateLabel.font = fontG;
         dateLabel.textColor = UIColor.lightGray;
         dateLabel.textAlignment = .left;
         dateLabel.translatesAutoresizingMaskIntoConstraints = true;
@@ -322,7 +321,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         t.center = CGPoint(x:20, y:2);
         
         //Setup Text
-        t.font = UIFont(name: "HelveticaNeue-Medium", size: 12);
+        t.font = fontG;
         t.textColor = UIColor.lightGray;
         t.textAlignment = .center;
         t.translatesAutoresizingMaskIntoConstraints = true;

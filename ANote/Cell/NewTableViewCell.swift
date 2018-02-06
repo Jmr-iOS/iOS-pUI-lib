@@ -44,7 +44,6 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
     var tableIndex : Int;
     
     //Config
-    let cell_fontName : String = cellFont;
     let numLines_main : Int = 2;                                            /* number of lines to apply to main text                */
     
     
@@ -138,13 +137,12 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         
         //Calc
         let rChunk_width = wS - tv_xOffs - tv_width;
-        let font  = UIFont(name: cell_fontName, size: mt_size)!;
-        let hMain = font.pointSize*CGFloat(numLines_main+1);
+        let hMain = mainFont.pointSize*CGFloat(numLines_main+1);
         let wMain = wS - cellXOffs - rChunk_width - tv_width;
 
         //Init
         mainField = UILabel(frame: CGRect(x: mt_xOffs, y: mt_yOffs, width:  wMain, height: hMain));
-        mainField.font = font;
+        mainField.font = mainFont;
         mainField.text = currRow.main;
         mainField.textAlignment = NSTextAlignment.left;
         mainField.textColor = cellMainColor;
@@ -165,7 +163,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         
         bodyField.text = currRow.body;
         
-        bodyField.font = UIFont(name: cell_fontName, size: body_size);
+        bodyField.font = fontC.withSize(body_size);
         bodyField.textAlignment = NSTextAlignment.left;
         bodyField.textColor = body_color;
         
@@ -181,7 +179,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         
         bottField.text = currRow.getDateString();
         
-        bottField.font = UIFont(name: cell_fontName, size: bott_size);
+        bottField.font = fontC.withSize(bott_size);
         bottField.textAlignment = NSTextAlignment.left;
         bottField.textColor = bott_color;
         
@@ -209,7 +207,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         
         //Setup
         dateLabel = UILabel(frame: CGRect(x: tl_xOffs, y: tl_yOffs, width: tl_width, height:  tl_height));
-        dateLabel.font  =   UIFont(name: cell_fontName, size: tl_size);
+        dateLabel.font  =   fontC.withSize(tl_size);
         setTimeLabel(getRowValue().time);
         dateLabel.textColor     = UIColor.white;
         dateLabel.textAlignment = NSTextAlignment.left;

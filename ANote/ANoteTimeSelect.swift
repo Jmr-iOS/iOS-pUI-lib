@@ -203,9 +203,6 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
      */
     /********************************************************************************************************************************/
     func load_row0() -> UITableViewCell {
-        
-        //helpers
-        let fnt : UIFont = (UIButton().titleLabel?.font)!;                          /* standard UIButton font                       */
 
         //Acquire Cell
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
@@ -216,7 +213,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         //UILabel  ("To-do Info")
         let label = UILabel();                                                      /* init                                         */
         label.textAlignment = .center;                                              /* x-alignment of text                          */
-        label.font = UIFont(name: fnt.fontName+"-Medium", size: (fnt.pointSize));
+        label.font = fontH;
         label.textColor = UIColor.black;
         label.frame = labelFrame;                                                   /* location in view                             */
         label.translatesAutoresizingMaskIntoConstraints = true;                     /* allow constraints                            */
@@ -224,7 +221,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
 
         //UIButton ("Cancel") - enabled
         cancelButton = UIButton(type: UIButtonType.roundedRect);
-        cancelButton.titleLabel?.font = UIFont(name: fnt.fontName, size: (fnt.pointSize-1));
+        cancelButton.titleLabel?.font = fontI;
         cancelButton.setTitleColor(buttonTextColor, for: .normal);
         cancelButton.translatesAutoresizingMaskIntoConstraints = true;
         cancelButton.setTitle("Cancel", for: .normal);
@@ -236,7 +233,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //UIButton ("Done") -> disabled
         doneButton = UIButton(type: UIButtonType.roundedRect);
-        doneButton.titleLabel?.font = UIFont(name: fnt.fontName+"-Medium", size: (fnt.pointSize-1));
+        doneButton.titleLabel?.font = fontJ;
         doneButton.translatesAutoresizingMaskIntoConstraints = true;
         doneButton.setTitle("Done", for: .normal);
         doneButton.sizeToFit();
@@ -269,6 +266,9 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /** @fcn        load_row1() -> UITableViewCell
      *  @brief
      *  @details    x
+     *
+     *  @section    Opens
+     *      Cleanup font acquisition (ugly and verbose - uneeded)
      */
     /********************************************************************************************************************************/
     func load_row1() -> UITableViewCell {
@@ -289,7 +289,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         titleLabel.frame.origin.x = 25;
         titleLabel.frame.origin.y = 13;
         titleLabel.translatesAutoresizingMaskIntoConstraints = true;
-        titleLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        titleLabel.font = mainFont;
         titleLabel.text = "Due Date";
         titleLabel.sizeToFit();
         
@@ -372,7 +372,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         titleLabel.frame.origin.x = 25;
         titleLabel.frame.origin.y = 13;
         titleLabel.translatesAutoresizingMaskIntoConstraints = true;
-        titleLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        titleLabel.font = mainFont;
         titleLabel.text = "All Day";
         titleLabel.sizeToFit();
         
@@ -415,7 +415,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         titleLabel.frame.origin.x = 25;
         titleLabel.frame.origin.y = 13;
         titleLabel.translatesAutoresizingMaskIntoConstraints = true;
-        titleLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        titleLabel.font = mainFont;
         titleLabel.text = "Alarm";
         titleLabel.sizeToFit();
         
@@ -423,7 +423,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         let valueLabel = UILabel();
         valueLabel.textColor = UIColor.gray;
         valueLabel.translatesAutoresizingMaskIntoConstraints = true;
-        valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        valueLabel.font = mainFont;
         valueLabel.text = "At time of event";
         valueLabel.sizeToFit();
         x = wS - (valueLabel.frame.width+35);
@@ -466,7 +466,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         titleLabel.frame.origin.x = 25;
         titleLabel.frame.origin.y = 13;
         titleLabel.translatesAutoresizingMaskIntoConstraints = true;
-        titleLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        titleLabel.font = mainFont;
         titleLabel.text = "Repeat";
         titleLabel.sizeToFit();
         
@@ -474,7 +474,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         let valueLabel = UILabel();
         valueLabel.textColor = UIColor.gray;
         valueLabel.translatesAutoresizingMaskIntoConstraints = true;
-        valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        valueLabel.font = mainFont;
         valueLabel.text = "Never";
         valueLabel.sizeToFit();
         x = wS - (valueLabel.frame.width+35);
@@ -519,7 +519,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         titleLabel.frame.origin.x = 25;
         titleLabel.frame.origin.y = 13;
         titleLabel.translatesAutoresizingMaskIntoConstraints = true;
-        titleLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        titleLabel.font = mainFont;
         titleLabel.text = "Status";
         titleLabel.sizeToFit();
 
@@ -527,7 +527,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         let valueLabel = UILabel();
         valueLabel.textColor = UIColor.gray;
         valueLabel.translatesAutoresizingMaskIntoConstraints = true;
-        valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
+        valueLabel.font = mainFont;
         valueLabel.text = "None";
         valueLabel.sizeToFit();
         x = wS - (valueLabel.frame.width+35);
@@ -555,6 +555,9 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /** @fcn        load_row6() -> UITableViewCell
      *  @brief      add 'Remove To-do Info' button in red
      *  @details    x
+     *
+     *  @section    Opens
+     *      cleanup font acquisition
      */
     /********************************************************************************************************************************/
     func load_row6() -> UITableViewCell {
@@ -787,6 +790,8 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /** @fcn        tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
      *  @brief      x
      *  @details    x
+     *
+     *  @section    Cleanup font acquisition
      */
     /********************************************************************************************************************************/
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
