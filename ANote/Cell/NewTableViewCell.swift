@@ -137,10 +137,10 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         if(verbose) { print("ANoteTableViewCell.initialize():    grabbing \(tableIndex)"); }
         
         //Calc
-        let rChunk_width = UIScreen.main.bounds.width - tv_xOffs - tv_width;
+        let rChunk_width = wS - tv_xOffs - tv_width;
         let font  = UIFont(name: cell_fontName, size: mt_size)!;
         let hMain = font.pointSize*CGFloat(numLines_main+1);
-        let wMain = UIScreen.main.bounds.width - cellXOffs - rChunk_width - tv_width;
+        let wMain = wS - cellXOffs - rChunk_width - tv_width;
 
         //Init
         mainField = UILabel(frame: CGRect(x: mt_xOffs, y: mt_yOffs, width:  wMain, height: hMain));
@@ -159,7 +159,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         /****************************************************************************************************************************/
         /*                                                  Description Text                                                        */
         /****************************************************************************************************************************/
-        let wBody : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
+        let wBody : CGFloat = wS - cellXOffs - rChunk_width;
         
         bodyField = UILabel(frame: CGRect(x: body_xOffs, y: body_yOffs, width: wBody, height: body_height));
         
@@ -175,7 +175,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         /****************************************************************************************************************************/
         /*                                                      Bott Text                                                           */
         /****************************************************************************************************************************/
-        let bottFieldWidth : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
+        let bottFieldWidth : CGFloat = wS - cellXOffs - rChunk_width;
         
         bottField = UILabel(frame: CGRect(x:bott_xOffs, y: bott_yOffs, width: bottFieldWidth, height:  bott_height));
         

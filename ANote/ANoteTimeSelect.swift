@@ -24,7 +24,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     
     let startDate : Date;                                               /* date on init                                             */
     
-    let width      : CGFloat = UIScreen.main.bounds.width;
+    let width      : CGFloat = wS;
     let height     : CGFloat = 517;                                     /* full view height                                         */
 
     var rowHeights : [CGFloat] = [45, 92, 188, 49, 49, 48, 0];          /* height of each row in table                              */
@@ -76,7 +76,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         if(verbose){ print("ANoteTimeSelect.init():             adding a standard table"); }
         
         //Init below screen
-        let frame = CGRect(x: 0, y: UIScreen.main.bounds.height, width: width, height: height);
+        let frame = CGRect(x: 0, y: hS, width: width, height: height);
         
         //Init Vars
         isRaised   = false;
@@ -169,7 +169,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
             //Launch with animation
             UIView.animate(withDuration: 0.5, delay: 0.5, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
                 if(self.verbose){ print("ANoteTimeSelect.loadPopup():        sliding popup in"); }
-                self.frame = CGRect(x: 0, y: UIScreen.main.bounds.height-height, width: vc.view.frame.width, height: height);
+                self.frame = CGRect(x: 0, y: hS-height, width: vc.view.frame.width, height: height);
                 self.isRaised = false;
                 viewOpen = false;
             }, completion: { (finished: Bool) -> Void in
@@ -183,7 +183,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
             //Remove from view
             UIView.animate(withDuration: 0.5, delay: 0.5, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
                 if(self.verbose){ print("ANoteTimeSelect.loadPopup():        sliding popup out"); }
-                self.frame = CGRect(x: 0, y: UIScreen.main.bounds.height, width: vc.view.frame.width, height: height);
+                self.frame = CGRect(x: 0, y: hS, width: vc.view.frame.width, height: height);
                 self.isRaised = true;
             }, completion: { (finished: Bool) -> Void in
                 if(self.verbose){ print("ANoteTimeSelect.loadPopup():        sliding popup out completion"); }
@@ -211,10 +211,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as UITableViewCell!;
         
         //Constants
-        let labelFrame = CGRect(x: 0,
-                                y: 1,
-                                width: UIScreen.main.bounds.width,
-                                height: ((cell?.frame.height)!));
+        let labelFrame = CGRect(x: 0, y: 1, width: wS, height: ((cell?.frame.height)!));
         
         //UILabel  ("To-do Info")
         let label = UILabel();                                                      /* init                                         */
@@ -245,7 +242,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         doneButton.sizeToFit();
         updateDoneButton(false);                                                /* set to disabled                                  */
         
-        let x : CGFloat = UIScreen.main.bounds.width - 28;
+        let x : CGFloat = wS - 28;
         doneButton.center = CGPoint(x: x, y: 26);
         doneButton.contentHorizontalAlignment = .left;
         doneButton.contentVerticalAlignment   = .top;
@@ -254,7 +251,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         //Add upper board
         let upperBorder = UIView();
         upperBorder.backgroundColor = UIColor(red:0.98, green:0.98, blue:0.98, alpha:1.0);
-        upperBorder.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 1);
+        upperBorder.frame = CGRect(x: 0, y: 0, width: wS, height: 1);
 
         //Add to view
         cell?.addSubview(label);
@@ -278,7 +275,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //Constants
         let wBtn  : CGFloat = 80;                                       /* width of button                                          */
-        let xMid  : CGFloat = (UIScreen.main.bounds.width/2)-(wBtn/2);  /* middle of screen                                         */
+        let xMid  : CGFloat = (wS/2)-(wBtn/2);  /* middle of screen                                         */
         let xBtn  : CGFloat = 88;                                       /* delta between row[1] buttons                             */
         let xOffs : CGFloat = 8;                                        /* offset of buttons in row                                 */
 
@@ -298,7 +295,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //Switch
         let alarmSwitch = UISwitch();
-        alarmSwitch.frame.origin = CGPoint(x: UIScreen.main.bounds.width - 65, y: 8);
+        alarmSwitch.frame.origin = CGPoint(x: wS - 65, y: 8);
         alarmSwitch.onTintColor = UIColor(red:1.00, green:0.67, blue:0.00, alpha:1.0);
         alarmSwitch.addTarget(self, action: #selector(self.alarmPressed(_:)), for: UIControlEvents.valueChanged);
         
@@ -381,7 +378,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //Switch
         let allDaySwitch = UISwitch();
-        allDaySwitch.frame.origin = CGPoint(x: UIScreen.main.bounds.width - 65, y: 8);
+        allDaySwitch.frame.origin = CGPoint(x: wS - 65, y: 8);
         allDaySwitch.onTintColor = UIColor(red:1.00, green:0.67, blue:0.00, alpha:1.0);
         //!allDaySwitch.addTarget(self, action: #selector(self.allDayPressed(_:)), for: UIControlEvents.valueChanged);
         
@@ -429,11 +426,11 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
         valueLabel.text = "At time of event";
         valueLabel.sizeToFit();
-        x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
+        x = wS - (valueLabel.frame.width+35);
         valueLabel.frame = CGRect(x: x, y: 13.5, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
         
         //Init Button
-        x = (UIScreen.main.bounds.width - 23);
+        x = (wS - 23);
         let button : UIButton = UIButton(frame:CGRect(x: x, y: 15, width: 10, height: 16));
         button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
         button.addTarget(self, action: #selector(self.rowArrowPressed(_:)), for:  .touchUpInside);
@@ -480,11 +477,11 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
         valueLabel.text = "Never";
         valueLabel.sizeToFit();
-        x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
+        x = wS - (valueLabel.frame.width+35);
         valueLabel.frame = CGRect(x: x, y: 13.5, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
         
         //Init Button
-        x = (UIScreen.main.bounds.width - 23);
+        x = (wS - 23);
         let button : UIButton = UIButton(frame:CGRect(x: x, y: 15, width: 10, height: 16));
         button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
         button.addTarget(self, action: #selector(self.rowArrowPressed(_:)), for:  .touchUpInside);
@@ -533,11 +530,11 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         valueLabel.font = UIFont(name: ".SFUIText", size: 15.25);
         valueLabel.text = "None";
         valueLabel.sizeToFit();
-        x = UIScreen.main.bounds.width - (valueLabel.frame.width+35);
+        x = wS - (valueLabel.frame.width+35);
         valueLabel.frame = CGRect(x: x, y: 13.5, width: (valueLabel.frame.width), height: (valueLabel.frame.height));
         
         //Init Button
-        x = (UIScreen.main.bounds.width - 23);
+        x = (wS - 23);
         let button : UIButton = UIButton(frame:CGRect(x: x, y: 15, width: 10, height: 16));
         button.setBackgroundImage(UIImage(named:"TimeSelectArrow"), for: UIControlState());
         button.addTarget(self, action: #selector(self.rowArrowPressed(_:)), for:  .touchUpInside);
@@ -567,7 +564,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
         
         //Gen fullsize frame (cell not sized yet)
         let f = cell?.frame;
-        let bFrame = CGRect(x: (f?.origin.x)!, y: (f?.origin.y)!, width: UIScreen.main.bounds.width, height: (f?.height)!);
+        let bFrame = CGRect(x: (f?.origin.x)!, y: (f?.origin.y)!, width: wS, height: (f?.height)!);
         
         //Init Button
         let button : UIButton = UIButton(frame:bFrame);
@@ -598,7 +595,7 @@ class ANoteTimeSelect : UIView, UITableViewDataSource, UITableViewDelegate {
     /********************************************************************************************************************************/
     func addPicker_aNote(_ view:UIView) {
         
-        let dateFrame = CGRect(x: (UIScreen.main.bounds.width/2-160), y: 35, width: 330, height: 150);
+        let dateFrame = CGRect(x: (wS/2-160), y: 35, width: 330, height: 150);
         
         //Init
         picker = UIDatePicker(frame: dateFrame);

@@ -50,8 +50,8 @@ class ANoteTableView : UICustomTableView {
         //Calc frame
         let tFrame = CGRect(x: frame.origin.x,
                             y: frame.origin.y,
-                            width:  UIScreen.main.bounds.width,
-                            height: (UIScreen.main.bounds.height - yOffs - lower_bar_height));
+                            width:  wS,
+                            height: (hS - yOffs - lower_bar_height));
         
         print("ANoteTableView.init():              currently configured to UITableViewCell usage");
 

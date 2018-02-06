@@ -42,11 +42,10 @@ class UIDateStamp : UIView {
     init(y0 : CGFloat) {
 
         //Vars
-        var wS, hI : CGFloat;
+        var hI : CGFloat;
         
         //Init vars
         img = UIImage(named: "datestamp_nosel.png")!;
-        wS  = UIScreen.main.bounds.width;
         hI  = (img.size.height/2);                                             /* 2x scale                                         */
         
         //Init UI
@@ -84,7 +83,7 @@ class UIDateStamp : UIView {
         
         //Vars
         var img : UIImage?;
-        var wS, hI : CGFloat;
+        var hI : CGFloat;
         
         //Select image
         switch(tempSel) {
@@ -107,8 +106,7 @@ class UIDateStamp : UIView {
         //Resize to fill
         if(tempSel != 2) {
             //Calc vars
-            wS  = UIScreen.main.bounds.width;
-            hI  = (img!.size.height/2);                                             /* 2x scale                                         */
+            hI  = (img!.size.height/2);                                         /* 2x scale                                         */
 
             //Apply dims
             dateBox.sizeToImage();

@@ -128,7 +128,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         devCtr  = 1;
 
         //Super
-        super.init(frame: UIScreen.main.bounds);
+        super.init(frame: bS);
         
         //Store
         self.mainView = mainView;
@@ -153,7 +153,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //**************************************************************************************************************************//
         bkgnds    = getCellBackgrounds();                                   /* get all backgrounds                                  */
         bkgnd_ind = Utils.randN(0, bkgnds.count);                           /* pick random selection                                */
-        bkgndView.frame = UIScreen.main.bounds;                             /* fullscreen                                           */
+        bkgndView.frame = bS;                                               /* fullscreen                                           */
         bkgndView.contentMode = .scaleToFill;                               /* set unscaled                                         */
         bkgndView.image = UIImage(named: bkgnds[bkgnd_ind]);                /* acquire next background                              */
 
@@ -164,7 +164,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //**************************************************************************************************************************//
         //                                                         TOP BAR                                                          //
         //**************************************************************************************************************************//
-        topBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 37);
+        topBar.frame = CGRect(x: 0, y: y, width: wS, height: 37);
         y = (y + topBar.bounds.height);
 
         //Section Label
@@ -177,7 +177,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //**************************************************************************************************************************//
         //                                                        TITLE BAR                                                         //
         //**************************************************************************************************************************//
-        mainBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 40);
+        mainBar.frame = CGRect(x: 0, y: y, width: wS, height: 40);
         y = (y + mainBar.bounds.height);
 
         //Gen text field
@@ -195,7 +195,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         mainBar.addSubview(mainField);
         
         //Divider
-        let divider = UIView(frame: CGRect(x:13, y: (y+1), width: (UIScreen.main.bounds.width-2*13), height: 0.5));
+        let divider = UIView(frame: CGRect(x:13, y: (y+1), width: (wS-2*13), height: 0.5));
         divider.backgroundColor = UIColor.gray;
         divider.alpha = 0.20;
 
@@ -203,7 +203,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //**************************************************************************************************************************//
         //                                                         DATE BAR                                                         //
         //**************************************************************************************************************************//
-        dateBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 33);
+        dateBar.frame = CGRect(x: 0, y: y, width: wS, height: 33);
         y = (y + dateBar.bounds.height);
 
         //Init text
@@ -243,7 +243,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //**************************************************************************************************************************//
         //                                                        BODY TEXT                                                         //
         //**************************************************************************************************************************//
-        bodyText.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 312);
+        bodyText.frame = CGRect(x: 0, y: y, width: wS, height: 312);
         bodyText.returnKeyType = UIReturnKeyType.done;
         bodyText.textColor = UIColor.lightGray;
         bodyText.backgroundColor = nil;                                 /* set to transparent (dflt:white)                          */
@@ -255,7 +255,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //**************************************************************************************************************************//
         //                                                        MENU BAR                                                          //
         //**************************************************************************************************************************//
-        menuBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: (UIScreen.main.bounds.height - y));
+        menuBar.frame = CGRect(x: 0, y: y, width: wS, height: (hS - y));
 
         //Init all hidden
         setContentsAlpha(0);
@@ -288,7 +288,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     func initBookmark(_ view : UIView) {
 
-        let x0 : CGFloat = (UIScreen.main.bounds.width - 37);
+        let x0 : CGFloat = (wS - 37);
         let y0 : CGFloat = 9;
         
         //Config
@@ -360,7 +360,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     func initStars(_ view : UIView) {
         
-        let xOffs = (UIScreen.main.bounds.width - 85);
+        let xOffs = (wS - 85);
         
         //Init view
         starView = UIView(frame: CGRect(x: xOffs, y:10, width:68, height: 20));
@@ -464,10 +464,10 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     /********************************************************************************************************************************/
     func addDevToolbar(_ view : UIView) {
 
-        let w    : CGFloat = UIScreen.main.bounds.width;
+        let w    : CGFloat = wS;
         
         let x0    : CGFloat = 33;
-        let y0    : CGFloat = UIScreen.main.bounds.height - 28;
+        let y0    : CGFloat = hS - 28;
         let xOffs : CGFloat = (w-2*x0)/4;
 
         

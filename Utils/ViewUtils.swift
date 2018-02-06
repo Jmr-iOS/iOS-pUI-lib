@@ -100,7 +100,7 @@ class ViewUtils : NSObject {
         popupView = UIView();
         popupView.backgroundColor = UIColor(red: 83/255, green: 90/255, blue: 102/255, alpha: 1);
         popupView.addSubview(popupLabel);
-        popupView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height, width: self.view.frame.width, height: popupHeight);
+        popupView.frame = CGRect(x: 0, y: hS, width: self.view.frame.width, height: popupHeight);
         
         //Add to view
         view.addSubview(popupView);
@@ -125,7 +125,7 @@ class ViewUtils : NSObject {
         //Begin launch
         UIView.animate(withDuration: 0.5, delay: 0.5, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
             if(verbose) { print("ViewUtils.loadPopup():              sliding popup in"); }
-            self.popupView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height-popupHeight, width: UIScreen.main.bounds.width, height: popupHeight);
+            self.popupView.frame = CGRect(x: 0, y: hS-popupHeight, width: wS, height: popupHeight);
             
         }, completion: { (finished: Bool) -> Void in
             if(verbose) { print("ViewUtils.loadPopup():              sliding popup in completion"); }
@@ -151,7 +151,7 @@ class ViewUtils : NSObject {
         //Begin dismiss
         UIView.animate(withDuration: 0.5, delay: 0.5, options: UIViewAnimationOptions.transitionCrossDissolve, animations: {
             if(verbose) { print("ViewUtils.loadPopup():              sliding popup out"); }
-            self.popupView.frame = CGRect(x: 0, y: UIScreen.main.bounds.height, width: self.view.frame.width, height: popupHeight);
+            self.popupView.frame = CGRect(x: 0, y: hS, width: self.view.frame.width, height: popupHeight);
             
         }, completion: { (finished: Bool) -> Void in
             if(verbose) { print("ViewUtils.loadPopup():              sliding popup out completion"); }
