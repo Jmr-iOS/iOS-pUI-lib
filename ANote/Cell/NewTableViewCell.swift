@@ -28,19 +28,16 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
     var cellSubView : ANoteCellSubview?;
     
     //Main UI
-    var checkBox     : UICheckbox!;
-    var subjectField : UILabel!;
-    var descripField : UILabel!;
-    var bottField    : UILabel!;
+    var checkBox  : UICheckbox!;
+    var mainField : UILabel!;
+    var bodyField : UILabel!;
+    var bottField : UILabel!;
     
     //Misc UI
-    var timeView  : UIView!;
-    var timeLabel : UILabel!;
+    var dateView  : UIView!;
+    var dateLabel : UILabel!;
     var type      : CellType!;
     var bellIcon  : UIImageView!;
-    
-    //Dev-UI
-    var dbgLabel : UILabel;
     
     //State
     var isComplete : Bool;                                                  /* if the cell has been initialized                     */
@@ -77,7 +74,6 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         self.tableIndex = index;
         
         //Init
-        dbgLabel = UILabel(frame: CGRect(x: 200, y:15, width: 50, height: 15));
         isComplete = false;
         
         //Super
@@ -88,12 +84,8 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
 
         //Dev setup
         setName("R\(index)");
-        dbgLabel.textColor = UIColor.orange;
         verbose = false;                                                        /* set cell verbose prints                          */
 
-        //Add to view
-        self.addSubview(dbgLabel);
-        
         //Dev-debug
         self.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: cellHeight);
         
@@ -140,44 +132,44 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
 
         
         /****************************************************************************************************************************/
-        /*                                                  Main(Subject) Text                                                      */
+        /*                                                        Main Text                                                         */
         /****************************************************************************************************************************/
         if(verbose) { print("ANoteTableViewCell.initialize():    grabbing \(tableIndex)"); }
         
         //Calc
         let rChunk_width = UIScreen.main.bounds.width - tv_xOffs - tv_width;
         let font  = UIFont(name: cell_fontName, size: mt_size)!;
-        let hSubj = font.pointSize*CGFloat(numLines_main+1);
-        let wSubj : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width - tv_width;
+        let hMain = font.pointSize*CGFloat(numLines_main+1);
+        let wMain = UIScreen.main.bounds.width - cellXOffs - rChunk_width - tv_width;
 
         //Init
-        subjectField = UILabel(frame: CGRect(x: mt_xOffs, y: mt_yOffs, width:  wSubj, height: hSubj));
-        subjectField.font = font;
-        subjectField.text = currRow.main;
-        subjectField.textAlignment = NSTextAlignment.left;
-        subjectField.textColor = cellSubjColor;
+        mainField = UILabel(frame: CGRect(x: mt_xOffs, y: mt_yOffs, width:  wMain, height: hMain));
+        mainField.font = font;
+        mainField.text = currRow.main;
+        mainField.textAlignment = NSTextAlignment.left;
+        mainField.textColor = cellMainColor;
         
         //text-wrap
-        subjectField.numberOfLines = 0;                                         /* set to '0' for auto-wrap                         */
-        subjectField.lineBreakMode = .byWordWrapping;
+        mainField.numberOfLines = 0;                                            /* set to '0' for auto-wrap                         */
+        mainField.lineBreakMode = .byWordWrapping;
         
-        self.addSubview(subjectField);
+        self.addSubview(mainField);
         
         
         /****************************************************************************************************************************/
         /*                                                  Description Text                                                        */
         /****************************************************************************************************************************/
-        let wDescr : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
+        let wBody : CGFloat = UIScreen.main.bounds.width - cellXOffs - rChunk_width;
         
-        descripField = UILabel(frame: CGRect(x: descr_xOffs, y: descr_yOffs, width: wDescr, height: descr_height));
+        bodyField = UILabel(frame: CGRect(x: body_xOffs, y: body_yOffs, width: wBody, height: body_height));
         
-        descripField.text = currRow.body;
+        bodyField.text = currRow.body;
         
-        descripField.font = UIFont(name: cell_fontName, size: descr_size);
-        descripField.textAlignment = NSTextAlignment.left;
-        descripField.textColor = descr_color;
+        bodyField.font = UIFont(name: cell_fontName, size: body_size);
+        bodyField.textAlignment = NSTextAlignment.left;
+        bodyField.textColor = body_color;
         
-        self.addSubview(descripField);
+        self.addSubview(bodyField);
         
         
         /****************************************************************************************************************************/
@@ -207,28 +199,28 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         /****************************************************************************************************************************/
         /*                                                      Time Label                                                          */
         /****************************************************************************************************************************/
-        timeView = UIView(frame: CGRect(x:      tv_xOffs,
+        dateView = UIView(frame: CGRect(x:      tv_xOffs,
                                         y:      tv_yOffs,
                                         width:  tv_width,
                                         height: tv_height));
         
-        timeView.layer.cornerRadius = tv_corner;
+        dateView.layer.cornerRadius = tv_corner;
         
         
         //Setup
-        timeLabel = UILabel(frame: CGRect(x: tl_xOffs, y: tl_yOffs, width: tl_width, height:  tl_height));
-        timeLabel.font  =   UIFont(name: cell_fontName, size: tl_size);
+        dateLabel = UILabel(frame: CGRect(x: tl_xOffs, y: tl_yOffs, width: tl_width, height:  tl_height));
+        dateLabel.font  =   UIFont(name: cell_fontName, size: tl_size);
         setTimeLabel(getRowValue().time);
-        timeLabel.textColor     = UIColor.white;
-        timeLabel.textAlignment = NSTextAlignment.left;
+        dateLabel.textColor     = UIColor.white;
+        dateLabel.textAlignment = NSTextAlignment.left;
         
         //Add delegate
         let tap = UITapGestureRecognizer(target: self, action: #selector(timeView_tapResponse));
-        timeView.addGestureRecognizer(tap);
+        dateView.addGestureRecognizer(tap);
         
         //Add it to view
-        timeView.addSubview(timeLabel);
-        addSubview(timeView);
+        dateView.addSubview(dateLabel);
+        addSubview(dateView);
    
         //Mark completion
         isComplete = true;                                                      /* mark completion                                  */
@@ -373,53 +365,52 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         if(selected) {
             if(verbose) { print("ANoteTableViewCell.updateSel():     selected"); }
             
-            //Subject field
-            var attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: self.subjectField.text!);
+            //Main text field
+            var attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: mainField.text!);
             
             attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle,
                                          value: NSUnderlineStyle.styleSingle.rawValue,
-                                         range: NSMakeRange(0, self.subjectField.text!.count));
+                                         range: NSMakeRange(0, mainField.text!.count));
             
-            self.subjectField.attributedText = attributeString;
-            self.subjectField.textColor = UIColor.gray;
+            mainField.attributedText = attributeString;
+            mainField.textColor = UIColor.gray;
             
             
             //Date field
-            attributeString =  NSMutableAttributedString(string: self.bottField.text!);
+            attributeString =  NSMutableAttributedString(string: bottField.text!);
             
             attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle,
                                          value: NSUnderlineStyle.styleSingle.rawValue,
-                                         range: NSMakeRange(0, self.bottField.text!.count));
+                                         range: NSMakeRange(0, bottField.text!.count));
             
-            self.bottField.attributedText = attributeString;
-            self.bottField.textColor = UIColor.gray;
+            bottField.attributedText = attributeString;
+            bottField.textColor = UIColor.gray;
             
             
         } else {
             if(verbose) { print("ANoteTableViewCell.updateSel():     not selected"); }
             
-            //Subject field
-            var attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: self.subjectField.text!);
+            //Main text field
+            var attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: mainField.text!);
             
             attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle,
                                          value: 0,
                                          range: NSMakeRange(0, attributeString.length));
             
             
-            self.subjectField.attributedText = attributeString;
-            self.subjectField.textColor = UIColor.black;
+            mainField.attributedText = attributeString;
+            mainField.textColor = UIColor.black;
             
-            
-            //Subject field
-            attributeString =  NSMutableAttributedString(string: self.bottField.text!);
-            
-            attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle,
-                                         value: 0,
-                                         range: NSMakeRange(0, attributeString.length));
             
             //Date field
-            self.bottField.attributedText = attributeString;
-            self.bottField.textColor = UIColor.black;
+            attributeString =  NSMutableAttributedString(string: bottField.text!);
+            
+            attributeString.addAttribute(NSAttributedStringKey.strikethroughStyle,
+                                         value: 0,
+                                         range: NSMakeRange(0, attributeString.length));
+            
+            bottField.attributedText = attributeString;
+            bottField.textColor = UIColor.black;
         }
         
         return;
@@ -525,8 +516,8 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         
         //@pre
         if(!isSet) {
-            timeLabel.text = "";
-            timeView.backgroundColor = nil;                             /* hidden                                                   */
+            dateLabel.text = "";
+            dateView.backgroundColor = nil;                             /* hidden                                                   */
             return;
         } else {
             isWithinHour = (date!.timeIntervalSince(DateUtils.getToday()) < (60*60));
@@ -546,13 +537,13 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         let minStr = String(format: "%02d", min);                       /* num chars 2                                              */
         
         //Apply text
-        timeLabel.text  =   "\(hrStr):\(minStr) \(mer)";
+        dateLabel.text  =   "\(hrStr):\(minStr) \(mer)";
         
         //Apply color
         if(isWithinHour) {
-            timeView.backgroundColor = stdTimeColor;
+            dateView.backgroundColor = stdTimeColor;
         } else {
-            timeView.backgroundColor = normTimeColor;
+            dateView.backgroundColor = normTimeColor;
         }
         
         if(verbose) { print("ANoteTableViewCell.setTimeLabel():  time label value changed"); }
@@ -600,8 +591,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         vc.rows[tableIndex].main = name;
         
         //UI update
-        dbgLabel.text = name;
-        subjectField.text = name;
+        mainField.text = name;
         
         return;
     }
@@ -619,7 +609,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         vc.rows[tableIndex].body = body;
 
         //UI update
-        descripField.text = body;
+        bodyField.text = body;
 
         return;
     }

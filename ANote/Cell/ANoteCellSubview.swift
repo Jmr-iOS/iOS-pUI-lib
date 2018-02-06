@@ -5,13 +5,13 @@
  *
  * 	@section	Opens
  * 		add top bar             (UIView)
- *      add title bar           (UIView)
+ *      add main text bar       (UIView)
  *      add date placeholder    (UIView)
  *      add main text           (UITextView)
  *      add bottom menubar      (UIView)
  *      ...
  *      main view here is scrollable
- *      mainText & titleText feature 'return' keyboard (after menu bar added for keyboard dismissal)
+ *      mainText & bodyText feature 'return' keyboard (after menu bar added for keyboard dismissal)
  *      text and graphics colors adjust to selected background (e.g. darker text for darker bkgnds etc.)
  *           have divider update color for brown background (hard to see)
  *
@@ -52,8 +52,8 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     
     //UI
     var topBar     : UIView;
-    var titleBar   : UIView;
-    var titleField : UITextField;
+    var mainBar    : UIView;
+    var mainField  : UITextField;
     var dateBar    : UIView;
     var datePlace  : UIView;
     var bodyText   : UITextView;
@@ -113,14 +113,14 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         bkgndView = UIImageView();
         
         //Init UI
-        topBar     = UIView();
-        titleBar   = UIView();
-        titleField = UITextField();
-        dateBar    = UIView();
-        datePlace  = UIView();
-        bodyText   = UITextView();
-        menuBar    = UIView();
-        bookmark   = UIButton(type: UIButtonType.roundedRect);
+        topBar    = UIView();
+        mainBar   = UIView();
+        mainField = UITextField();
+        dateBar   = UIView();
+        datePlace = UIView();
+        bodyText  = UITextView();
+        menuBar   = UIView();
+        bookmark  = UIButton(type: UIButtonType.roundedRect);
 
         //Init Vars
         bookSel = false;
@@ -177,22 +177,22 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //**************************************************************************************************************************//
         //                                                        TITLE BAR                                                         //
         //**************************************************************************************************************************//
-        titleBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 40);
-        y = (y + titleBar.bounds.height);
+        mainBar.frame = CGRect(x: 0, y: y, width: UIScreen.main.bounds.width, height: 40);
+        y = (y + mainBar.bounds.height);
 
         //Gen text field
-        titleField.frame = CGRect(x: 13, y: -1, width: titleBar.frame.width-13, height: titleBar.frame.height);
-        titleField.placeholder = "Untitled";
-        titleField.text = main;
-        titleField.font = UIFont(name: "HelveticaNeue-Medium", size: 46);                                                             //!!!to lib
-        titleField.font = FontUtils.updateFontSize(titleField.font!, 26);
-        titleField.clearButtonMode = .always;
-        titleField.textColor = UIColor.darkGray;
-        titleField.returnKeyType = UIReturnKeyType.done;
-        titleField.delegate = self;
+        mainField.frame = CGRect(x: 13, y: -1, width: mainBar.frame.width-13, height: mainBar.frame.height);
+        mainField.placeholder = "Untitled";
+        mainField.text = main;
+        mainField.font = UIFont(name: "HelveticaNeue-Medium", size: 46);                                                             //!!!to lib
+        mainField.font = FontUtils.updateFontSize(mainField.font!, 26);
+        mainField.clearButtonMode = .always;
+        mainField.textColor = UIColor.darkGray;
+        mainField.returnKeyType = UIReturnKeyType.done;
+        mainField.delegate = self;
         
         //Add to bar
-        titleBar.addSubview(titleField);
+        mainBar.addSubview(mainField);
         
         //Divider
         let divider = UIView(frame: CGRect(x:13, y: (y+1), width: (UIScreen.main.bounds.width-2*13), height: 0.5));
@@ -264,7 +264,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         mainView.reloadInputViews();
         addSubview(bkgndView);
         addSubview(topBar);
-        addSubview(titleBar);
+        addSubview(mainBar);
         addSubview(dateBar);
         addSubview(dateStamp);
         addSubview(divider);
@@ -397,7 +397,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         
         //Apply alpha to all
         topBar.alpha    = alpha;
-        titleBar.alpha  = alpha;
+        mainBar.alpha  = alpha;
         datePlace.alpha = alpha;
         dateBar.alpha   = alpha;
         bodyText.alpha  = alpha;
@@ -756,7 +756,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     func textFieldShouldReturn(_ textField : UITextField) -> Bool {
         
         //Update row (do both each time)
-        parentCell.setName(titleField.text!);
+        parentCell.setName(mainField.text!);
         parentCell.setBody(bodyText.text!);
         
         //@todo     handle other fields
@@ -781,7 +781,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         
         //Update row (do both each time)
-        parentCell.setName(titleField.text!);
+        parentCell.setName(mainField.text!);
         parentCell.setBody(bodyText.text!);
         
         //@todo     handle other fields
