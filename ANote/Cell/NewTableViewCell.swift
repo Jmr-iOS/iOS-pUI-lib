@@ -630,42 +630,6 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
 //**********************************************************************************************************************************//
 //                                                          UNKNOWN                                                                 //
 //**********************************************************************************************************************************//
-
-    /********************************************************************************************************************************/
-    /** @fcn        func numberOfLinesInLabel(_ yourString: NSString, labelWidth: CGFloat, labelHeight: CGFloat, font: UIFont) -> Int
-     *  @brief      x
-     *  @details    x
-     *
-     *  @param      [in] (NSString) yourString  - x
-     *  @param      [in] (CGFloat)  labelWidth  -  x
-     *  @param      [in] (CGFloat)  labelHeight - x
-     *  @param      [in] (UIFont)   font - x
-     *
-     *  @return     (Int) descrip
-     *
-     */
-    /********************************************************************************************************************************/
-    func numberOfLinesInLabel(_ yourString: NSString, labelWidth: CGFloat, labelHeight: CGFloat, font: UIFont) -> Int {
-        
-        fatalError("not sure why present, aborting");
-/*
-        let paragraphStyle = NSMutableParagraphStyle();
-        
-        paragraphStyle.minimumLineHeight = labelHeight;
-        paragraphStyle.maximumLineHeight = labelHeight;
-        paragraphStyle.lineBreakMode = .byWordWrapping;
-        
-        let size        :  CGSize  = CGSize(width: 1, height: 2);
-        let stringWidth :  CGFloat = size.width;
-        
-        let constrain   :  CGSize  = CGSize(width: labelWidth, height: labelHeight);
-        
-        let numberOfLines = ceil(Double(stringWidth/constrain.width))
-        
-        return Int(numberOfLines);
- */
-    }
-
     
     /********************************************************************************************************************************/
 	/**	@fcn		init?(coder aDecoder: NSCoder)
