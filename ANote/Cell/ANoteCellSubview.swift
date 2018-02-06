@@ -94,6 +94,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     var v        : UIView!;
     var foldV    : UIView!;                                         /* folder listing, topbar                                       */
     var bookSel  : Bool;
+    var devCtr   : Int;
 
     
     /********************************************************************************************************************************/
@@ -124,6 +125,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //Init Vars
         bookSel = false;
         stars   = [UIImageView]();
+        devCtr  = 1;
 
         //Super
         super.init(frame: UIScreen.main.bounds);
@@ -135,6 +137,15 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //Init view
         backgroundColor = UIColor.white;
         frame = getCSFrame(onscreen: false);
+        
+
+        //**************************************************************************************************************************//
+        //                                                     GRAB ROW CONTENTS                                                    //
+        //**************************************************************************************************************************//
+        let r = getRowValue();
+        let main : String = r.main!;
+//      let body : String = r.body!;
+//      let time : Date   = r.time!;
         
         
         //**************************************************************************************************************************//
@@ -172,10 +183,10 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         //Gen text field
         titleField.frame = CGRect(x: 13, y: -1, width: titleBar.frame.width-13, height: titleBar.frame.height);
         titleField.placeholder = "Untitled";
-        titleField.font = UIFont(name: "HelveticaNeue-Medium", size: 46);
+        titleField.text = main;
+        titleField.font = UIFont(name: "HelveticaNeue-Medium", size: 46);                                                             //!!!to lib
         titleField.font = FontUtils.updateFontSize(titleField.font!, 26);
         titleField.clearButtonMode = .always;
-        titleField.clearsOnBeginEditing = true;
         titleField.textColor = UIColor.darkGray;
         titleField.returnKeyType = UIReturnKeyType.done;
         titleField.delegate = self;
@@ -674,7 +685,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     @objc func clipPress(_ sender: UIButton!) {
         
         //Grab row
-        let row = parentCell.getRowValue();
+        let row = getRowValue();
         
         //Init view
         let p = ANoteTimeSelect(parentCell.vc, parentCell, row.time);
@@ -687,7 +698,16 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
         return;
     }
 
-    var devCtr : Int = 1;
+
+    /********************************************************************************************************************************/
+    /** @fcn        getRowValue() -> ANoteRow
+     *  @brief      convience wrapper to get row
+     */
+    /********************************************************************************************************************************/
+    func getRowValue() -> ANoteRow {
+        return parentCell.getRowValue();
+    }
+    
     
     /********************************************************************************************************************************/
     /** @fcn        sendPressed(_ sender: UIButton!)
