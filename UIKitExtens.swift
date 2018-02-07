@@ -88,3 +88,33 @@ extension UIImageView {
 }
 
 
+//**********************************************************************************************************************************//
+//                                                   UIIMAGEVIEW EXTENSIONS                                                         //
+//**********************************************************************************************************************************//
+extension UITableView {
+    
+    /********************************************************************************************************************************/
+    /** @fcn        refreshTable()
+     *  @brief      refresh table contents for display
+     *  @details    x
+     *
+     *  @assum      section=0
+     *
+     *  @section    Opens
+     *      none listed
+     */
+    /********************************************************************************************************************************/
+    func refreshTable() {
+ 
+        //Reload
+        for i in 0...(numRows-1) {
+            self.reloadRows(at: [IndexPath(row:i, section:0)], with: .none);                /* reload specified row                 */
+        }
+ 
+        //Refresh
+        self.reloadData();
+ 
+        return;
+    }
+}
+

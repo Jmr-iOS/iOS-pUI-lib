@@ -6,7 +6,7 @@
  *
  * 	@author		Justin Reina, Firmware Engineer, Jaostech
  * 	@created	1/26/18
- * 	@last rev	1/226/18
+ * 	@last rev	1/26/18
  *
  * 	@section	Opens
  *      support multiple apps concurrently      (currently supports one)

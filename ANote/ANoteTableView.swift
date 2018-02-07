@@ -119,35 +119,6 @@ class ANoteTableView : UICustomTableView {
         return cell;
     }
 
-    /********************************************************************************************************************************/
-    /** @fcn        refreshTable()
-     *  @brief      refresh table contents for display
-     *  @details    x
-     *
-     *  @section    Opens
-     *      port to library
-     */
-    /********************************************************************************************************************************/
-    func refreshTable() {
-
-        //Grab
-        let vc    = self.vc;
-        let rows  = vc.rows;
-  
-        for i in 0...(numRows-1) {
-            //Reload
-            self.reloadRows(at: [IndexPath(row:0, section:0)], with: .none);
-            
-            //Dev print
-            print("[\(i)]: '\(rows[i].main!)'");
-        }
-        
-        //refresh table
-        self.reloadData();
-        
-        return;
-    }
-
 
     /********************************************************************************************************************************/
     /** @fcn    updateCellTitles()
