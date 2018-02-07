@@ -48,7 +48,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
     
     //Ref
     var mainView   : UIView!;                                       /* main view of app                                             */
-    var parentCell : NewTableViewCell!;
+    var parentCell : ANoteTableViewCell!;
     
     //UI
     var topBar     : UIView;
@@ -98,7 +98,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
 
     
     /********************************************************************************************************************************/
-	/**	@fcn		init(mainView : UIView, parentCell : NewTableViewCell)
+	/**	@fcn		init(mainView : UIView, parentCell : ANoteTableViewCell)
 	 *  @brief		x
      *
      *  @param      [in] (UIView) mainView - main view of app
@@ -107,7 +107,7 @@ class ANoteCellSubview : UIView, UITextFieldDelegate, UITextViewDelegate, UIDate
      *  @post       all UI contents hidden
      */
 	/********************************************************************************************************************************/
-    init(mainView : UIView, parentCell : NewTableViewCell) {
+    init(mainView : UIView, parentCell : ANoteTableViewCell) {
         
         //Prep Background
         bkgndView = UIImageView();

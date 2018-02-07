@@ -21,10 +21,11 @@ import UIKit
 class ANoteTableView : UICustomTableView {
 
     //Root
-    var vc : ViewController;
+    var vc         : ViewController;
+    var mainView   : UIView;
     
     //UI
-    var myCustomCells2 : [NewTableViewCell];
+    var cells : [ANoteTableViewCell];
 
     /********************************************************************************************************************************/
     /** @fcn        init(frame: CGRect, style: UITableViewStyle, vc: ViewController, yOffs : CGFloat)
@@ -42,10 +43,12 @@ class ANoteTableView : UICustomTableView {
     /********************************************************************************************************************************/
     init(frame: CGRect, style: UITableViewStyle, vc: ViewController, yOffs : CGFloat) {
         
+        //Store
         self.vc = vc;                                               /* not sure on use                                              */
+        self.mainView   = vc.view;
         
         //Init Cells
-        myCustomCells2 = [NewTableViewCell]();
+        cells = [ANoteTableViewCell]();
         
         //Calc frame
         let tFrame = CGRect(x: frame.origin.x,
@@ -53,31 +56,28 @@ class ANoteTableView : UICustomTableView {
                             width:  wS,
                             height: (hS - yOffs - lower_bar_height));
         
-        print("ANoteTableView.init():              currently configured to UITableViewCell usage");
 
         /****************************************************************************************************************************/
         /*                                                  UITableView                                                             */
         /****************************************************************************************************************************/
         super.init(frame: tFrame, style: style);
-        register(NewTableViewCell.self, forCellReuseIdentifier: "cell");
+        register(ANoteTableViewCell.self, forCellReuseIdentifier: "cell");
         translatesAutoresizingMaskIntoConstraints = false;
 
         //Load cells
         for i in 0...(numRows-1) {
-            let cell = NewTableViewCell(vc:vc, aNoteTable:self, index:i, style: UITableViewCellStyle.default, reuseIdentifier: "cell");
-            myCustomCells2.append(cell);
+            let cell = ANoteTableViewCell(vc:vc, aNoteTable:self, index:i, style: UITableViewCellStyle.default, reuseIdentifier: "cell");
+            cells.append(cell);
         }
         
         //Set background color
         self.backgroundColor = tableBakColor;
         
-        //Set the row height
-        rowHeight = (rowHeight);
-        
         //Allow for selection
         allowsSelection = true;
         
-        
+        if(verbose) { print("ANoteTableView.init():              currently configured to UITableViewCell usage"); }
+
         /****************************************************************************************************************************/
         /*                                              aNote cell-styles                                                           */
         /****************************************************************************************************************************/
@@ -102,19 +102,19 @@ class ANoteTableView : UICustomTableView {
      */
     /********************************************************************************************************************************/
     override func getCellCount() -> Int {
-        return myCustomCells2.count;
+        return cells.count;
     }
     
     
     /********************************************************************************************************************************/
-    /** @fcn        getCell(_ index: Int) -> NewTableViewCell
+    /** @fcn        getCell(_ index: Int) -> ANoteTableViewCell
      *  @brief      x
      *  @details    x
      */
     /********************************************************************************************************************************/
-    override func getCell(_ index: Int) -> NewTableViewCell {
+    override func getCell(_ index: Int) -> ANoteTableViewCell {
         
-        let cell : NewTableViewCell = myCustomCells2[index];
+        let cell : ANoteTableViewCell = cells[index];
         
         return cell;
     }
@@ -134,7 +134,7 @@ class ANoteTableView : UICustomTableView {
         for i in 0...(n-1) {
             let name = vc.rows[i].main;
             
-            myCustomCells2[i].setName(name!);
+            cells[i].setName(name!);
         }
         
         return;

@@ -1,5 +1,5 @@
 /************************************************************************************************************************************/
-/** @file		NewTableViewCell.swift
+/** @file		ANoteTableViewCell.swift
  *  @brief      x
  *  @details    x
  *
@@ -17,7 +17,7 @@
 import UIKit
 
 
-class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
+class ANoteTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
     
     //App
     var vc : ViewController;
@@ -88,7 +88,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         //Dev-debug
         self.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: frame.width, height: cellHeight);
         
-        if(verbose){ print("NewTableViewCell.init():            cell initialized"); }
+        if(verbose){ print("ANoteTableViewCell.init():            cell initialized"); }
         
         return;
     }
@@ -208,12 +208,12 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         //Setup
         dateLabel = UILabel(frame: CGRect(x: tl_xOffs, y: tl_yOffs, width: tl_width, height:  tl_height));
         dateLabel.font  =   fontC.withSize(tl_size);
-        setTimeLabel(getRowValue().time);
+        setDateLabel(getRowValue().time);
         dateLabel.textColor     = UIColor.white;
         dateLabel.textAlignment = NSTextAlignment.left;
         
         //Add delegate
-        let tap = UITapGestureRecognizer(target: self, action: #selector(timeView_tapResponse));
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dateView_tapResponse));
         dateView.addGestureRecognizer(tap);
         
         //Add it to view
@@ -286,7 +286,7 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
 //**********************************************************************************************************************************//
     
     /********************************************************************************************************************************/
-    /** @fcn        timeView_tapResponse()
+    /** @fcn        dateView_tapResponse()
      *  @details    respond to selection of the time view
      *
      *  @section     Opens
@@ -296,12 +296,12 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
      *      complete and store
      */
     /********************************************************************************************************************************/
-    @objc func timeView_tapResponse() {
+    @objc func dateView_tapResponse() {
 
         //Launch time selection
         raiseTimePicker();
 
-        if(verbose) { print("ANoteTableViewCell.tvResp():        tap response selected"); }
+        if(verbose) { print("ANoteTableViewCell.dateResp():      tap response selected"); }
         
         return;
     }
@@ -344,12 +344,8 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         }
         return;
     }
-    
-    
-    
-    
-    
-    
+
+
     /********************************************************************************************************************************/
     /** @fcn        updateSelection(selected : Bool)
      *  @brief      update selected state of cell
@@ -470,40 +466,15 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
     func getCellNumber() -> Int {
         return (tableIndex+1);
     }
-    
-    
-    /********************************************************************************************************************************/
-    /** @fcn        setDateLabel(_ date: Date?)
-     *  @brief      x
-     *  @details    x
-     */
-    /********************************************************************************************************************************/
-    func setDateLabel(_ date: Date?) {
-        
-        //Handle unset cell
-        if(date == nil) {
-            bottField.text = "";                                        /* string is empty when date unset                          */
-            bellIcon.image = nil;                                       /* turn off bell icon                                       */
-            return;
-        }
-        
-        //Update bell icon (in case empty reload)
-        bellIcon.image = UIImage(named:"bell");
-        
-        //Update date string
-        bottField.text = getRowValue().getDateString();
-        
-        return;
-    }
 
 
     /********************************************************************************************************************************/
-    /** @fcn        setTimeLabel(_ date : Date?)
+    /** @fcn        setDateLabel(_ date : Date?)
      *  @brief      set cell's time label contents to match date
      *  @details    x
      */
     /********************************************************************************************************************************/
-    func setTimeLabel(_ date : Date?) {
+    func setDateLabel(_ date : Date?) {
         
         //Vars
         let isSet : Bool;                                               /* don't operate on timeView when date not set              */
@@ -563,7 +534,6 @@ class NewTableViewCell : UICustomTableViewCell, UICheckBoxDelegate {
         
         //Update UI
         setDateLabel(date);
-        setTimeLabel(date);
         
         //Grab date
         var respStr = "nil";

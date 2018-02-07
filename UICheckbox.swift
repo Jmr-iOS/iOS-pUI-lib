@@ -31,7 +31,7 @@ class UICheckbox: UIView {
     
     //state
     var checkBoxImg : UIImageView!;
-    var parentCell  : NewTableViewCell!;
+    var parentCell  : ANoteTableViewCell!;
     var delegate    : UICheckBoxDelegate!;
     var state       : Bool = false;
 
@@ -47,7 +47,7 @@ class UICheckbox: UIView {
 
 
     /********************************************************************************************************************************/
-    /** @fcn        init(view: UIView, parentCell: NewTableViewCell, delegate: UICheckBoxDelegate, type: CellType,
+    /** @fcn        init(view: UIView, parentCell: ANoteTableViewCell, delegate: UICheckBoxDelegate, type: CellType,
      *                   xCoord: CGFloat, yCoord: CGFloat)                                                                            
      *  @brief
      *
@@ -58,7 +58,7 @@ class UICheckbox: UIView {
      *  @param      [in] (CGFloat) yCoord - y coordinates of box
      */
     /********************************************************************************************************************************/
-    init(view: UIView, parentCell: NewTableViewCell, delegate: UICheckBoxDelegate, type: CellType, xCoord: CGFloat, yCoord: CGFloat) {
+    init(view: UIView, parentCell: ANoteTableViewCell, delegate: UICheckBoxDelegate, type: CellType, xCoord: CGFloat, yCoord: CGFloat) {
 
         //Store
         self.parentCell = parentCell;
