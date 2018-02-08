@@ -94,9 +94,11 @@ extension UIImageView {
 extension UITableView {
     
     /********************************************************************************************************************************/
-    /** @fcn        refreshTable()
+    /** @fcn        refreshTable(numRows : Int)
      *  @brief      refresh table contents for display
      *  @details    x
+     *
+     *  @param      [in] (Int) numRows - number of rows to refresh (0...numRows-1)
      *
      *  @assum      section=0
      *
@@ -104,7 +106,7 @@ extension UITableView {
      *      none listed
      */
     /********************************************************************************************************************************/
-    func refreshTable() {
+    func refreshTable(numRows : Int) {
  
         //Reload
         for i in 0...(numRows-1) {
