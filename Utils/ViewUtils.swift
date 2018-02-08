@@ -6,27 +6,32 @@
  *
  * 	@author		Justin Reina, Firmware Engineer, Jaostech
  * 	@created	1/26/18
- * 	@last rev	1/26/18
+ * 	@last rev	2/7/18
  *
  * 	@section	Opens
- *      support multiple apps concurrently      (currently supports one)
- * 		support multiple popups concurrently    (currently supports one)
+ *      @todo   support multiple apps concurrently      (currently supports one)
+ * 		@todo   support multiple popups concurrently    (currently supports one)
  *
  * 	@section	Legal Disclaimer
- * 			All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
- * 			Corporation. Do not distribute. Do not copy.
+ * 	    All contents of this source file and/or any other Jaostech related source files are the explicit property on Jaostech
+ * 		Corporation. Do not distribute. Do not copy.
  */
 /************************************************************************************************************************************/
 import UIKit
+
+//Global Defs
+let wS : CGFloat = UIScreen.main.bounds.width;                                          /* screen dimensions                        */
+let hS : CGFloat = UIScreen.main.bounds.height;
+let bS : CGRect  = UIScreen.main.bounds;
 
 
 class ViewUtils : NSObject {
     
     //Vars
-    static var view : UIView!;                                                              /* main view of running application     */
-    static var popupView : UIView!                                                          /* popup to launch                      */
-    static var popupLabel : UILabel!;                                                       /* label for popup holding text         */
-    static var popupRunning : Bool = false;                                                 /* is the popup in progress?            */
+    static var view         : UIView!;                                                  /* main view of running application         */
+    static var popupView    : UIView!                                                   /* popup to launch                          */
+    static var popupLabel   : UILabel!;                                                 /* label for popup holding text             */
+    static var popupRunning : Bool = false;                                             /* is the popup in progress?                */
     
     //Const
     static let popupHeight : CGFloat = 35;
@@ -47,17 +52,21 @@ class ViewUtils : NSObject {
     }
 
     
+//**********************************************************************************************************************************//
+//                                                        POPUP MESSAGE                                                             //
+//**********************************************************************************************************************************//
+    
     /********************************************************************************************************************************/
     /** @fcn        class func popup(_ msg : String)
      *  @brief      launch a popup message
      *
      *  @section     Opens
-     *      specify  launch time & delays
-     *      specify with callback
-     *      specify background color
-     *      specify height
-     *      specify font
-     *      respond to selection
+     *      @todo   specify  launch time & delays
+     *      @todo   specify with callback
+     *      @todo   specify background color
+     *      @todo   specify height
+     *      @todo   specify font
+     *      @todo   respond to selection
      */
     /********************************************************************************************************************************/
     class func popup(_ msg : String) {
@@ -174,6 +183,24 @@ class ViewUtils : NSObject {
     }
     
     
+//**********************************************************************************************************************************//
+//                                                          POPUP MENU                                                              //
+//**********************************************************************************************************************************//
+
+    /********************************************************************************************************************************/
+    /** @fcn        class func genPopupMenu() -> PopupMenu
+     *  @brief      generate a popup menu
+     */
+    /********************************************************************************************************************************/
+    class func genPopupMenu() -> PopupMenu {
+        return PopupMenu();
+    }
+    
+    
+//**********************************************************************************************************************************//
+//                                                          HELPERS                                                                 //
+//**********************************************************************************************************************************//
+
     /********************************************************************************************************************************/
     /** @fcn        class func storeView(_ view : UIView)
      *  @brief      store main view for popup insertion
@@ -186,3 +213,133 @@ class ViewUtils : NSObject {
 
 }
 
+
+/************************************************************************************************************************************/
+/** @class      PopupMenu : UIView
+ *  @brief      popmenu for use
+ *
+ *  @section     Opens
+ *      working
+ */
+/************************************************************************************************************************************/
+class PopupMenu : UIView {
+    
+    //Datatypes
+    struct Row {
+        var title     : String?;                                    /* nil fields are unused (e.g. nil title left blank)            */
+        var resp      : ()->()?;
+        var height    : Int?;
+        var textColor : UIColor?;
+        var bakColor  : UIColor?;
+    }
+
+    //State
+    var rows : [Row];
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        init()
+     *  @brief      x
+     */
+    /********************************************************************************************************************************/
+    init() {
+        
+        //Init
+        rows = [Row]();
+        
+        //Super
+        super.init(frame:CGRect(x:1,y:2,width:3,height:4));
+        
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        addRow(_ title: String,_  resp: @escaping ()->())
+     *  @brief      x
+     */
+    /********************************************************************************************************************************/
+    func addRow(_ title: String?,_  resp: @escaping ()->()?) {
+        
+        let r : Row = Row(title: title, resp: resp, height: nil, textColor: nil, bakColor: nil);
+        
+        rows.append(r);
+        
+        return;
+    }
+
+    
+    /********************************************************************************************************************************/
+    /** @fcn        getRow(i : Int) -> PopupMenu.Row
+     *  @brief      x
+     */
+    /********************************************************************************************************************************/
+    func getRow(i : Int) -> PopupMenu.Row {
+        return rows[i];
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        setRows(_ rows: [PopupMenu.Row])
+     *  @brief      x
+     */
+    /********************************************************************************************************************************/
+    func setRows(_ rows: [PopupMenu.Row]) {
+        self.rows = rows;                                                   /* swift copies arrays on assignment                    */
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        getRows()
+     *  @brief      x
+     */
+    /********************************************************************************************************************************/
+    func getRows() ->  [PopupMenu.Row] {
+        return rows;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        show()
+     *  @brief      x
+     */
+    /********************************************************************************************************************************/
+    func show() {
+        
+        //@pre (if already launched ignore)
+        
+        
+        //Create the table
+        
+        
+        //Launch it
+        
+        
+        return;
+    }
+    
+    
+    /********************************************************************************************************************************/
+    /** @fcn        dismiss()
+     *  @brief      x
+     */
+    /********************************************************************************************************************************/
+    func dismiss() {
+        print("dismiss");
+        
+        //Fade offscreen
+        
+        //Dispose?
+        
+        return;
+    }
+
+    
+    /********************************************************************************************************************************/
+    /** @fcn        required init?(coder aDecoder: NSCoder)
+     *  @brief      x
+     */
+    /********************************************************************************************************************************/
+    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented"); }
+}
